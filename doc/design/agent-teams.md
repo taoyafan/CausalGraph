@@ -188,7 +188,8 @@ Agent 执行任务时常见障碍及**标准解法**（对应铁律"遇阻不放
     `reviewer` = [read, search, execute]（**只读审核 + 否决权**；`execute` 仅用于跑 `check`）；
     `operator-author` = [read, edit, search, execute]（写算子代码）。
   - 其它 harness（Claude subagents 等）：按各自的 subagent/system-prompt 机制承载同一套提示词。
-- **`.agent.md` 一律是薄壳，提示词正文只改一处**：每个 `.agent.md` 只放 frontmatter（`tools`/`description`）+ 一句
-  "必读并逐字执行 §3.x" 的指针 + 该 harness 专属的工具约束；**§3 的提示词正文（清单/检验项/输出格式）绝不复制进 `.agent.md`**。
-  改提示词时**只改本文 §3 对应小节一处**即可，薄壳因指向 §3 而自动生效——严禁在两处各存一份。
+- **`.agent.md` 一律是零正文存根，提示词只在 §3 改一处**：每个 `.agent.md` 只放 frontmatter（`name`/`description`/`tools`）
+  + 一句"用 `read` 打开并逐字执行 §3.x"的指针，**零提示词正文、零转述**（连流程/约束/输出都不摘抄）；
+  §3 的正文（清单/检验项/输出格式/工具约束）绝不复制进 `.agent.md`。这样所有 harness 的存根都只是指针、
+  天然与 §3 一致；改提示词**只改本文 §3 对应小节一处**，严禁在两处各存一份。
 - **禁止分叉**：适配层不得改写角色边界与铁律；如需调整，改本文后各 harness 同步，避免多份不一致定义。
