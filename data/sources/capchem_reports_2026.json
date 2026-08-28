@@ -1,0 +1,84 @@
+{
+  "source_id": "capchem_reports_2026",
+  "source_name": "新宙邦 2026 半年报 + 2024/2025 年报（公司定期报告，巨潮原件）",
+  "publisher": "新宙邦 (300037.SZ)",
+  "as_of": "2026-08-21",
+  "source_url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225487079.PDF",
+  "retrieved_at": "2026-08-28",
+  "local_copy": "data/sources/raw/capchem_2026_semiannual_report.pdf",
+  "note": "全部为公司定期报告披露值（audited）。分业务口径以 2026 半年报『分产品营业收入/毛利率』表为准；公司自 2025 年起将原电容化学品+半导体化学品合并披露为电子信息化学品。分产品销量未披露（仅披露产量），故不做电解液单品的产量×价格拆分，改为分业务收入外推（见 assumptions 文件）。",
+  "nodes": [
+    {
+      "id": "seg.battery.rev_h1_2026",
+      "metric": "电池化学品_营业收入_2026H1",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "distribution": {"type": "point", "value": 57.506, "domain": [0, null]},
+      "quote": "2026 半年报 分产品：电池化学品 营业收入 5,750,643,171.67 元（≈57.51 亿），毛利率 15.32%，收入同比 +104.27%。"
+    },
+    {
+      "id": "seg.electronic.rev_h1_2026",
+      "metric": "电子信息化学品_营业收入_2026H1",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "distribution": {"type": "point", "value": 9.563, "domain": [0, null]},
+      "quote": "2026 半年报 分产品：电子信息化学品 营业收入 956,280,120.36 元（≈9.56 亿），毛利率 51.68%，收入同比 +40.80%。（口径：原电容+半导体化学品合并）"
+    },
+    {
+      "id": "seg.fluorine.rev_h1_2026",
+      "metric": "有机氟化学品_营业收入_2026H1",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "distribution": {"type": "point", "value": 7.083, "domain": [0, null]},
+      "quote": "2026 半年报 分产品：有机氟化学品 营业收入 708,295,877.59 元（≈7.08 亿），毛利率 55.87%，收入同比 -1.88%。"
+    },
+    {
+      "id": "seg.other.rev_h1_2026",
+      "metric": "其他业务_营业收入_2026H1",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "distribution": {"type": "point", "value": 0.473, "domain": [0, null]},
+      "quote": "2026 半年报 / F10 主营构成：其他 营业收入 47,334,819.75 元（≈0.47 亿），毛利率 28.49%。"
+    },
+    {
+      "id": "seg.battery.margin_h1_2026",
+      "metric": "电池化学品_毛利率_2026H1",
+      "unit": "比率",
+      "evidence_type": "audited",
+      "distribution": {"type": "point", "value": 0.1532, "domain": [0, 1]},
+      "quote": "2026 半年报 分产品：电池化学品 毛利率 15.32%（同比 +5.61pct）。"
+    },
+    {
+      "id": "seg.electronic.margin_h1_2026",
+      "metric": "电子信息化学品_毛利率_2026H1",
+      "unit": "比率",
+      "evidence_type": "audited",
+      "distribution": {"type": "point", "value": 0.5168, "domain": [0, 1]},
+      "quote": "2026 半年报 分产品：电子信息化学品 毛利率 51.68%（同比 +3.86pct）。"
+    },
+    {
+      "id": "seg.fluorine.margin_h1_2026",
+      "metric": "有机氟化学品_毛利率_2026H1",
+      "unit": "比率",
+      "evidence_type": "audited",
+      "distribution": {"type": "point", "value": 0.5587, "domain": [0, 1]},
+      "quote": "2026 半年报 分产品：有机氟化学品 毛利率 55.87%（同比 -6.93pct）。"
+    },
+    {
+      "id": "seg.other.margin_h1_2026",
+      "metric": "其他业务_毛利率_2026H1",
+      "unit": "比率",
+      "evidence_type": "audited",
+      "distribution": {"type": "point", "value": 0.2849, "domain": [0, 1]},
+      "quote": "F10 主营构成 2026H1：其他 毛利率 28.49%。"
+    },
+    {
+      "id": "capchem.profit.h1_2026",
+      "metric": "归母净利润_2026H1(对账锚点)",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "distribution": {"type": "point", "value": 9.838, "domain": [0, null]},
+      "quote": "2026 半年报：归母净利润 9.838 亿元（半年报直接披露），同比 +103.33%；Q1 4.805 / Q2 5.033 仅作对账佐证，非本值来源。经 divide 算子参与计算 H1 实际毛利转净利率。"
+    }
+  ]
+}

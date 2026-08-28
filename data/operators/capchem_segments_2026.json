@@ -1,0 +1,97 @@
+{
+  "subgraph": "capchem_segments_2026",
+  "note": "新宙邦 2026 全年归母净利润——分业务自下而上（不含券商）。每业务：全年毛利 = H1收入 × 全年/H1季节倍数 × H1毛利率 × 毛利率调整系数；汇总各业务全年毛利后，× 毛利转净利率 = 全年归母。算子皆纯数学(product/sum, C_op=1.0)，全部主观性在 assumptions 数据节点。",
+  "operators": [
+    {
+      "id": "seg.battery.gp_fy2026",
+      "operator": "product",
+      "inputs": ["seg.battery.rev_h1_2026", "seg.battery.rev_fy_mult", "seg.battery.margin_h1_2026", "capchem.margin_fy_factor"],
+      "output_metric": "电池化学品_全年毛利_2026",
+      "unit": "亿元"
+    },
+    {
+      "id": "seg.electronic.gp_fy2026",
+      "operator": "product",
+      "inputs": ["seg.electronic.rev_h1_2026", "seg.electronic.rev_fy_mult", "seg.electronic.margin_h1_2026", "capchem.margin_fy_factor"],
+      "output_metric": "电子信息化学品_全年毛利_2026",
+      "unit": "亿元"
+    },
+    {
+      "id": "seg.fluorine.gp_fy2026",
+      "operator": "product",
+      "inputs": ["seg.fluorine.rev_h1_2026", "seg.fluorine.rev_fy_mult", "seg.fluorine.margin_h1_2026", "capchem.margin_fy_factor"],
+      "output_metric": "有机氟化学品_全年毛利_2026",
+      "unit": "亿元"
+    },
+    {
+      "id": "seg.other.gp_fy2026",
+      "operator": "product",
+      "inputs": ["seg.other.rev_h1_2026", "seg.other.rev_fy_mult", "seg.other.margin_h1_2026", "capchem.margin_fy_factor"],
+      "output_metric": "其他业务_全年毛利_2026",
+      "unit": "亿元"
+    },
+    {
+      "id": "capchem.gross_profit.fy2026",
+      "operator": "sum",
+      "inputs": ["seg.battery.gp_fy2026", "seg.electronic.gp_fy2026", "seg.fluorine.gp_fy2026", "seg.other.gp_fy2026"],
+      "output_metric": "全年毛利合计_2026",
+      "unit": "亿元"
+    },
+    {
+      "id": "seg.battery.gp_h1_2026",
+      "operator": "product",
+      "inputs": ["seg.battery.rev_h1_2026", "seg.battery.margin_h1_2026"],
+      "output_metric": "电池化学品_H1毛利_2026",
+      "unit": "亿元"
+    },
+    {
+      "id": "seg.electronic.gp_h1_2026",
+      "operator": "product",
+      "inputs": ["seg.electronic.rev_h1_2026", "seg.electronic.margin_h1_2026"],
+      "output_metric": "电子信息化学品_H1毛利_2026",
+      "unit": "亿元"
+    },
+    {
+      "id": "seg.fluorine.gp_h1_2026",
+      "operator": "product",
+      "inputs": ["seg.fluorine.rev_h1_2026", "seg.fluorine.margin_h1_2026"],
+      "output_metric": "有机氟化学品_H1毛利_2026",
+      "unit": "亿元"
+    },
+    {
+      "id": "seg.other.gp_h1_2026",
+      "operator": "product",
+      "inputs": ["seg.other.rev_h1_2026", "seg.other.margin_h1_2026"],
+      "output_metric": "其他业务_H1毛利_2026",
+      "unit": "亿元"
+    },
+    {
+      "id": "capchem.gross_profit.h1_2026",
+      "operator": "sum",
+      "inputs": ["seg.battery.gp_h1_2026", "seg.electronic.gp_h1_2026", "seg.fluorine.gp_h1_2026", "seg.other.gp_h1_2026"],
+      "output_metric": "H1毛利合计_2026",
+      "unit": "亿元"
+    },
+    {
+      "id": "capchem.gross_to_net.h1_actual",
+      "operator": "divide",
+      "inputs": ["capchem.profit.h1_2026", "capchem.gross_profit.h1_2026"],
+      "output_metric": "毛利转归母净利率_2026H1实际",
+      "unit": "比率"
+    },
+    {
+      "id": "capchem.gross_to_net.fy2026",
+      "operator": "product",
+      "inputs": ["capchem.gross_to_net.h1_actual", "capchem.gross_to_net.fy_factor"],
+      "output_metric": "毛利转归母净利率_2026全年",
+      "unit": "比率"
+    },
+    {
+      "id": "capchem.profit.fy2026",
+      "operator": "product",
+      "inputs": ["capchem.gross_profit.fy2026", "capchem.gross_to_net.fy2026"],
+      "output_metric": "归母净利润_2026全年_分业务自下而上",
+      "unit": "亿元"
+    }
+  ]
+}

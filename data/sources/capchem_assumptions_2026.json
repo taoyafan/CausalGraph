@@ -1,0 +1,60 @@
+{
+  "source_id": "capchem_assumptions_2026",
+  "source_name": "新宙邦 2026 全年预测——我方假设（非公司/非券商）",
+  "publisher": "CausalGraph 协作者假设",
+  "as_of": "2026-08-28",
+  "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-24/1225026296.PDF",
+  "retrieved_at": "2026-08-28",
+  "local_copy": "data/sources/raw/capchem_2025_annual_report.pdf",
+  "note": "本文件全部为我方假设(assumption)，非公司披露、非券商结论预测。分业务『全年/H1 收入倍数』采用恒等式 倍数=2+g3（g3=2026 H1→H2 环比增速）：以最新真实环比 g2(2025H2→2026H1) 为锚、参考同期内 g1(2025 H1→H2)，再按价格/产量基本面保守微调上/下（价格信号为二手行业聚合、未能归档，仅作定性依据）。g1/g2 由 audited 半年收入序列精确算出。毛利转净利率的 H1 实际值不再手算，改由图从真实节点算出（capchem.gross_to_net.h1_actual = H1 归母 ÷ H1 毛利合计），本文件只保留“H2≈H1”的调整系数假设。预测整体偏保守。待协作者确认。",
+  "nodes": [
+    {
+      "id": "seg.battery.rev_fy_mult",
+      "metric": "电池化学品_全年收入相对H1倍数_假设",
+      "unit": "倍",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 2.28, "mode": 2.40, "high": 2.52, "domain": [0, null]},
+      "quote": "我方假设(偏保守)。倍数=2+g3，g3=2026 H1→H2 环比增速。真实锚：2025 同期内 H1→H2 增速 g1=+37.3%(→倍数2.37)，最新跨年环比 g2(2025H2→2026H1)=+48.8%。众数取 g3≈+40%(倍数2.40)：略高于2025季节性(反映六氟触底回升、电解液/VC涨价的价格支撑，来源为二手行业价格聚合、gap未归档)，但显著低于g2(因H1含低价基数一次性修复、新产能年底才投放、利用率87.9%近满产)。保守留下行至2.28。"
+    },
+    {
+      "id": "seg.electronic.rev_fy_mult",
+      "metric": "电子信息化学品_全年收入相对H1倍数_假设",
+      "unit": "倍",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 2.18, "mode": 2.24, "high": 2.32, "domain": [0, null]},
+      "quote": "我方假设(偏保守上调)。真实锚：2025 同期内 H1→H2 增速 g1=+15.8%(倍数2.16)，最新跨年环比 g2=+21.7%。众数取 g3≈+24%(倍数2.24)，高于g2：产能利用率仅55.7%放量空间大，H2 半导体/AI液冷旺季、毛利率同比+3.86pct 需求强。保守未取更高。"
+    },
+    {
+      "id": "seg.fluorine.rev_fy_mult",
+      "metric": "有机氟化学品_全年收入相对H1倍数_假设",
+      "unit": "倍",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 1.95, "mode": 2.02, "high": 2.12, "domain": [0, null]},
+      "quote": "我方假设(弱上调,低置信)。真实锚：2025 同期内 H1→H2 增速 g1=-2.5%(倍数1.98)，最新跨年环比 g2=+0.6%。众数取 g3≈+2%(倍数2.02)，略高于g2：H2 有 AI液冷氟化液批量出货增量对冲；但一代老产品价格下滑(医药中间体跌+氢氟酸涨)拖累仍在，故幅度小、带宽宽。"
+    },
+    {
+      "id": "seg.other.rev_fy_mult",
+      "metric": "其他业务_全年收入相对H1倍数_假设",
+      "unit": "倍",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 1.70, "mode": 2.00, "high": 2.30, "domain": [0, null]},
+      "quote": "我方假设：其他业务占比小(<1%)，缺 2025H1 单列数，倍数按化工整体季节性粗取约 2.0，带宽较宽。"
+    },
+    {
+      "id": "capchem.margin_fy_factor",
+      "metric": "全年毛利率相对H1的调整系数_假设(全业务共用)",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 0.92, "mode": 1.00, "high": 1.06, "domain": [0, null]},
+      "quote": "我方假设：全年各业务毛利率 ≈ H1 水平（众数系数 1.00）。下行 0.92 反映电解液价格竞争/H2 让价风险，上行 1.06 反映六氟等提价延续；全业务共用一个系数（视为同向宏观驱动）。"
+    },
+    {
+      "id": "capchem.gross_to_net.fy_factor",
+      "metric": "全年毛利转净利率相对H1的调整系数_假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 0.91, "mode": 1.00, "high": 1.05, "domain": [0, null]},
+      "quote": "我方假设：全年毛利转净利率 ≈ H1 实际水平（众数系数 1.00）。H1 实际值由图从真实节点算出（capchem.gross_to_net.h1_actual = H1归母 9.838 ÷ H1毛利合计），不再手算烘焙。下行 0.91 反映 H2 年度奖金/汇算清缴等期间费用上升，上行 1.05 反映规模效应；偏保守。"
+    }
+  ]
+}
