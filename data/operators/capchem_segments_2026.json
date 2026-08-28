@@ -1,32 +1,109 @@
 {
   "subgraph": "capchem_segments_2026",
-  "note": "新宙邦 2026 全年归母净利润——分业务自下而上（不含券商）。每业务：全年毛利 = H1收入 × 全年/H1季节倍数 × H1毛利率 × 毛利率调整系数；汇总各业务全年毛利后，× 毛利转净利率 = 全年归母。算子皆纯数学(product/sum, C_op=1.0)，全部主观性在 assumptions 数据节点。",
+  "note": "新宙邦 2026 全年归母净利润——分业务自下而上（不含券商）。每业务全年毛利由富算子 seg_gross_profit(H1收入, g3, H1毛利率, 全年毛利率调整系数) 一步算出 = H1收入 × (2+g3) × H1毛利率 × 调整系数（2 来自恒等式 全年=两个半年）。关键：g3(2026 H1→H2 增速) 不再拍一个复杂假设，而是 g3 = g1_2025(2025 同期真实季节性，audited 由 hoh_growth 算出) + season_delta(唯一假设：2026 相对 2025 的小调整量)，用算子 sum 相加。另一个锚 g2_cross(2025H2→2026H1 跨年环比) 仅作交叉参考、不进路径。算子皆纯数学(C_op=1.0，定义即代码)，全部主观性集中在 assumptions 里的 season_delta 与两个调整系数。",
   "operators": [
     {
+      "id": "seg.battery.g1_2025",
+      "operator": "hoh_growth",
+      "inputs": ["seg.battery.rev_fy_2025", "seg.battery.rev_h1_2025"],
+      "output_metric": "电池化学品_2025_H1→H2季节性环比增速(g3基础)",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.electronic.g1_2025",
+      "operator": "hoh_growth",
+      "inputs": ["seg.electronic.rev_fy_2025", "seg.electronic.rev_h1_2025"],
+      "output_metric": "电子信息化学品_2025_H1→H2季节性环比增速(g3基础)",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.fluorine.g1_2025",
+      "operator": "hoh_growth",
+      "inputs": ["seg.fluorine.rev_fy_2025", "seg.fluorine.rev_h1_2025"],
+      "output_metric": "有机氟化学品_2025_H1→H2季节性环比增速(g3基础)",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.other.g1_2025",
+      "operator": "hoh_growth",
+      "inputs": ["seg.other.rev_fy_2025", "seg.other.rev_h1_2025"],
+      "output_metric": "其他业务_2025_H1→H2季节性环比增速(g3基础)",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.battery.g2_cross",
+      "operator": "cross_growth",
+      "inputs": ["seg.battery.rev_h1_2026", "seg.battery.rev_fy_2025", "seg.battery.rev_h1_2025"],
+      "output_metric": "电池化学品_2025H2→2026H1跨年环比增速(锚，仅参考)",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.electronic.g2_cross",
+      "operator": "cross_growth",
+      "inputs": ["seg.electronic.rev_h1_2026", "seg.electronic.rev_fy_2025", "seg.electronic.rev_h1_2025"],
+      "output_metric": "电子信息化学品_2025H2→2026H1跨年环比增速(锚，仅参考)",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.fluorine.g2_cross",
+      "operator": "cross_growth",
+      "inputs": ["seg.fluorine.rev_h1_2026", "seg.fluorine.rev_fy_2025", "seg.fluorine.rev_h1_2025"],
+      "output_metric": "有机氟化学品_2025H2→2026H1跨年环比增速(锚，仅参考)",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.other.g2_cross",
+      "operator": "cross_growth",
+      "inputs": ["seg.other.rev_h1_2026", "seg.other.rev_fy_2025", "seg.other.rev_h1_2025"],
+      "output_metric": "其他业务_2025H2→2026H1跨年环比增速(锚，仅参考)",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.battery.g3",
+      "operator": "sum",
+      "inputs": ["seg.battery.g1_2025", "seg.battery.season_delta"],
+      "output_metric": "电池化学品_2026_H1→H2收入环比增速(=2025季节性+调整)",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.electronic.g3",
+      "operator": "sum",
+      "inputs": ["seg.electronic.g1_2025", "seg.electronic.season_delta"],
+      "output_metric": "电子信息化学品_2026_H1→H2收入环比增速(=2025季节性+调整)",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.fluorine.g3",
+      "operator": "sum",
+      "inputs": ["seg.fluorine.g1_2025", "seg.fluorine.season_delta"],
+      "output_metric": "有机氟化学品_2026_H1→H2收入环比增速(=2025季节性+调整)",
+      "unit": "比率"
+    },
+    {
       "id": "seg.battery.gp_fy2026",
-      "operator": "product",
-      "inputs": ["seg.battery.rev_h1_2026", "seg.battery.rev_fy_mult", "seg.battery.margin_h1_2026", "capchem.margin_fy_factor"],
+      "operator": "seg_gross_profit",
+      "inputs": ["seg.battery.rev_h1_2026", "seg.battery.g3", "seg.battery.margin_h1_2026", "capchem.margin_fy_factor"],
       "output_metric": "电池化学品_全年毛利_2026",
       "unit": "亿元"
     },
     {
       "id": "seg.electronic.gp_fy2026",
-      "operator": "product",
-      "inputs": ["seg.electronic.rev_h1_2026", "seg.electronic.rev_fy_mult", "seg.electronic.margin_h1_2026", "capchem.margin_fy_factor"],
+      "operator": "seg_gross_profit",
+      "inputs": ["seg.electronic.rev_h1_2026", "seg.electronic.g3", "seg.electronic.margin_h1_2026", "capchem.margin_fy_factor"],
       "output_metric": "电子信息化学品_全年毛利_2026",
       "unit": "亿元"
     },
     {
       "id": "seg.fluorine.gp_fy2026",
-      "operator": "product",
-      "inputs": ["seg.fluorine.rev_h1_2026", "seg.fluorine.rev_fy_mult", "seg.fluorine.margin_h1_2026", "capchem.margin_fy_factor"],
+      "operator": "seg_gross_profit",
+      "inputs": ["seg.fluorine.rev_h1_2026", "seg.fluorine.g3", "seg.fluorine.margin_h1_2026", "capchem.margin_fy_factor"],
       "output_metric": "有机氟化学品_全年毛利_2026",
       "unit": "亿元"
     },
     {
       "id": "seg.other.gp_fy2026",
-      "operator": "product",
-      "inputs": ["seg.other.rev_h1_2026", "seg.other.rev_fy_mult", "seg.other.margin_h1_2026", "capchem.margin_fy_factor"],
+      "operator": "seg_gross_profit",
+      "inputs": ["seg.other.rev_h1_2026", "seg.other.g3", "seg.other.margin_h1_2026", "capchem.margin_fy_factor"],
       "output_metric": "其他业务_全年毛利_2026",
       "unit": "亿元"
     },

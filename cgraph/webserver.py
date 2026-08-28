@@ -78,8 +78,16 @@ def _make_handler(sources_dir, operators_dir, samples, seed):
 
 def serve(sources_dir, operators_dir, host, port, samples, seed):
     handler = _make_handler(sources_dir, operators_dir, samples, seed)
-    httpd = ThreadingHTTPServer((host, port), handler)
+    try:
+        httpd = ThreadingHTTPServer((host, port), handler)
+    except OSError as e:
+        # 端口被占用最常见：多半已有一个 serve 在跑。改数据不用重启，直接刷新浏览器即可。
+        print(f"端口 {host}:{port} 起不来（{e}）。")
+        print("多半已有一个 serve 在跑——改完数据不用重启，回浏览器按 F5 刷新即可（每次请求都重读磁盘）。")
+        print(f"若确实要另起一个，换端口：python -m cgraph.cli serve --port {port + 1}")
+        return
     print(f"CausalGraph 网页已启动: http://{host}:{port}/  (Ctrl+C 停止)")
+    print("提示：改完 data/ 下的节点/算子不用重启，回浏览器 F5 刷新即可（每次请求都重新从磁盘读图）。")
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

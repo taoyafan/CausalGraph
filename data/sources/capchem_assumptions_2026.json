@@ -6,39 +6,39 @@
   "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-24/1225026296.PDF",
   "retrieved_at": "2026-08-28",
   "local_copy": "data/sources/raw/capchem_2025_annual_report.pdf",
-  "note": "本文件全部为我方假设(assumption)，非公司披露、非券商结论预测。各业务『全年/H1 收入倍数』为直接拍定的先验(三角众数+带宽)：其判断参考两个可由 audited 半年报精确算出的锚——同期内季节性 g1(2025 H1→H2) 与最新跨年环比 g2(2025H2→2026H1)，恒等式为 倍数=2+g3(g3=2026 H1→H2 前瞻增速)，再按 H2 价格/产量基本面保守微调。注：g1/g2/恒等式目前仅作定性背景，尚未作为 audited 节点+环比算子进图——待补 2025 分业务半年收入后可将倍数改由图内 2+g3 算子产出(见 TODO C10)。价格信号为二手行业价格聚合、未能归档，仅作定性依据。毛利转净利率的 H1 实际值由图内 divide 算子从真实节点算出。预测整体偏保守，待协作者确认。",
+  "note": "本文件全部为我方假设(assumption)，非公司披露、非券商结论预测。关键：2026 H1→H2 收入环比增速 g3 不再拍一个复杂假设，而是拆成 g3 = g1_2025(2025 同期真实季节性，audited 由 hoh_growth 算出) + season_delta(本文件唯一的分业务主观量：2026 相对 2025 季节性的小调整)，g3 由图内算子 seg.*.g3=sum(g1_2025, season_delta) 算出；唯有其他业务因 2025 锚口径混杂不可靠，g3 直接作原子假设(不走 g1+delta)。这样能算的部分(历史季节性)由 audited 算出，主观性收缩为每业务一个调整量+一句依据，不再写 essay。跨年环比锚 g2_cross 仅作交叉参考。毛利转净利率的 H1 实际值由图从真实节点算出(capchem.gross_to_net.h1_actual = H1 归母 ÷ H1 毛利合计)，本文件只保留“H2≈H1”的调整系数假设。season_delta 为 AI 反推的小调整值(与旧 g3 众数大致等价)，待协作者确认。预测整体偏保守。",
   "nodes": [
     {
-      "id": "seg.battery.rev_fy_mult",
-      "metric": "电池化学品_全年收入相对H1倍数_假设",
-      "unit": "倍",
+      "id": "seg.battery.season_delta",
+      "metric": "电池化学品_2026季节性相对2025的调整_假设",
+      "unit": "比率(增速点数)",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 2.28, "mode": 2.40, "high": 2.52, "domain": [0, null]},
-      "quote": "我方假设(偏保守)：电池化学品全年收入约为 H1 的 2.40 倍(带宽 2.28~2.52)。判断依据(定性)：H2 电解液/VC 涨价与六氟触底回升提供价格支撑，倍数相对 2025 季节性略上调；但利用率 87.9% 近满产、新产能年底才投放限制放量，故不追高、并保守留下行。锚点 g1/g2 见 source note(未入图)。"
+      "distribution": {"type": "triangular", "low": -0.09, "mode": 0.03, "high": 0.15, "domain": [-1, 1]},
+      "quote": "唯一主观判断：2026 电池 H1→H2 季节性相对 2025 真实值(g1≈+37%，audited)的调整。众数 +3pct——六氟触底回升、电解液/VC 涨价支撑，略强于去年；带宽 −9~+15pct 含 H2 让价下行风险。g3 = g1 + 本调整，基础季节性由 audited 算出、不拍。"
     },
     {
-      "id": "seg.electronic.rev_fy_mult",
-      "metric": "电子信息化学品_全年收入相对H1倍数_假设",
-      "unit": "倍",
+      "id": "seg.electronic.season_delta",
+      "metric": "电子信息化学品_2026季节性相对2025的调整_假设",
+      "unit": "比率(增速点数)",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 2.18, "mode": 2.24, "high": 2.32, "domain": [0, null]},
-      "quote": "我方假设(偏保守上调)：电子信息化学品全年收入约为 H1 的 2.24 倍(带宽 2.18~2.32)。判断依据：产能利用率仅 55.7% 放量空间大，H2 半导体/AI 液冷旺季、毛利率同比 +3.86pct 需求强；保守未取更高。锚点 g1/g2 见 source note(未入图)。"
+      "distribution": {"type": "triangular", "low": 0.02, "mode": 0.08, "high": 0.16, "domain": [-1, 1]},
+      "quote": "唯一主观判断：2026 电子 H1→H2 季节性相对 2025(g1≈+16%，audited)的调整。众数 +8pct——H2 半导体/AI 液冷旺季，季节性显著强于去年；低精度、带宽 +2~+16pct。g3 = g1 + 本调整，基础季节性由 audited 算出、不拍。"
     },
     {
-      "id": "seg.fluorine.rev_fy_mult",
-      "metric": "有机氟化学品_全年收入相对H1倍数_假设",
-      "unit": "倍",
+      "id": "seg.fluorine.season_delta",
+      "metric": "有机氟化学品_2026季节性相对2025的调整_假设",
+      "unit": "比率(增速点数)",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 1.95, "mode": 2.02, "high": 2.12, "domain": [0, null]},
-      "quote": "我方假设(弱上调，低置信)：有机氟化学品全年收入约为 H1 的 2.02 倍(带宽 1.95~2.12)。判断依据：H2 有 AI 液冷氟化液批量出货增量，但一代老产品价格下滑(医药中间体跌+氢氟酸涨)拖累仍在，故幅度小、带宽宽。锚点 g1/g2 见 source note(未入图)。"
+      "distribution": {"type": "triangular", "low": -0.03, "mode": 0.04, "high": 0.14, "domain": [-1, 1]},
+      "quote": "唯一主观判断：2026 有机氟 H1→H2 季节性相对 2025(g1≈−2%，audited)的调整。众数 +4pct——AI 液冷氟化液批量出货增量对冲一代老品价格下滑，由略负转弱正；低置信、带宽 −3~+14pct。"
     },
     {
-      "id": "seg.other.rev_fy_mult",
-      "metric": "其他业务_全年收入相对H1倍数_假设",
-      "unit": "倍",
+      "id": "seg.other.g3",
+      "metric": "其他业务_2026_H1→H2收入环比增速_假设(原子)",
+      "unit": "比率",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 1.70, "mode": 2.00, "high": 2.30, "domain": [0, null]},
-      "quote": "我方假设：其他业务占比小(<1%)，缺 2025H1 单列数，倍数按化工整体季节性粗取约 2.0，带宽较宽。"
+      "distribution": {"type": "triangular", "low": -0.30, "mode": 0.00, "high": 0.30, "domain": [-1, 1]},
+      "quote": "其他业务占比<1%、构成杂；2025 季节性锚 g1≈+15% 取自口径混杂的半年报附注、不可靠，故此段不走 g1+调整，直接原子假设 2026 无季节性(众数 g3≈0)、带宽极宽 ±30%。低置信。"
     },
     {
       "id": "capchem.margin_fy_factor",
@@ -54,7 +54,7 @@
       "unit": "比率",
       "evidence_type": "assumption",
       "distribution": {"type": "triangular", "low": 0.91, "mode": 1.00, "high": 1.05, "domain": [0, null]},
-      "quote": "我方假设：全年毛利转净利率 ≈ H1 实际水平(众数系数 1.00，区间 0.91~1.05)。H1 实际率由图内 divide 算子从真实节点算出(见 capchem.gross_to_net.h1_actual)，本节点只是它的全年调整系数。下行 0.91 反映 H2 年度奖金/汇算清缴等期间费用上升，上行 1.05 反映规模效应；偏保守。"
+      "quote": "我方假设：全年毛利转净利率 ≈ H1 实际水平（众数系数 1.00）。H1 实际值由图从真实节点算出（capchem.gross_to_net.h1_actual = H1归母 9.838 ÷ H1毛利合计），不再手算烘焙。下行 0.91 反映 H2 年度奖金/汇算清缴等期间费用上升，上行 1.05 反映规模效应；偏保守。"
     }
   ]
 }
