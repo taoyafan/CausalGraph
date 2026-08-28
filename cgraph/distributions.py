@@ -20,9 +20,12 @@ def sample(dist, c, n):
     t = dist["type"]
     if t == "point":
         v = dist["value"]
-        seed = abs(v) * 0.01 + 1e-9  # Point 先给极小种子宽度，再按 1/C 展宽
-        lo, hi = v - seed / c, v + seed / c
-        xs = [random.triangular(lo, hi, v) for _ in range(n)]
+        # Point 是确定值：C=1（如 audited 披露值）→ 精确点、零展宽；C<1 才按缺失的置信度展宽。
+        half = abs(v) * 0.01 * (1.0 / c - 1.0)
+        if half <= 0:
+            xs = [v] * n
+        else:
+            xs = [random.triangular(v - half, v + half, v) for _ in range(n)]
     elif t == "uniform":
         mid = (dist["low"] + dist["high"]) / 2
         lo, hi = _widen_bounds(dist["low"], mid, dist["high"], c)

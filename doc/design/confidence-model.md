@@ -15,7 +15,7 @@ $C\in(0,1]$ 直接、单向地展宽该节点自身的分布，公式只用到�
 | Normal($\mu,\sigma$) | $\sigma_{eff} = \sigma / C$ |
 | Triangular(min, mode, max) | $\text{new\_min} = \text{mode} - \dfrac{\text{mode}-\text{min}}{C}$，$\text{new\_max} = \text{mode} + \dfrac{\text{max}-\text{mode}}{C}$ |
 | Uniform(min, max) | 以中点为中心，两端按 $1/C$ 拉伸 |
-| Point / Bernoulli | 先退化为极小种子宽度（如按 domain 量级取 1%）的 Normal/Triangular，再套用上式（0 宽度乘任何倍数仍是 0，必须先给一个非零种子宽度） |
+| Point / Bernoulli | 展宽半宽 $= k\lvert v\rvert\,(1/C - 1)$（$k$ 取 domain 量级的约 1%）。**$C=1$ 时半宽严格为 0 —— audited 等确定披露值退化为精确点，不凭空造噪声**；$C<1$ 才按缺失的置信度展开为绕 $v$ 的三角分布 |
 
 **Domain 钳制**：每种指标类型注册一个静态物理/常识边界常量（如"价格 ≥ 0""同比增速 ≥ −100%"，随指标类型写入 Schema，不是对其它节点的依赖），展宽后的分布始终按边界截断。$C\to 0$ 时，分布自然收敛到"边界内的均匀分布"——这就是 README 里"退化为行业常识宽分布"的准确含义，不需要额外发明一个"先验节点"。
 
