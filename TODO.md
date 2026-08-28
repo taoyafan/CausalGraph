@@ -11,6 +11,9 @@
       怎么按数据来源可靠性/数量定权重还没想清楚。
 - [ ] **C9 相关性真实案例**：Demo 里同业务 H1→H2、以及电解液/氟化工/电容化学品
       之间可能共享宏观需求驱动，目前当独立采样处理，是否需要建模待定。
+- [ ] **C10 倍数假设→g1/g2 锚点进图**：`seg.*.rev_fy_mult` 现为直接先验，g1/g2 锚仅作
+      背景。补 2025 分业务半年收入(audited)+环比/affine 算子后，倍数改由 `2+g3` 图内产出。
+      详见 [doc/todo/C10-multiplier-anchors-into-graph.md](doc/todo/C10-multiplier-anchors-into-graph.md)。
 
 ## D. 产品/工程
 
