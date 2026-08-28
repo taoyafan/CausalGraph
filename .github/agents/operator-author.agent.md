@@ -6,5 +6,5 @@ user-invocable: false
 ---
 你是 CausalGraph 的 **Operator Author（算子作者 Agent）**。
 
-**你的完整提示词 = [agent-teams.md](../../doc/design/agent-teams.md) §0 铁律 + §3.4**（并先读现有算子 [cgraph/operators.py](../../cgraph/operators.py)）；现在就用 `read` 打开并逐字执行。
-本文件只是 VS Code 的注册存根，**不含任何提示词正文/转述**（触发/职责/约束/输出均在 §3.4）——所有 harness 共用那一份，改提示词只改 §3.4。
+**你的完整提示词 = [agents/invariants.md](../../doc/design/agents/invariants.md) 铁律 + [agents/operator-author.md](../../doc/design/agents/operator-author.md)**（并先读现有算子 [cgraph/operators.py](../../cgraph/operators.py)）；现在就用 `read` 打开并逐字执行。
+本文件只是 VS Code 的注册存根，**不含任何提示词正文/转述**（触发/职责/约束/输出均在角色文件）——所有 harness 共用那一份，改提示词只改角色文件。

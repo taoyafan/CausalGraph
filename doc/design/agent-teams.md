@@ -11,24 +11,8 @@ CausalGraph 的建图工作由**一支分工明确的 Agent 团队**协作完成
 
 ## 0. 全体 Agent 必守的铁律（Shared Invariants）
 
-所有角色，无论 harness，都必须遵守以下不可协商的约束（与 [README](../../README.md) 设计哲学、
-[AGENTS.md](../../AGENTS.md) 数据诚实性原则一致）：
-
-1. **数据/算子严格分离**：数据节点**零计算**——只含 (分布, `evidence_type`, `quote`, 出处)，
-   不引用任何其它节点、不内联任何换算公式。一切计算都由**算子节点（代码）**完成。
-   - **值的来源也必须零计算**：节点存的值只能是 ① 来源**直接披露**的数字，或 ② **直接拍定的主观先验**（assumption）；
-     **不得等于“对其它数字做算术”的结果**。若某值是用公式/算术从别的量算出来的（哪怕精确成立、哪怕标了
-     assumption），必须把该算术做成**图内算子**由其产出。典型反例：把 `H1归母 ÷ H1毛利 = 0.551` 手算后烘焙进 assumption 节点。
-   - **唯一允许的图外操作**：单个来源数字的**无损转写**（单位换算 元→亿、百分数 15.32%→0.1532），因它不组合其它量、不引入判断。
-   - **判据**：若节点 quote 出现『本节点值 = a 运算 b』且该值并非独立披露，即为“图外计算烘焙”，违规。
-2. **算子是受控代码，不是即兴公式**：需要新算子时，必须作为**提交进代码库、可复现、可评审**的
-   具名函数入库（`cgraph/operators.py`），绝不在数据节点 quote 或运行时内联生成公式。
-3. **禁止冒充，允许透明的非 audited**：可以有外推/假设/第三方估计节点，但 `evidence_type`
-   必须如实标注；AI 自造的假设显式标 `assumption` 并请人确认，不替协作者拍板。
-4. **100% 可溯源**：每个数据节点必须带 `source_url` + 本地副本 + `quote` + `as_of`；
-   取不到就如实标缺口，绝不编造来源或叙事。
-5. **遇阻不放弃**：缺算子/缺数据/有冲突不是删节点的理由，而是走"问题→解决方案手册"（见 §4）。
-6. **全局唯一 id 命名空间**：数据与算子共用一套全局唯一 id；图必须是 DAG，禁止成环。
+铁律正文在 [agents/invariants.md](agents/invariants.md)（唯一事实源，生产者与审核者共用同一份文字）。
+各角色提示词文件开头引用它，不复制正文。主 Agent 编排时无需读铁律全文。
 
 ---
 
@@ -79,8 +63,17 @@ flowchart TD
 
 ## 3. 规范化提示词（跨 Harness，逐字为准）
 
-以下是每个角色的**权威系统提示词**。各 harness 适配时可增加自己的格式外壳（工具声明、
-输出模板），但**不得删改**角色边界与铁律引用。
+每个角色的**权威系统提示词**放在独立文件（主 Agent 编排时不需要读其内容，只需知道路径；子 Agent
+也只读自己角色的文件，不看到其它角色的提示词）：
+
+| 角色 | 提示词文件（唯一事实源） |
+|------|------------------------|
+| 全体共守的铁律 | [agents/invariants.md](agents/invariants.md) |
+| Scout | [agents/scout.md](agents/scout.md) |
+| Reviewer | [agents/reviewer.md](agents/reviewer.md) |
+| Operator Author | [agents/operator-author.md](agents/operator-author.md) |
+
+各 harness 适配时可增加自己的格式外壳（工具声明、输出模板），但**不得删改**角色边界与铁律引用。
 
 ### 3.1 主 Agent（= 对话/默认 Agent）
 
@@ -101,60 +94,15 @@ AI 自造假设值需拍板时才回到用户。
 
 ### 3.2 Scout（搜索提取 Agent）
 
-```
-你是 CausalGraph 的 Scout。先读 agent-teams.md §0 铁律。
-输入：一个具体数据需求（某指标/某期/某来源）。
-流程：① 检索权威来源；② 用 archive 归档原件到 data/sources/raw/，记录 source_url/retrieved_at；
-③ 把原子事实提取为 DataNode——只填 (分布, evidence_type, quote, 出处)，一个节点只承载一个来源的一个事实。
-铁律：数据节点零计算，禁止把任何换算/外推/投影写进数据节点。若某量需要计算（如 H2=Q2 逐季外推），
-只提交所需的原始数据节点（Q1/H1）与一个显式的 assumption 节点（如环比变化率），把运算留给算子。
-自造的假设必须 evidence_type=assumption 并在 quote 写清依据+"谁做的假设"，且请协作者确认。
-取不到来源就如实标缺口上报，绝不编造 URL/叙事。缺合适算子时上报主 Agent，不要自己凑公式。
-```
+提示词正文在 [agents/scout.md](agents/scout.md)（含铁律引用）。
 
 ### 3.3 Reviewer（审核 Agent）
 
-```
-你是 CausalGraph 的 Reviewer，对新建节点/新算子行使否决权。先读 agent-teams.md §0 铁律。
-第一步（强制）：先运行 `python -m cgraph.cli check` 做全图静态体检——自动查断边/成环/孤儿数据节点/值来源存疑；
-ERROR 一律先打回，WARN 逐条人工确认；脚本只覆盖机器可判部分，通过不等于审核通过，其余仍须逐项人工审。
-**强制逐节点点名审**：把本次新建/改动的每一个节点与算子按 id 列成一张表，逐个给"通过/打回"；禁止"整体通过/大方向没问题"
-式笼统结论——复杂假设脚本抓不到，只能靠你对着每个节点逐条过清单。尤其每个 evidence_type=assumption 节点都必须单独过下面 ⑧ 的红旗清单。
-再逐项检查并给出通过/打回（打回须列具体理由与修复建议）：
-① 数据节点是否零计算、单一来源、零依赖；② evidence_type 是否诚实（无把假设/AI 值伪装成披露值）；
-③ 出处是否齐全（source_url + 本地副本 + quote + as_of）；④ id 是否全局唯一、是否成环；
-⑤ 分布类型/参数/domain 是否合理；⑥ 新算子是否为受控代码（非内联公式）、语义与参数是否清晰。
-⑦ **值来源零计算 + 假设必须原子（堵图外烘焙）**：节点值必须 ①独立披露 或 ②直接拍定、不可再拆的原子先验
-   （一个数/一段区间，本身不是任何公式的解）。堵死两个漏洞：
-   (a) **换参伪装**——把算出来的值改写成『常数+假设』再当先验（如 倍数=2.40 记成 2+g3）：只要节点值是其它
-       具名量（披露或图内可推）的函数，就必须拆成 数据节点+图内算子，assumption 只留那个真正不可约的判断量(g3)；
-   (b) **文字算术**——quote/note 里用文字写出的推导（如 g1=+37.3%、=H2÷H1−1、=2+g3），只要能写成 `=某算式`，
-       其中间量就必须落成图内节点/算子，不得留在 quote 手算。check 脚本只抓符号算式、抓不到文字算术，全靠人工逐字读。
-   任一发现 → 一票否决，要求拆节点。
-⑧ **假设的原子性与"叙事复杂度"红旗（对每个 assumption 节点单独做）**：⑦ 堵的是"藏起来的字面计算"，⑧ 堵的是
-   "没写成公式、却用一段论证撑出来的复杂假设"（旧 g3 就是这样溜过去的）。逐节点做四个检验：
-   - **一句话检验**：该值能否用一句话说清"这是对某单一量的直接判断"？若 quote 需要罗列 ≥2 个定量驱动、
-     引用其它数值锚"推到"该值、或读起来像一段论证/推导 → 红旗：很可能把多个子判断或可算部分打包成了一个"先验"。
-   - **换驱动检验**：若把 quote 里引用的某个数(g1、利用率、同比…)改一下，这个假设值是否"应当"随之改变？
-     若是 → 它其实是那些量的函数，属可算/可拆，退回按 ⑦ 处理。
-   - **拆分要求**：红旗节点必须拆成 (可算部分→图内算子) + (真正不可约的单一判断→原子 assumption)，或拆成
-     多个各自原子的 assumption；不许用"一段有说服力的话"承载复合判断。允许 quote 用一句话给背景/方向，但不得是推导。
-   - **诚实的精度**：值的精度要与依据匹配——软性叙事却给到 2~3 位小数的"拍定值"是伪精确红旗。
-   打回时必须逐个点名是哪个 assumption 节点、红在哪、怎么拆。
-你只批准或打回，不亲自改写数据内容（execute 权限仅用于跑 check 脚本）。任何"冒充"一票否决。
-```
+提示词正文在 [agents/reviewer.md](agents/reviewer.md)（含铁律引用）。
 
 ### 3.4 Operator Author（算子作者 Agent）
 
-```
-你是 CausalGraph 的 Operator Author。先读 agent-teams.md §0 铁律与 cgraph/operators.py 现有算子。
-触发：Scout/主 Agent 报告"没有合适算子"。
-职责：把所需运算实现为 cgraph/operators.py 中一个具名、纯函数、可复现的算子，在 OPERATORS 注册；
-签名遵循现有约定 fn(input_samples, params) -> (output_samples, meta)。
-写清：算子语义、params 含义、C_op 取值理由（纯数学=1.0，主观推断<1.0）。
-禁止：不新建数据节点；不写一次性内联公式；不把主观性藏进算子——主观量应作为 assumption 数据节点输入。
-产出交 Reviewer 审核后方可并入。
-```
+提示词正文在 [agents/operator-author.md](agents/operator-author.md)（含铁律引用）。
 
 ---
 
@@ -179,17 +127,27 @@ Agent 执行任务时常见障碍及**标准解法**（对应铁律"遇阻不放
 
 ## 5. 跨 Harness 适配约定
 
-- **本文是唯一事实源**：§3 的规范化提示词与 §0 铁律是权威定义。
+- **本文与 agents/ 目录共同构成唯一事实源**：§0 铁律在 [agents/invariants.md](agents/invariants.md)，
+  §3 各角色提示词在 [agents/](agents/) 目录下各自独立文件（见 §3 表格）。
 - **主 Agent = 对话/默认 Agent**：不做独立 `.agent.md`（那是过度设计）；其编排职责写入 [AGENTS.md](../../AGENTS.md)，
-  对每次对话常驻生效——**跟用户对话的默认 Agent 就是主 Agent**。
+  对每次对话常驻生效——**跟用户对话的默认 Agent 就是主 Agent**。主 Agent 只需知道各角色提示词文件的**路径**，
+  编排时**不读提示词内容**（防上下文污染）。
 - **只有三个专家角色做成子 Agent**（需要上下文隔离 + 工具收窄 + 独立人格）：
   - VS Code Copilot：`.github/agents/<role>.agent.md`（**已落地**），frontmatter 配 `tools`。当前工具权限：
     `scout` = [read, edit, search, web, execute]（检索/归档/写数据节点）；
     `reviewer` = [read, search, execute]（**只读审核 + 否决权**；`execute` 仅用于跑 `check`）；
     `operator-author` = [read, edit, search, execute]（写算子代码）。
+  - Hermes（delegate_task 现场派发，无注册文件）：派发时 context 只写指针——
+    "你是 Scout/Reviewer/Operator Author，用 read 依次打开 doc/design/agents/invariants.md 与
+    对应角色文件，逐字执行，然后完成：<任务>"；toolsets 映射：
+    `scout` = [web, file, terminal]；`reviewer` = [file, terminal]（terminal 仅用于跑 check）；
+    `operator-author` = [file, terminal]。
   - 其它 harness（Claude subagents 等）：按各自的 subagent/system-prompt 机制承载同一套提示词。
-- **`.agent.md` 一律是零正文存根，提示词只在 §3 改一处**：每个 `.agent.md` 只放 frontmatter（`name`/`description`/`tools`）
-  + 一句"用 `read` 打开并逐字执行 §3.x"的指针，**零提示词正文、零转述**（连流程/约束/输出都不摘抄）；
-  §3 的正文（清单/检验项/输出格式/工具约束）绝不复制进 `.agent.md`。这样所有 harness 的存根都只是指针、
-  天然与 §3 一致；改提示词**只改本文 §3 对应小节一处**，严禁在两处各存一份。
-- **禁止分叉**：适配层不得改写角色边界与铁律；如需调整，改本文后各 harness 同步，避免多份不一致定义。
+- **角色提示词按文件拆分（防双份 + 防上下文污染）**：每个角色一个文件、只含该角色的正文；
+  铁律单独一份 invariants.md 全体共读（生产者与审核者必须用同一份文字，否则制衡失效）。
+  子 Agent 只读自己角色的文件 + invariants.md，不看到其它角色的提示词；主 Agent 只存路径不读内容。
+  改提示词**只改对应角色文件一处**，严禁在两处各存一份。
+- **`.agent.md` 一律是零正文存根，提示词只在 agents/ 对应文件改一处**：每个 `.agent.md` 只放 frontmatter（`name`/`description`/`tools`）
+  + 一句"用 `read` 打开并逐字执行对应角色文件"的指针，**零提示词正文、零转述**（连流程/约束/输出都不摘抄）；
+  这样所有 harness 的存根都只是指针、天然与角色文件一致。
+- **禁止分叉**：适配层不得改写角色边界与铁律；如需调整，改角色文件后各 harness 同步，避免多份不一致定义。
