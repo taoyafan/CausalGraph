@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>CausalGraph · 因果图</title>
+<style>
+  :root {
+    --bg: #f2f4f8; --card: #ffffff; --ink: #1f2733; --sub: #6b7684;
+    --line: #e6e9f0; --accent: #3b6ef5; --accent-soft: #eaf0ff;
+    --hi: #17a673; --mid: #e6961e; --lo: #e0524d; --op: #7b5bd6;
+    --shadow: 0 1px 3px rgba(20,30,60,.08), 0 6px 20px rgba(20,30,60,.05);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 14px; line-height: 1.5;
+  }
+  .app { max-width: 520px; margin: 0 auto; min-height: 100vh; background: var(--bg); }
+  header {
+    position: sticky; top: 0; z-index: 10; background: rgba(242,244,248,.9);
+    backdrop-filter: saturate(180%) blur(10px);
+    padding: 14px 16px 10px; border-bottom: 1px solid var(--line);
+  }
+  header h1 { margin: 0 0 10px; font-size: 17px; font-weight: 700; letter-spacing: .3px; }
+  header h1 small { color: var(--sub); font-weight: 500; font-size: 12px; margin-left: 6px; }
+  .picker { display: flex; gap: 8px; }
+  select {
+    flex: 1; appearance: none; background: var(--card); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px;
+    font-size: 14px; box-shadow: var(--shadow);
+  }
+  main { padding: 14px 16px 40px; }
+  .summary {
+    background: linear-gradient(135deg, #3b6ef5, #6a55e0); color: #fff;
+    border-radius: 18px; padding: 18px 18px 16px; box-shadow: var(--shadow); margin-bottom: 16px;
+  }
+  .summary .lbl { font-size: 13px; opacity: .9; }
+  .summary .p50 { font-size: 34px; font-weight: 800; margin: 4px 0 2px; }
+  .summary .p50 span { font-size: 15px; font-weight: 600; opacity: .85; margin-left: 4px; }
+  .summary .range { font-size: 13px; opacity: .92; }
+  .spark { display: flex; align-items: flex-end; gap: 2px; height: 40px; margin-top: 12px; }
+  .spark i { flex: 1; background: rgba(255,255,255,.55); border-radius: 2px 2px 0 0; min-height: 2px; }
+  .sec-title { font-size: 12px; color: var(--sub); font-weight: 600; margin: 4px 2px 8px; letter-spacing: .5px; }
+  .node { margin: 0 0 8px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: var(--shadow); overflow: hidden;
+  }
+  .row { display: flex; align-items: center; gap: 10px; padding: 11px 12px; cursor: default; }
+  .row.tap { cursor: pointer; }
+  .cbar { width: 4px; align-self: stretch; border-radius: 4px; background: var(--mid); }
+  .caret { width: 16px; text-align: center; color: var(--sub); transition: transform .15s; font-size: 12px; }
+  .caret.open { transform: rotate(90deg); }
+  .caret.leaf { visibility: hidden; }
+  .title { flex: 1; min-width: 0; }
+  .title b { display: block; font-weight: 600; font-size: 13.5px; }
+  .title .meta { color: var(--sub); font-size: 11.5px; display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
+  .chip {
+    font-size: 11px; padding: 2px 7px; border-radius: 999px; white-space: nowrap;
+    background: var(--accent-soft); color: var(--accent); font-weight: 600;
+  }
+  .chip.op { background: #f0ecff; color: var(--op); }
+  .badge { font-size: 10.5px; padding: 1px 6px; border-radius: 6px; font-weight: 700; color: #fff; }
+  .stat { text-align: right; }
+  .stat b { font-size: 14px; }
+  .stat small { display: block; color: var(--sub); font-size: 10.5px; }
+  .detail { padding: 0 12px 12px 26px; font-size: 12.5px; color: var(--sub); }
+  .detail .kv { margin: 2px 0; }
+  .quote { background: #f7f8fb; border-left: 3px solid var(--line); border-radius: 8px;
+           padding: 8px 10px; margin: 8px 0 4px; color: var(--ink); font-size: 12px; }
+  .detail a { color: var(--accent); text-decoration: none; word-break: break-all; }
+  .kids { margin-left: 14px; border-left: 1px dashed var(--line); padding-left: 8px; margin-top: 6px; }
+  .alert { color: var(--lo); font-weight: 600; }
+  .loading, .err { text-align: center; color: var(--sub); padding: 40px 0; }
+  .err { color: var(--lo); }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>CausalGraph <small>因果推理图 · 可溯源</small></h1>
+    <div class="picker">
+      <select id="picker"></select>
+    </div>
+  </header>
+  <main id="main"><div class="loading">加载中…</div></main>
+</div>
+<script>
+const fmt = (v, d = 2) => (v === undefined || v === null) ? "—" : Number(v).toFixed(d);
+const el = (t, c) => { const e = document.createElement(t); if (c) e.className = c; return e; };
+
+function confColor(c) { return c >= 0.8 ? "var(--hi)" : c >= 0.4 ? "var(--mid)" : "var(--lo)"; }
+function confLabel(c) { return c >= 0.8 ? "高" : c >= 0.4 ? "中" : "低"; }
+
+function spark(hist) {
+  const box = el("div", "spark");
+  if (!hist) return box;
+  const max = hist.max || 1;
+  hist.counts.forEach(c => { const b = el("i"); b.style.height = (6 + 34 * c / max) + "%"; box.appendChild(b); });
+  return box;
+}
+
+function summaryCard(root) {
+  const c = el("div", "summary");
+  c.innerHTML = `<div class="lbl">${root.label}</div>
+    <div class="p50">${fmt(root.stats.p50)}<span>${root.unit || ""}</span></div>
+    <div class="range">区间 P10–P90: ${fmt(root.stats.p10)} ~ ${fmt(root.stats.p90)} · 均值 ${fmt(root.stats.mean)}</div>`;
+  c.appendChild(spark(root.hist));
+  return c;
+}
+
+function nodeView(n, depth) {
+  const wrap = el("div", "node");
+  const card = el("div", "card");
+  const row = el("div", "row" + (n.children && n.children.length ? " tap" : ""));
+
+  const bar = el("div", "cbar"); bar.style.background = confColor(n.confidence);
+  const caret = el("div", "caret" + (n.children && n.children.length ? "" : " leaf"));
+  caret.textContent = "▶";
+  const title = el("div", "title");
+  const meta = el("div", "meta");
+  if (n.kind === "operator") {
+    meta.innerHTML = `<span class="chip op">${n.operator}</span>`;
+  } else {
+    meta.innerHTML = `<span class="chip">${n.dist || "data"}</span>`;
+  }
+  const badge = el("span", "badge");
+  badge.style.background = confColor(n.confidence);
+  badge.textContent = (n.evidence_type || "算子") + " · " + confLabel(n.confidence);
+  meta.appendChild(badge);
+  title.innerHTML = `<b>${n.label}</b>`;
+  title.appendChild(meta);
+
+  const stat = el("div", "stat");
+  stat.innerHTML = `<b>${fmt(n.stats.p50)}</b><small>${fmt(n.stats.p10)}~${fmt(n.stats.p90)}</small>`;
+
+  row.append(bar, caret, title, stat);
+  card.appendChild(row);
+
+  const detail = el("div", "detail");
+  detail.style.display = "none";
+  if (n.alert) detail.innerHTML += `<div class="kv alert">⚠ ${n.alert}</div>`;
+  if (n.kind === "data") {
+    if (n.quote) detail.innerHTML += `<div class="quote">${n.quote}</div>`;
+    const s = n.source || {};
+    detail.innerHTML += `<div class="kv">来源: ${s.name || s.id || "—"}${s.publisher ? " · " + s.publisher : ""}</div>`;
+    if (n.as_of) detail.innerHTML += `<div class="kv">数据时点: ${n.as_of}</div>`;
+    if (s.url) detail.innerHTML += `<div class="kv"><a href="${s.url}" target="_blank" rel="noopener">原始出处 ↗</a></div>`;
+    if (s.local_copy) detail.innerHTML += `<div class="kv">本地副本: ${s.local_copy}</div>`;
+  } else {
+    detail.innerHTML += `<div class="kv">算子: ${n.operator} · 算子置信度 ${fmt(n.confidence, 2)}</div>`;
+    detail.appendChild(spark(n.hist));
+  }
+  card.appendChild(detail);
+  wrap.appendChild(card);
+
+  let kids = null;
+  if (n.children && n.children.length) {
+    kids = el("div", "kids");
+    kids.style.display = "none";
+    n.children.forEach(ch => kids.appendChild(nodeView(ch, depth + 1)));
+    wrap.appendChild(kids);
+    const toggle = () => {
+      const open = kids.style.display === "none";
+      kids.style.display = open ? "block" : "none";
+      detail.style.display = open ? "block" : "none";
+      caret.classList.toggle("open", open);
+    };
+    row.addEventListener("click", toggle);
+    if (depth < 1) toggle(); // 顶层默认展开一层
+  } else {
+    row.classList.add("tap");
+    row.addEventListener("click", () => {
+      const open = detail.style.display === "none";
+      detail.style.display = open ? "block" : "none";
+    });
+  }
+  return wrap;
+}
+
+async function loadFocus(node) {
+  const main = document.getElementById("main");
+  main.innerHTML = `<div class="loading">求值中…</div>`;
+  try {
+    const r = await fetch("/api/focus?node=" + encodeURIComponent(node));
+    const tree = await r.json();
+    if (tree.error) { main.innerHTML = `<div class="err">${tree.error}</div>`; return; }
+    main.innerHTML = "";
+    main.appendChild(summaryCard(tree));
+    const t = el("div", "sec-title"); t.textContent = "贡献分解（点卡片展开溯源）";
+    main.appendChild(t);
+    main.appendChild(nodeView(tree, 0));
+  } catch (e) {
+    main.innerHTML = `<div class="err">加载失败: ${e}</div>`;
+  }
+}
+
+async function init() {
+  const picker = document.getElementById("picker");
+  try {
+    const nodes = await (await fetch("/api/nodes")).json();
+    nodes.forEach(n => {
+      const o = el("option"); o.value = n.id;
+      o.textContent = (n.terminal ? "★ " : "") + n.label;
+      picker.appendChild(o);
+    });
+    picker.addEventListener("change", () => loadFocus(picker.value));
+    if (nodes.length) loadFocus(nodes[0].id);
+    else document.getElementById("main").innerHTML = `<div class="err">图中没有算子节点</div>`;
+  } catch (e) {
+    document.getElementById("main").innerHTML = `<div class="err">无法连接服务: ${e}</div>`;
+  }
+}
+init();
+</script>
+</body>
+</html>

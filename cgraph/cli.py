@@ -75,6 +75,12 @@ def cmd_check(args):
         sys.exit(1)
 
 
+def cmd_serve(args):
+    """启动本地网页服务，在浏览器里交互展示因果图。"""
+    from .webserver import serve
+    serve(args.sources, args.operators, args.host, args.port, args.samples, args.seed)
+
+
 def cmd_trace(args):
     """溯源：打印某数据节点的来源出处（URL / 本地副本 / 原文引用）。"""
     graph = load_world(args.sources, args.operators, 1)
@@ -125,6 +131,15 @@ def main(argv=None):
     c.add_argument("--sources", default=default_sources, help="数据源目录")
     c.add_argument("--operators", default=default_operators, help="算子子图目录")
     c.set_defaults(func=cmd_check)
+
+    s = sub.add_parser("serve", help="启动本地网页（浏览器交互展示因果图）")
+    s.add_argument("--host", default="127.0.0.1", help="监听地址")
+    s.add_argument("--port", type=int, default=8000, help="端口")
+    s.add_argument("--sources", default=default_sources, help="数据源目录")
+    s.add_argument("--operators", default=default_operators, help="算子子图目录")
+    s.add_argument("--samples", type=int, default=20000, help="蒙特卡洛样本数")
+    s.add_argument("--seed", type=int, default=42, help="随机种子（可复现）")
+    s.set_defaults(func=cmd_serve)
 
     args = parser.parse_args(argv)
     args.func(args)
