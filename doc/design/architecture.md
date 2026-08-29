@@ -13,11 +13,9 @@ cgraph/                  引擎（Python 包，零第三方依赖）
   operators.py           算子库（sum / mixture ...），注册即扩展
   engine.py              Graph：从 focus 递归拓扑求值 + 循环检测 + 告警收集
   loader.py              读 data/sources + data/operators 合成一张全局 Graph
-  archive.py             下载并归档数据源原件（urllib），产出 source_url/local_copy/retrieved_at/sha256
   cli.py                 `cgraph focus <node_id>` / `cgraph trace <node_id>`
 data/
   sources/*.json         数据源，每文件一个独立源，产出若干 DataNode
-  sources/raw/           数据源原件的本地归档副本（local_copy 指向它）
   operators/*.json       算子子图，每文件一簇 OperatorNode（inputs = 对任意上游节点 id 的引用 = 边）
 ```
 
@@ -32,12 +30,12 @@ data/
 - 数据节点零依赖（README §2.3）：只有分布 + `evidence_type` + 原文 `quote`，不引用其他节点、不存 C 数值。
 - 加载时校验数据节点 `id` 全局唯一，冲突即报错。
 
-### 2.1 出处标注与本地归档
+### 2.1 出处标注
 
-- 文件头再带出处字段：`source_url`（原文网址）、`local_copy`（本地副本相对路径）、`retrieved_at`（抓取时间 ISO-UTC）、`sha256`（副本指纹）。
-- 原件副本统一存 `data/sources/raw/`，`local_copy` 指向它；离线可查、可校验，网址失效也不丢证据。
-- `cgraph/archive.py` 负责下载归档：`python -m cgraph.archive <url> [filename]` 用 urllib 抓原件存入 `raw/`，返回 `source_url` / `local_copy` / `retrieved_at` / `sha256` / `bytes`，回填到源 JSON 头部即可。
-- 溯源用 `cgraph trace <node_id>`：从数据节点反查其 `source_id`，打印发布方、来源 URL、本地副本、原文引用、数据时点。
+- 文件头带出处字段：`source_url`（原文网址）、`retrieved_at`（抓取时间 ISO-UTC）、`publisher`（发布方）。
+- **不下载原件到本地**：溯源证据 = 原文 URL + quote（原文引用）+ retrieved_at；原件可能失效，
+  失效即如实标注缺口，不编造本地文件冒充出处（agent-teams.md 手册）。
+- 溯源用 `cgraph trace <node_id>`：从数据节点反查其 `source_id`，打印发布方、来源 URL、原文引用、数据时点。
 - 加载时源文件头（除 `nodes[]`）整体登记进 `Graph.sources`（`source_id -> 出处元数据`），供 `trace` 与审计使用。
 
 ## 3. 节点如何存储

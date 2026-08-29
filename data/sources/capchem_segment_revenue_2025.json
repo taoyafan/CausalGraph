@@ -9,7 +9,6 @@
     {
       "report": "新宙邦 2025 年半年度报告全文",
       "source_url": "https://static.cninfo.com.cn/finalpage/2025-08-26/1224572024.PDF",
-      "local_copy": "data/sources/raw/capchem_2025_semiannual_report.pdf",
       "sha256": "c6af4a97aa6382a1e6b801e2fd05b19fffc41f63d47bd7dcc1d70ced0a9c97f6",
       "as_of": "2025-06-30",
       "published": "2025-08-26"
@@ -17,7 +16,6 @@
     {
       "report": "新宙邦 2025 年年度报告全文",
       "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-24/1225026296.PDF",
-      "local_copy": "data/sources/raw/capchem_2025_annual_report.pdf",
       "sha256": "869370f748df99731c01040af0d0bebfc85e1dd82d2b42377f70888fe529b3ae",
       "as_of": "2025-12-31",
       "published": "2026-03-24"
@@ -31,7 +29,6 @@
       "evidence_type": "audited",
       "as_of": "2025-06-30",
       "source_url": "https://static.cninfo.com.cn/finalpage/2025-08-26/1224572024.PDF",
-      "local_copy": "data/sources/raw/capchem_2025_semiannual_report.pdf",
       "distribution": {"type": "point", "value": 28.152, "domain": [0, null]},
       "quote": "2025 半年报 三、主营业务分析『占比 10%以上的产品或服务』分产品：电池化学品 营业收入 2,815,236,050.66 元（≈28.15 亿），毛利率 9.71%，收入同比 +22.77%。"
     },
@@ -42,7 +39,6 @@
       "evidence_type": "audited",
       "as_of": "2025-06-30",
       "source_url": "https://static.cninfo.com.cn/finalpage/2025-08-26/1224572024.PDF",
-      "local_copy": "data/sources/raw/capchem_2025_semiannual_report.pdf",
       "distribution": {"type": "point", "value": 6.792, "domain": [0, null]},
       "quote": "2025 半年报 分产品：电子信息化学品 营业收入 679,177,445.52 元（≈6.79 亿），毛利率 47.82%，收入同比 +25.18%。"
     },
@@ -53,7 +49,6 @@
       "evidence_type": "audited",
       "as_of": "2025-06-30",
       "source_url": "https://static.cninfo.com.cn/finalpage/2025-08-26/1224572024.PDF",
-      "local_copy": "data/sources/raw/capchem_2025_semiannual_report.pdf",
       "distribution": {"type": "point", "value": 7.218, "domain": [0, null]},
       "quote": "2025 半年报 分产品：有机氟化学品 营业收入 721,835,375.91 元（≈7.22 亿），毛利率 62.80%，收入同比 +1.37%。"
     },
@@ -64,7 +59,6 @@
       "evidence_type": "audited",
       "as_of": "2025-06-30",
       "source_url": "https://static.cninfo.com.cn/finalpage/2025-08-26/1224572024.PDF",
-      "local_copy": "data/sources/raw/capchem_2025_semiannual_report.pdf",
       "distribution": {"type": "point", "value": 0.320, "domain": [0, null]},
       "quote": "2025 半年报 附注 61『营业收入、营业成本的分解信息』分产品(合同分类·化工行业)：其他 营业收入 32,018,951.75 元（≈0.32 亿）、营业成本 19,135,196.94 元。（半年报正文分产品表仅列占比≥10%的三大产品，未单列其他，故取自财务报告附注分解表。）"
     },
@@ -75,7 +69,6 @@
       "evidence_type": "audited",
       "as_of": "2025-12-31",
       "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-24/1225026296.PDF",
-      "local_copy": "data/sources/raw/capchem_2025_annual_report.pdf",
       "distribution": {"type": "point", "value": 66.793, "domain": [0, null]},
       "quote": "2025 年报『营业收入构成-分产品』：电池化学品 营业收入 6,679,287,833.00 元（≈66.79 亿，占营收 69.29%），同比 +30.57%。"
     },
@@ -86,7 +79,6 @@
       "evidence_type": "audited",
       "as_of": "2025-12-31",
       "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-24/1225026296.PDF",
-      "local_copy": "data/sources/raw/capchem_2025_annual_report.pdf",
       "distribution": {"type": "point", "value": 14.646, "domain": [0, null]},
       "quote": "2025 年报『营业收入构成-分产品』：电子信息化学品 营业收入 1,464,610,164.45 元（≈14.65 亿，占营收 15.19%），同比 +29.14%。"
     },
@@ -97,7 +89,6 @@
       "evidence_type": "audited",
       "as_of": "2025-12-31",
       "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-24/1225026296.PDF",
-      "local_copy": "data/sources/raw/capchem_2025_annual_report.pdf",
       "distribution": {"type": "point", "value": 14.263, "domain": [0, null]},
       "quote": "2025 年报『营业收入构成-分产品』：有机氟化学品 营业收入 1,426,342,449.53 元（≈14.26 亿，占营收 14.80%），同比 -6.70%。"
     },
@@ -108,7 +99,6 @@
       "evidence_type": "audited",
       "as_of": "2025-12-31",
       "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-24/1225026296.PDF",
-      "local_copy": "data/sources/raw/capchem_2025_annual_report.pdf",
       "distribution": {"type": "point", "value": 0.689, "domain": [0, null]},
       "quote": "2025 年报『营业收入构成-分产品』：其他 营业收入 68,927,385.54 元（≈0.69 亿，占营收 0.72%），同比 +1.03%。"
     }

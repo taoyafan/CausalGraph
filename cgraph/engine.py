@@ -41,7 +41,7 @@ def _check_arity(op, n_inputs):
 class Graph:
     def __init__(self, nodes, sources=None, n_samples=20000, overrides=None, mutes=None):
         self.nodes = {node.id: node for node in nodes}
-        self.sources = sources or {}  # source_id -> 出处元数据（url / local_copy / ...）
+        self.sources = sources or {}  # source_id -> 出处元数据（url / retrieved_at / ...）
         self.n_samples = n_samples
         self.overrides = overrides or {}  # id -> 临时分布 dict（情景覆盖）
         self.mutes = set(mutes or [])     # 被屏蔽节点 id 集合（情景断边）

@@ -78,7 +78,6 @@ def _build_node(graph, node_id):
                 "name": src.get("source_name", node.source_id),
                 "publisher": src.get("publisher"),
                 "url": src.get("source_url"),
-                "local_copy": src.get("local_copy"),
             },
             "children": [],
         })

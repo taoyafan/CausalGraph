@@ -5,7 +5,6 @@
   "as_of": "2026-08-21",
   "source_url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225487079.PDF",
   "retrieved_at": "2026-08-28",
-  "local_copy": "data/sources/raw/capchem_2026_semiannual_report.pdf",
   "note": "全部为公司定期报告披露值（audited）。分业务口径以 2026 半年报『分产品营业收入/毛利率』表为准；公司自 2025 年起将原电容化学品+半导体化学品合并披露为电子信息化学品。分产品销量未披露（仅披露产量），故不做电解液单品的产量×价格拆分，改为分业务收入外推（见 assumptions 文件）。",
   "nodes": [
     {

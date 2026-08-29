@@ -16,7 +16,7 @@
    具名函数入库（`cgraph/operators.py`），绝不在数据节点 quote 或运行时内联生成公式。
 3. **禁止冒充，允许透明的非 audited**：可以有外推/假设/第三方估计节点，但 `evidence_type`
    必须如实标注；AI 自造的假设显式标 `assumption` 并请人确认，不替协作者拍板。
-4. **100% 可溯源**：每个数据节点必须带 `source_url` + 本地副本 + `quote` + `as_of`；
+4. **100% 可溯源**：每个数据节点必须带 `source_url` + `quote` + `as_of`（+ 源级 `retrieved_at`/`publisher`）；
    取不到就如实标缺口，绝不编造来源或叙事。
 5. **遇阻不放弃**：缺算子/缺数据/有冲突不是删节点的理由，而是走"问题→解决方案手册"（见
    [agent-teams.md §4](../agent-teams.md)）。

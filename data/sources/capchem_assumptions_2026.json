@@ -5,7 +5,6 @@
   "as_of": "2026-08-28",
   "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-24/1225026296.PDF",
   "retrieved_at": "2026-08-28",
-  "local_copy": "data/sources/raw/capchem_2025_annual_report.pdf",
   "note": "本文件全部为我方假设(assumption)，非公司披露、非券商结论预测。关键：2026 H1→H2 收入环比增速 g3 不再拍一个复杂假设，而是拆成 g3 = g1_2025(2025 同期真实季节性，audited 由 hoh_growth 算出) + season_delta(本文件唯一的分业务主观量：2026 相对 2025 季节性的小调整)，g3 由图内算子 seg.*.g3=sum(g1_2025, season_delta) 算出；唯有其他业务因 2025 锚口径混杂不可靠，g3 直接作原子假设(不走 g1+delta)。这样能算的部分(历史季节性)由 audited 算出，主观性收缩为每业务一个调整量+一句依据，不再写 essay。跨年环比锚 g2_cross 仅作交叉参考。毛利转净利率的 H1 实际值由图从真实节点算出(capchem.gross_to_net.h1_actual = H1 归母 ÷ H1 毛利合计)，本文件只保留“H2≈H1”的调整系数假设。season_delta 为 AI 反推的小调整值(与旧 g3 众数大致等价)，待协作者确认。预测整体偏保守。",
   "nodes": [
     {

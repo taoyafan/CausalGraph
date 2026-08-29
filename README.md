@@ -116,7 +116,7 @@
 建图由一支**分工明确的 Agent 团队**协作完成，用"提取/审核分离、数据/算子分离"把可审计性落到组织结构上：
 
 - **主 Agent（= 对话/默认 Agent）** 拆解目标、分发搜索任务、汇总并触发求值——**就是当前与你对话的默认 Agent，职责写在 [AGENTS.md](AGENTS.md)，无独立 agent 文件**；
-- **Scout（搜索提取）** 检索归档来源、把原子事实提取为数据节点（零计算）；
+- **Scout（搜索提取）** 检索来源、把原子事实提取为数据节点（零计算）；
 - **Reviewer（审核）** 对新建节点/新算子行使否决权（证据类型诚实、出处齐全、数据零计算、不成环）；
 - **Operator Author（算子作者）** 在"没有合适算子"时把运算实现为受控代码入库，而非内联公式。
 
@@ -153,14 +153,14 @@ Path A（bottom-up，半年报锚定）              Path B（top-down，券商�
 - **Path A（bottom-up）**：H1 用 2026 半年报已实现值 9.838 亿元（`audited`，$C=1.0$）；
   H2 由 Q1/Q2 实际季度环比外推（`extrapolation`，$C=0.45$）为三角分布，相加得全年。
 - **Path B（top-down）**：10 家券商 2026E 预测（`analyst_estimate`，C=0.6），来自同花顺 F10
-  盈利预测页（检索 2026-08-29，本地快照 `data/sources/raw/capchem_f10_worth_20260829.html`）：
+  盈利预测页（检索 2026-08-29）：
   华安 21.00 / 长城 21.36 / 国海 21.64 / 光大 21.92 / 开源 22.18 / 国联民生 22.25 /
   东吴 22.33 / 华泰 23.45 / 西部 24.12 / 华源 24.15（亿元，`data/sources/capchem_broker_forecasts_2026.json`），
   用 Mixture 等权融合为一致预期节点 `capchem.profit.fy2026e.consensus`（`data/operators/capchem_broker_consensus_2026.json`）。
 - **最终融合**：Path A 与 Path B 是同一目标（全年净利润）的两种独立估计，用 Mixture 融合；
   分歧过大则触发 `ALERT: Method Conflict`（对应 doc/design/confidence-model.md §3 的融合语义）。
 
-**可运行实现**：全局单图——数据节点独立存于 [data/sources/](data/sources)（含 `source_url` / 本地副本 `data/sources/raw/`），
+**可运行实现**：全局单图——数据节点独立存于 [data/sources/](data/sources)（含 `source_url` / `retrieved_at` / `publisher` 出处字段），
 算子子图见 [data/operators/](data/operators)（`inputs` 即边，可跨子图引用任意上游节点 id）；
 引擎为 [cgraph/](cgraph) 包，结构说明见 [doc/design/architecture.md](doc/design/architecture.md)。
 没有「每个 use case 一个图文件」——"use case" 就是指定一个 focus 节点 id：

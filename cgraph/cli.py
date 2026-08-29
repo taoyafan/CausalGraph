@@ -6,7 +6,7 @@
 
 focus 以某节点为根，向上游递归渲染字符树：
   (...) 数据节点   [...] 算子节点   ⚠ 告警
-trace 对某数据节点反查出处：来源 URL / 本地副本 / 原文引用 / 数据时点。
+trace 对某数据节点反查出处：来源 URL / 原文引用 / 数据时点。
 """
 
 import argparse
@@ -133,7 +133,7 @@ def cmd_scenario_action(args):
 
 
 def cmd_trace(args):
-    """溯源：打印某数据节点的来源出处（URL / 本地副本 / 原文引用）。"""
+    """溯源：打印某数据节点的来源出处（URL / 原文引用）。"""
     graph = load_world(args.sources, args.operators, 1)
     node = graph.nodes.get(args.node)
     if node is None:
@@ -149,8 +149,7 @@ def cmd_trace(args):
     print(f"数据源   : {src.get('source_name', node.source_id)}  [{node.source_id}]")
     print(f"发布方   : {src.get('publisher', '(未标注)')}")
     print(f"来源URL  : {src.get('source_url', '(未标注)')}")
-    print(f"本地副本 : {src.get('local_copy', '(未归档)')}")
-    print(f"抓取时间 : {src.get('retrieved_at') or '(未归档)'}")
+    print(f"抓取时间 : {src.get('retrieved_at') or '(未标注)'}")
     print(f"数据时点 : {node.as_of or '(未标注)'}")
 
 

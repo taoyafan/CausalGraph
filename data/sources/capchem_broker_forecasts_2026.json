@@ -5,8 +5,7 @@
   "as_of": "2026-08-29",
   "source_url": "https://basic.10jqka.com.cn/300037/worth.html",
   "retrieved_at": "2026-08-29",
-  "local_copy": "data/sources/raw/capchem_f10_worth_20260829.html",
-  "note": "10 家券商对新宙邦(300037.SZ) 2026E 归母净利润的预测，逐字转写自同花顺 F10 盈利预测页汇总，全部 evidence_type=analyst_estimate，各自独立披露值、零计算。各家发布日期不同（8 月下旬中报季密集发布为主，另有 5-6 月两家较早发布），已在各节点 as_of 与 quote 标明。检索日 2026-08-29；同花顺 F10 汇总页已本地快照归档（local_copy），华泰/华源研报原件印证 URL 待补入。",
+  "note": "10 家券商对新宙邦(300037.SZ) 2026E 归母净利润的预测，逐字转写自同花顺 F10 盈利预测页汇总，全部 evidence_type=analyst_estimate，各自独立披露值、零计算。各家发布日期不同（8 月下旬中报季密集发布为主，另有 5-6 月两家较早发布），已在各节点 as_of 与 quote 标明。检索日 2026-08-29；华泰/华源研报原件印证 URL 待补入。",
   "nodes": [
     {
       "id": "broker.huaan.fy2026e",

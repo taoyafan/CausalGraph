@@ -148,7 +148,6 @@ function nodeView(n, depth) {
     detail.innerHTML += `<div class="kv">来源: ${s.name || s.id || "—"}${s.publisher ? " · " + s.publisher : ""}</div>`;
     if (n.as_of) detail.innerHTML += `<div class="kv">数据时点: ${n.as_of}</div>`;
     if (s.url) detail.innerHTML += `<div class="kv"><a href="${s.url}" target="_blank" rel="noopener">原始出处 ↗</a></div>`;
-    if (s.local_copy) detail.innerHTML += `<div class="kv">本地副本: ${s.local_copy}</div>`;
   } else {
     detail.innerHTML += `<div class="kv">算子: ${n.operator} · 算子置信度 ${fmt(n.confidence, 2)}</div>`;
     detail.appendChild(spark(n.hist));

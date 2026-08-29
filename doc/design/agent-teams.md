@@ -21,7 +21,7 @@ CausalGraph 的建图工作由**一支分工明确的 Agent 团队**协作完成
 | 角色 | 职责 | 明确**不做** |
 |------|------|------------|
 | **主 Agent（= 对话/默认 Agent）** | 把目标（如"预测新宙邦 2026 全年净利"）拆成子任务；分发搜索任务；汇总结果；判断图是否完整；触发求值与呈现。**即当前与用户对话的默认 Agent，职责写在 [AGENTS.md](../../AGENTS.md)，无独立 `.agent.md`** | 不亲自提取内容、不亲自写节点、不亲自写算子 |
-| **Scout（搜索提取 Agent）** | 领取具体数据需求 → 检索来源 → 归档原件 → 提取**原子事实**为 DataNode（分布+证据类型+quote+出处）；缺算子/缺数据时上报，不自行凑 | 不做任何数值计算；不把估计塞进数据节点；不评审自己 |
+| **Scout（搜索提取 Agent）** | 领取具体数据需求 → 检索来源 → 提取**原子事实**为 DataNode（分布+证据类型+quote+出处）；缺算子/缺数据时上报，不自行凑 | 不做任何数值计算；不把估计塞进数据节点；不评审自己 |
 | **Reviewer（审核 Agent）** | 审核新建节点是否守铁律：数据零计算、证据类型诚实、出处齐全、id 唯一、分布合理、不成环；通过或打回并给出理由 | 不新建数据、不改数据内容（只批准/打回） |
 | **Operator Author（算子作者 Agent）** | 当"没有合适算子"时，把所需运算实现为受控、可复现的具名算子代码入库；写清语义与参数 | 不新建数据节点；不内联一次性公式 |
 
@@ -36,7 +36,7 @@ CausalGraph 的建图工作由**一支分工明确的 Agent 团队**协作完成
 flowchart TD
     U[目标/问题] --> O["主 Agent（对话 Agent）"]
     O -->|分发搜索任务| S[Scout 搜索提取]
-    S -->|归档原件+提取节点| N[(候选 DataNode)]
+    S -->|提取节点| N[(候选 DataNode)]
     S -.->|缺算子上报| O
     O -->|派发算子需求| A[Operator Author 算子作者]
     A -->|提交算子代码| OPS[(cgraph/operators.py)]
@@ -121,7 +121,7 @@ Agent 执行任务时常见障碍及**标准解法**（对应铁律"遇阻不放
 | **AI 自造假设** | evidence_type=assumption，quote 写清依据与"谁假设的"，优先请协作者确认，不替对方拍板。 |
 | **插入边会成环** | 图必须是 DAG，拒绝该边；重新审视因果方向或引入 Baseline+Delta 分层。 |
 | **id 冲突** | 全局唯一命名空间：改名或复用已有节点，不得让同一 id 既是数据又是算子。 |
-| **来源无法归档** | 记录 gap 为 TODO 并标注，不用编造的本地副本冒充。 |
+| **来源无法获取/已失效** | 记录 gap 为 TODO 并标注，绝不编造 URL 或叙事冒充出处。 |
 
 ---
 
@@ -134,7 +134,7 @@ Agent 执行任务时常见障碍及**标准解法**（对应铁律"遇阻不放
   编排时**不读提示词内容**（防上下文污染）。
 - **只有三个专家角色做成子 Agent**（需要上下文隔离 + 工具收窄 + 独立人格）：
   - VS Code Copilot：`.github/agents/<role>.agent.md`（**已落地**），frontmatter 配 `tools`。当前工具权限：
-    `scout` = [read, edit, search, web, execute]（检索/归档/写数据节点）；
+    `scout` = [read, edit, search, web, execute]（检索/写数据节点）；
     `reviewer` = [read, search, execute]（**只读审核 + 否决权**；`execute` 仅用于跑 `check`）；
     `operator-author` = [read, edit, search, execute]（写算子代码）。
   - Hermes（delegate_task 现场派发，无注册文件）：派发时 context 只写指针——
