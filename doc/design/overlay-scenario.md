@@ -32,7 +32,7 @@ data/scenarios/
   "desc": "踢掉华源预测，且假设 H2 让价更狠",
   "created_by": "user",
   "overrides": {
-    "seg.battery.season_delta": {
+    "seg.battery.eps": {
       "distribution": {"type": "triangular", "low": -0.15, "mode": 0.0, "high": 0.1},
       "reason": "假设 H2 让价更狠"
     }

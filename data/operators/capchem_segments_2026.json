@@ -1,28 +1,7 @@
 {
   "subgraph": "capchem_segments_2026",
-  "note": "新宙邦 2026 全年归母净利润——分业务自下而上（不含券商）。每业务全年毛利由富算子 seg_gross_profit(H1收入, g3, H1毛利率, 全年毛利率调整系数) 一步算出 = H1收入 × (2+g3) × H1毛利率 × 调整系数（2 来自恒等式 全年=两个半年）。关键：g3(2026 H1→H2 增速) 不再拍一个复杂假设，而是 g3 = g1_2025(2025 同期真实季节性，audited 由 hoh_growth 算出) + season_delta(唯一假设：2026 相对 2025 的小调整量)，用算子 sum 相加。另一个锚 g2_cross(2025H2→2026H1 跨年环比) 仅作交叉参考、不进路径。算子皆纯数学(C_op=1.0，定义即代码)，全部主观性集中在 assumptions 里的 season_delta 与两个调整系数。",
+  "note": "新宙邦 2026 全年归母净利润——分业务自下而上（不含券商）。每业务全年毛利由富算子 seg_gross_profit(H1收入, g3, H1毛利率, 全年毛利率调整系数) 一步算出 = H1收入 × (2+g3) × H1毛利率 × 调整系数（2 来自恒等式 全年=两个半年）。关键：g3(2026 H1→H2 增速) = g2_cross(2025H2→2026H1 跨年环比增速锚，audited 由 cross_growth 算出，进路径) + eps(唯一假设：H2 环比相对跨期动能的偏离，assumptions 中三个 eps 原子假设、众数≈0)，用算子 sum 相加。原 g1_2025(2025 同期季节性) 节点因改锚后不再被引用已删除；seg.other.g1_2025 保留作参考产出（其他业务 g3 走原子假设）。算子皆纯数学(C_op=1.0，定义即代码)，全部主观性集中在 assumptions 里的 eps 与两个调整系数。",
   "operators": [
-    {
-      "id": "seg.battery.g1_2025",
-      "operator": "hoh_growth",
-      "inputs": ["seg.battery.rev_fy_2025", "seg.battery.rev_h1_2025"],
-      "output_metric": "电池化学品_2025_H1→H2季节性环比增速(g3基础)",
-      "unit": "比率"
-    },
-    {
-      "id": "seg.electronic.g1_2025",
-      "operator": "hoh_growth",
-      "inputs": ["seg.electronic.rev_fy_2025", "seg.electronic.rev_h1_2025"],
-      "output_metric": "电子信息化学品_2025_H1→H2季节性环比增速(g3基础)",
-      "unit": "比率"
-    },
-    {
-      "id": "seg.fluorine.g1_2025",
-      "operator": "hoh_growth",
-      "inputs": ["seg.fluorine.rev_fy_2025", "seg.fluorine.rev_h1_2025"],
-      "output_metric": "有机氟化学品_2025_H1→H2季节性环比增速(g3基础)",
-      "unit": "比率"
-    },
     {
       "id": "seg.other.g1_2025",
       "operator": "hoh_growth",
@@ -34,21 +13,21 @@
       "id": "seg.battery.g2_cross",
       "operator": "cross_growth",
       "inputs": ["seg.battery.rev_h1_2026", "seg.battery.rev_fy_2025", "seg.battery.rev_h1_2025"],
-      "output_metric": "电池化学品_2025H2→2026H1跨年环比增速(锚，仅参考)",
+      "output_metric": "电池化学品_2025H2→2026H1跨年环比增速(跨期增速锚，audited派生)",
       "unit": "比率"
     },
     {
       "id": "seg.electronic.g2_cross",
       "operator": "cross_growth",
       "inputs": ["seg.electronic.rev_h1_2026", "seg.electronic.rev_fy_2025", "seg.electronic.rev_h1_2025"],
-      "output_metric": "电子信息化学品_2025H2→2026H1跨年环比增速(锚，仅参考)",
+      "output_metric": "电子信息化学品_2025H2→2026H1跨年环比增速(跨期增速锚，audited派生)",
       "unit": "比率"
     },
     {
       "id": "seg.fluorine.g2_cross",
       "operator": "cross_growth",
       "inputs": ["seg.fluorine.rev_h1_2026", "seg.fluorine.rev_fy_2025", "seg.fluorine.rev_h1_2025"],
-      "output_metric": "有机氟化学品_2025H2→2026H1跨年环比增速(锚，仅参考)",
+      "output_metric": "有机氟化学品_2025H2→2026H1跨年环比增速(跨期增速锚，audited派生)",
       "unit": "比率"
     },
     {
@@ -61,22 +40,22 @@
     {
       "id": "seg.battery.g3",
       "operator": "sum",
-      "inputs": ["seg.battery.g1_2025", "seg.battery.season_delta"],
-      "output_metric": "电池化学品_2026_H1→H2收入环比增速(=2025季节性+调整)",
+      "inputs": ["seg.battery.g2_cross", "seg.battery.eps"],
+      "output_metric": "电池化学品_2026_H1→H2收入环比增速(=跨期动能+偏离)",
       "unit": "比率"
     },
     {
       "id": "seg.electronic.g3",
       "operator": "sum",
-      "inputs": ["seg.electronic.g1_2025", "seg.electronic.season_delta"],
-      "output_metric": "电子信息化学品_2026_H1→H2收入环比增速(=2025季节性+调整)",
+      "inputs": ["seg.electronic.g2_cross", "seg.electronic.eps"],
+      "output_metric": "电子信息化学品_2026_H1→H2收入环比增速(=跨期动能+偏离)",
       "unit": "比率"
     },
     {
       "id": "seg.fluorine.g3",
       "operator": "sum",
-      "inputs": ["seg.fluorine.g1_2025", "seg.fluorine.season_delta"],
-      "output_metric": "有机氟化学品_2026_H1→H2收入环比增速(=2025季节性+调整)",
+      "inputs": ["seg.fluorine.g2_cross", "seg.fluorine.eps"],
+      "output_metric": "有机氟化学品_2026_H1→H2收入环比增速(=跨期动能+偏离)",
       "unit": "比率"
     },
     {

@@ -5,31 +5,31 @@
   "as_of": "2026-08-28",
   "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-24/1225026296.PDF",
   "retrieved_at": "2026-08-28",
-  "note": "本文件全部为我方假设(assumption)，非公司披露、非券商结论预测。关键：2026 H1→H2 收入环比增速 g3 不再拍一个复杂假设，而是拆成 g3 = g1_2025(2025 同期真实季节性，audited 由 hoh_growth 算出) + season_delta(本文件唯一的分业务主观量：2026 相对 2025 季节性的小调整)，g3 由图内算子 seg.*.g3=sum(g1_2025, season_delta) 算出；唯有其他业务因 2025 锚口径混杂不可靠，g3 直接作原子假设(不走 g1+delta)。这样能算的部分(历史季节性)由 audited 算出，主观性收缩为每业务一个调整量+一句依据，不再写 essay。跨年环比锚 g2_cross 仅作交叉参考。毛利转净利率的 H1 实际值由图从真实节点算出(capchem.gross_to_net.h1_actual = H1 归母 ÷ H1 毛利合计)，本文件只保留“H2≈H1”的调整系数假设。season_delta 为 AI 反推的小调整值(与旧 g3 众数大致等价)，待协作者确认。预测整体偏保守。",
+  "note": "本文件全部为我方假设(assumption)，非公司披露、非券商结论预测。关键：2026 H1→H2 收入环比增速 g3 = g2_cross(2025H2→2026H1 跨年环比增速锚，audited 由 cross_growth 算出，进路径) + eps(本文件唯一的分业务主观量：H2 环比相对跨期动能的偏离，众数≈0)，g3 由图内算子 seg.*.g3=sum(g2_cross, eps) 算出；唯有其他业务因 2025 锚口径混杂不可靠，g3 直接作原子假设(不走 g2+eps)。这样能算的部分(跨期动能)由 audited 算出，主观性收缩为每业务一个偏离量+一句依据，不再写 essay。毛利转净利率的 H1 实际值由图从真实节点算出(capchem.gross_to_net.h1_actual = H1 归母 ÷ H1 毛利合计)，本文件只保留“H2≈H1”的调整系数假设。eps 为 AI 反推的偏离假设(众数≈0，与旧 g3 众数大致等价)，待协作者确认。预测整体偏保守。",
   "nodes": [
     {
-      "id": "seg.battery.season_delta",
-      "metric": "电池化学品_2026季节性相对2025的调整_假设",
+      "id": "seg.battery.eps",
+      "metric": "电池化学品_2026H2环比相对跨期动能的偏离_假设",
       "unit": "比率(增速点数)",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": -0.09, "mode": 0.03, "high": 0.15, "domain": [-1, 1]},
-      "quote": "唯一主观判断：2026 电池 H1→H2 季节性相对 2025 真实值(g1≈+37%，audited)的调整。众数 +3pct——六氟触底回升、电解液/VC 涨价支撑，略强于去年；带宽 −9~+15pct 含 H2 让价下行风险。g3 = g1 + 本调整，基础季节性由 audited 算出、不拍。"
+      "distribution": {"type": "triangular", "low": -0.086, "mode": 0.0, "high": 0.084, "domain": [-1, 1]},
+      "quote": "2026H2 环比相对跨期动能 g2(+48.8%, audited) 的偏离。方向：六氟磷酸锂 2026-07 约10万元/吨(2025-07 不足5万)、宁德30万吨长单(2026年5万吨)、Q4六氟供需缺口0.7万吨、公司表态下半年高景气——动能延续，偏离中心≈0。证据：ind.battery.li6_price_2026、ind.battery.catl_contract_2026、ind.battery.li6_gap_q4_2026、ind.battery.company_outlook"
     },
     {
-      "id": "seg.electronic.season_delta",
-      "metric": "电子信息化学品_2026季节性相对2025的调整_假设",
+      "id": "seg.electronic.eps",
+      "metric": "电子信息化学品_2026H2环比相对跨期动能的偏离_假设",
       "unit": "比率(增速点数)",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 0.02, "mode": 0.08, "high": 0.16, "domain": [-1, 1]},
-      "quote": "唯一主观判断：2026 电子 H1→H2 季节性相对 2025(g1≈+16%，audited)的调整。众数 +8pct——H2 半导体/AI 液冷旺季，季节性显著强于去年；低精度、带宽 +2~+16pct。g3 = g1 + 本调整，基础季节性由 audited 算出、不拍。"
+      "distribution": {"type": "triangular", "low": -0.06, "mode": 0.0, "high": 0.09, "domain": [-1, 1]},
+      "quote": "2026H2 环比相对跨期动能 g2(+21.8%, audited) 的偏离，中心≈0。证据：ind.electronic.hf_price_2026（电子级氢氟酸较年初涨17%-19%）"
     },
     {
-      "id": "seg.fluorine.season_delta",
-      "metric": "有机氟化学品_2026季节性相对2025的调整_假设",
+      "id": "seg.fluorine.eps",
+      "metric": "有机氟化学品_2026H2环比相对跨期动能的偏离_假设",
       "unit": "比率(增速点数)",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": -0.03, "mode": 0.04, "high": 0.14, "domain": [-1, 1]},
-      "quote": "唯一主观判断：2026 有机氟 H1→H2 季节性相对 2025(g1≈−2%，audited)的调整。众数 +4pct——AI 液冷氟化液批量出货增量对冲一代老品价格下滑，由略负转弱正；低置信、带宽 −3~+14pct。"
+      "distribution": {"type": "triangular", "low": -0.05, "mode": 0.0, "high": 0.07, "domain": [-1, 1]},
+      "quote": "2026H2 环比相对跨期动能 g2(+0.5%, audited) 的偏离，中心≈0，带宽收窄（证据弱）。证据：ind.fluorine.refrigerant_2026、ind.fluorine.liquid_cooling_2026（公司自述液冷对业绩影响非常小）"
     },
     {
       "id": "seg.other.g3",
