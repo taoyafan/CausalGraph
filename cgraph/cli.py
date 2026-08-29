@@ -148,7 +148,13 @@ def cmd_trace(args):
     print(f"原文引用 : {node.quote or '(无)'}")
     print(f"数据源   : {src.get('source_name', node.source_id)}  [{node.source_id}]")
     print(f"发布方   : {src.get('publisher', '(未标注)')}")
-    print(f"来源URL  : {src.get('source_url', '(未标注)')}")
+    urls = src.get("source_url") or [s.get("source_url") for s in src.get("sources", []) if s.get("source_url")]
+    if isinstance(urls, str):
+        urls = [urls]
+    print(f"来源URL  : {urls[0] if urls else '(未标注)'}")
+    if len(urls) > 1:
+        for u in urls[1:]:
+            print(f"           {u}")
     print(f"抓取时间 : {src.get('retrieved_at') or '(未标注)'}")
     print(f"数据时点 : {node.as_of or '(未标注)'}")
 

@@ -1,6 +1,3 @@
-# 原始数据副本（体积大、可重新归档，不入库）
-data/sources/raw/
-
 # Python
 __pycache__/
 *.py[cod]
