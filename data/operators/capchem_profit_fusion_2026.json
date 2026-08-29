@@ -1,0 +1,18 @@
+{
+  "subgraph": "capchem_profit_fusion_2026",
+  "note": "新宙邦 2026 全年归母净利润——最终融合节点。Path A（分业务自下而上 capchem.profit.fy2026.bottomup）与 Path B（券商一致预期 capchem.profit.fy2026e.consensus）经 mixture 等权融合为最终结论；权重暂为占位（TODO C8 校准）。",
+  "operators": [
+    {
+      "id": "capchem.profit.fy2026",
+      "operator": "mixture",
+      "inputs": [
+        "capchem.profit.fy2026.bottomup",
+        "capchem.profit.fy2026e.consensus"
+      ],
+      "output_metric": "归母净利润_2026全年（融合）",
+      "unit": "亿元",
+      "op_confidence": 1.0,
+      "note": "最终融合：Path A（分业务自下而上）与 Path B（券商一致预期）等权 Mixture 融合；权重为占位（TODO C8 校准），分歧过大时引擎自动触发 Method Conflict 告警。"
+    }
+  ]
+}

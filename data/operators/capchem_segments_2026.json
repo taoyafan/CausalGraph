@@ -164,7 +164,7 @@
       "unit": "比率"
     },
     {
-      "id": "capchem.profit.fy2026",
+      "id": "capchem.profit.fy2026.bottomup",
       "operator": "product",
       "inputs": ["capchem.gross_profit.fy2026", "capchem.gross_to_net.fy2026"],
       "output_metric": "归母净利润_2026全年_分业务自下而上",

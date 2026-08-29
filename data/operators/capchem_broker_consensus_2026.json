@@ -1,6 +1,6 @@
 {
   "subgraph": "capchem_broker_consensus_2026",
-  "note": "新宙邦 2026E 归母净利润——券商一致预期路径。把 10 家券商各自独立披露的 2026E 归母净利润预测(broker.*.fy2026e，analyst_estimate)用 mixture 等权融合，保留多峰形状作为一致预期分布，供与分业务自下而上路径(capchem.profit.fy2026)交叉印证。inputs 按预测值升序排列（保持稳定），weights 不填即等权（1/10）。",
+  "note": "新宙邦 2026E 归母净利润——券商一致预期路径。把 10 家券商各自独立披露的 2026E 归母净利润预测(broker.*.fy2026e，analyst_estimate)用 mixture 等权融合，保留多峰形状作为一致预期分布，供与分业务自下而上路径(capchem.profit.fy2026.bottomup)交叉印证。inputs 按预测值升序排列（保持稳定），weights 不填即等权（1/10）。",
   "operators": [
     {
       "id": "capchem.profit.fy2026e.consensus",
