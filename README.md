@@ -152,8 +152,11 @@ Path A（bottom-up，半年报锚定）              Path B（top-down，券商�
 
 - **Path A（bottom-up）**：H1 用 2026 半年报已实现值 9.838 亿元（`audited`，$C=1.0$）；
   H2 由 Q1/Q2 实际季度环比外推（`extrapolation`，$C=0.45$）为三角分布，相加得全年。
-- **Path B（top-down）**：12 家券商 2026E 一致预期（`analyst_estimate`，$C=0.6$），来自东方财富 F10，
-  各券商 EPS 按总股本 7.539 亿股折算为归母净利，用 Mixture 融合。
+- **Path B（top-down）**：10 家券商 2026E 预测（`analyst_estimate`，C=0.6），来自同花顺 F10
+  盈利预测页（检索 2026-08-29，本地快照 `data/sources/raw/capchem_f10_worth_20260829.html`）：
+  华安 21.00 / 长城 21.36 / 国海 21.64 / 光大 21.92 / 开源 22.18 / 国联民生 22.25 /
+  东吴 22.33 / 华泰 23.45 / 西部 24.12 / 华源 24.15（亿元，`data/sources/capchem_broker_forecasts_2026.json`），
+  用 Mixture 等权融合为一致预期节点 `capchem.profit.fy2026e.consensus`（`data/operators/capchem_broker_consensus_2026.json`）。
 - **最终融合**：Path A 与 Path B 是同一目标（全年净利润）的两种独立估计，用 Mixture 融合；
   分歧过大则触发 `ALERT: Method Conflict`（对应 doc/design/confidence-model.md §3 的融合语义）。
 
@@ -164,6 +167,8 @@ Path A（bottom-up，半年报锚定）              Path B（top-down，券商�
 
 ```powershell
 python -m cgraph.cli focus capchem.profit.fy2026
+# 券商一致预期（top-down 路径）：
+python -m cgraph.cli focus capchem.profit.fy2026e.consensus
 # 溯源某数据节点来源：
 python -m cgraph.cli trace capchem.profit.h1_2026
 ```

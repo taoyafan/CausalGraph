@@ -1,0 +1,25 @@
+{
+  "subgraph": "capchem_broker_consensus_2026",
+  "note": "新宙邦 2026E 归母净利润——券商一致预期路径。把 10 家券商各自独立披露的 2026E 归母净利润预测(broker.*.fy2026e，analyst_estimate)用 mixture 等权融合，保留多峰形状作为一致预期分布，供与分业务自下而上路径(capchem.profit.fy2026)交叉印证。inputs 按预测值升序排列（保持稳定），weights 不填即等权（1/10）。",
+  "operators": [
+    {
+      "id": "capchem.profit.fy2026e.consensus",
+      "operator": "mixture",
+      "inputs": [
+        "broker.huaan.fy2026e",
+        "broker.changcheng.fy2026e",
+        "broker.guohai.fy2026e",
+        "broker.guangda.fy2026e",
+        "broker.kaiyuan.fy2026e",
+        "broker.guolianminsheng.fy2026e",
+        "broker.dongwu.fy2026e",
+        "broker.huatai.fy2026e",
+        "broker.xibu.fy2026e",
+        "broker.huayuan.fy2026e"
+      ],
+      "output_metric": "归母净利润_2026全年_券商一致预期",
+      "unit": "亿元",
+      "op_confidence": 1.0
+    }
+  ]
+}

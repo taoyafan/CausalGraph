@@ -1,0 +1,102 @@
+{
+  "source_id": "capchem_broker_forecasts_2026",
+  "source_name": "新宙邦 2026E 券商盈利预测（同花顺 F10 汇总，检索 2026-08-29）",
+  "publisher": "同花顺 F10（汇总之各券商研究所研报）",
+  "as_of": "2026-08-29",
+  "source_url": "https://basic.10jqka.com.cn/300037/worth.html",
+  "retrieved_at": "2026-08-29",
+  "local_copy": "data/sources/raw/capchem_f10_worth_20260829.html",
+  "note": "10 家券商对新宙邦(300037.SZ) 2026E 归母净利润的预测，逐字转写自同花顺 F10 盈利预测页汇总，全部 evidence_type=analyst_estimate，各自独立披露值、零计算。各家发布日期不同（8 月下旬中报季密集发布为主，另有 5-6 月两家较早发布），已在各节点 as_of 与 quote 标明。检索日 2026-08-29；同花顺 F10 汇总页已本地快照归档（local_copy），华泰/华源研报原件印证 URL 待补入。",
+  "nodes": [
+    {
+      "id": "broker.huaan.fy2026e",
+      "metric": "归母净利润_2026全年_华安证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-06-05",
+      "distribution": {"type": "point", "value": 21.00, "domain": [0, null]},
+      "quote": "华安证券 2026E 归母净利预测 21.00 亿元，发布日期 2026-06-05，检索自同花顺F10。"
+    },
+    {
+      "id": "broker.changcheng.fy2026e",
+      "metric": "归母净利润_2026全年_长城证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-05-26",
+      "distribution": {"type": "point", "value": 21.36, "domain": [0, null]},
+      "quote": "长城证券 2026E 归母净利预测 21.36 亿元，发布日期 2026-05-26，检索自同花顺F10。"
+    },
+    {
+      "id": "broker.guohai.fy2026e",
+      "metric": "归母净利润_2026全年_国海证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-05-07",
+      "distribution": {"type": "point", "value": 21.64, "domain": [0, null]},
+      "quote": "国海证券 2026E 归母净利预测 21.64 亿元，发布日期 2026-05-07，检索自同花顺F10。"
+    },
+    {
+      "id": "broker.guangda.fy2026e",
+      "metric": "归母净利润_2026全年_光大证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-08-25",
+      "distribution": {"type": "point", "value": 21.92, "domain": [0, null]},
+      "quote": "光大证券 2026E 归母净利预测 21.92 亿元，发布日期 2026-08-25，检索自同花顺F10。"
+    },
+    {
+      "id": "broker.kaiyuan.fy2026e",
+      "metric": "归母净利润_2026全年_开源证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-08-25",
+      "distribution": {"type": "point", "value": 22.18, "domain": [0, null]},
+      "quote": "开源证券 2026E 归母净利预测 22.18 亿元，发布日期 2026-08-25，检索自同花顺F10。"
+    },
+    {
+      "id": "broker.guolianminsheng.fy2026e",
+      "metric": "归母净利润_2026全年_国联民生预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-08-22",
+      "distribution": {"type": "point", "value": 22.25, "domain": [0, null]},
+      "quote": "国联民生 2026E 归母净利预测 22.25 亿元，发布日期 2026-08-22，检索自同花顺F10。"
+    },
+    {
+      "id": "broker.dongwu.fy2026e",
+      "metric": "归母净利润_2026全年_东吴证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-08-21",
+      "distribution": {"type": "point", "value": 22.33, "domain": [0, null]},
+      "quote": "东吴证券 2026E 归母净利预测 22.33 亿元，发布日期 2026-08-21，检索自同花顺F10。"
+    },
+    {
+      "id": "broker.huatai.fy2026e",
+      "metric": "归母净利润_2026全年_华泰证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-08-25",
+      "distribution": {"type": "point", "value": 23.45, "domain": [0, null]},
+      "quote": "华泰证券 2026E 归母净利预测 23.45 亿元，发布日期 2026-08-25，检索自同花顺F10（另有该研报原件印证 URL，待补入）。"
+    },
+    {
+      "id": "broker.xibu.fy2026e",
+      "metric": "归母净利润_2026全年_西部证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-08-25",
+      "distribution": {"type": "point", "value": 24.12, "domain": [0, null]},
+      "quote": "西部证券 2026E 归母净利预测 24.12 亿元，发布日期 2026-08-25，检索自同花顺F10。"
+    },
+    {
+      "id": "broker.huayuan.fy2026e",
+      "metric": "归母净利润_2026全年_华源证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-08-24",
+      "distribution": {"type": "point", "value": 24.15, "domain": [0, null]},
+      "quote": "华源证券 2026E 归母净利预测 24.15 亿元，发布日期 2026-08-24，检索自同花顺F10（另有该研报原件印证 URL，待补入）。"
+    }
+  ]
+}
