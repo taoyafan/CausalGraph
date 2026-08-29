@@ -11,54 +11,32 @@ trace 对某数据节点反查出处：来源 URL / 本地副本 / 原文引用 
 
 import argparse
 import os
-import random
 import sys
 
-from .distributions import describe
-from .confidence import confidence_for
+from .render import render_level0, render_level1, render_tree, render_formula
 from .loader import load_world
 from .check import check_world
 from .model import DataNode
 
 
-def _fmt_stats(s):
-    return f"P10={s['p10']:.2f} P50={s['p50']:.2f} P90={s['p90']:.2f}"
-
-
-def _render(graph, node_id, prefix, is_last, is_root=False):
-    node = graph.nodes[node_id]
-    stats = graph.stats[node_id]
-    connector = "" if is_root else ("└─ " if is_last else "├─ ")
-
-    if isinstance(node, DataNode):
-        c = confidence_for(node.evidence_type)
-        label = (f"({node.metric}) ~ {describe(node.distribution)} "
-                 f"C={c:.2f}[{node.evidence_type}] src={node.source_id}")
-        print(prefix + connector + label)
-    else:
-        label = f"[{node.operator}] ({node.output_metric}) {_fmt_stats(stats)} {node.unit}"
-        if node_id in graph.alerts:
-            label += f"  ⚠ {graph.alerts[node_id]}"
-        print(prefix + connector + label)
-        child_prefix = prefix + ("" if is_root else ("   " if is_last else "│  "))
-        for i, child in enumerate(node.inputs):
-            _render(graph, child, child_prefix, i == len(node.inputs) - 1)
-
-
 def cmd_focus(args):
-    random.seed(args.seed)
     graph = load_world(args.sources, args.operators, args.samples)
+    if args.seed is not None:
+        import random
+        random.seed(args.seed)
     focus_id = args.node
     if focus_id not in graph.nodes:
         print(f"节点不存在: {focus_id}")
         return
     result = graph.evaluate(focus_id)
-    print(f"FOCUS = {focus_id}  ->  {_fmt_stats(result)}  (mean={result['mean']:.2f})\n")
-    _render(graph, focus_id, "", True, is_root=True)
-    if graph.alerts:
-        print("\n告警:")
-        for nid, msg in graph.alerts.items():
-            print(f"  ⚠ {nid}: {msg}")
+    if args.level == 0:
+        render_level0(graph, focus_id)
+    elif args.level == 1:
+        render_level1(graph, focus_id)
+    elif args.level == 2:
+        render_tree(graph, focus_id)
+    else:
+        render_formula(graph, focus_id)
 
 
 def cmd_check(args):
@@ -115,10 +93,12 @@ def main(argv=None):
 
     p = sub.add_parser("focus", help="以某节点为 focus 在全局图上求值并渲染字符树")
     p.add_argument("node", help="focus 节点 id")
+    p.add_argument("--level", type=int, default=3, choices=[0, 1, 2, 3],
+                   help="输出等级: 0=一行摘要 1=一层上游 2=全树 3=公式视图(默认)")
     p.add_argument("--sources", default=default_sources, help="数据源目录")
     p.add_argument("--operators", default=default_operators, help="算子子图目录")
     p.add_argument("--samples", type=int, default=20000, help="蒙特卡洛样本数")
-    p.add_argument("--seed", type=int, default=42, help="随机种子（可复现）")
+    p.add_argument("--seed", type=int, default=None, help="随机种子（可复现；缺省不固定）")
     p.set_defaults(func=cmd_focus)
 
     t = sub.add_parser("trace", help="溯源某个数据节点的来源出处")
