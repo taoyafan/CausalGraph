@@ -12,6 +12,7 @@ Point(C=1) 数据节点与 C_op=1 算子组成、零不确定性的分支，折�
 
 from .distributions import describe
 from .confidence import confidence_for
+from .operators import formula_of
 from .model import DataNode
 
 
@@ -166,28 +167,7 @@ def _formula_expr(graph, nid):
     if isinstance(node, DataNode):
         return f"{node.metric}[{_data_value(node)}]" + ("?" if node.evidence_type == "assumption" else "")
     parts = [_formula_expr(graph, i) for i in node.inputs]
-    op = node.operator
-    if op == "sum":
-        return " + ".join(parts)
-    if op == "product":
-        return " × ".join(parts)
-    if op == "divide":
-        return f"({parts[0]} ÷ {parts[1]})"
-    if op == "subtract":
-        return f"({parts[0]} − {parts[1]})"
-    if op == "growth":
-        return f"({parts[0]} ÷ {parts[1]} − 1)"
-    if op == "affine":
-        return f"({node.params.get('a', 0)} + {node.params.get('b', 1)}·{parts[0]})"
-    if op == "hoh_growth":
-        return f"({parts[0]} ÷ {parts[1]} − 2)"
-    if op == "cross_growth":
-        return f"({parts[0]} ÷ ({parts[1]} − {parts[2]}) − 1)"
-    if op == "seg_gross_profit":
-        return f"{parts[0]} × (2 + {parts[1]}) × {parts[2]} × {parts[3]}"
-    if op == "mixture":
-        return f"mix({', '.join(parts)})"
-    return f"{op}({', '.join(parts)})"
+    return formula_of(node.operator, parts, node.params)
 
 
 def render_formula(graph, focus_id):

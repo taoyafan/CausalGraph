@@ -7,7 +7,9 @@
 
 from .confidence import confidence_for
 from .distributions import describe
+from .operators import formula_of
 from .model import DataNode, OperatorNode
+from .render import _data_value
 
 
 def _histogram(samples, bins=24):
@@ -97,3 +99,66 @@ def build_focus(graph, focus_id):
         return None
     graph.evaluate(focus_id)
     return _build_node(graph, focus_id)
+
+
+# ---------------------------------------------------------------- 公式钻取 API
+# 端上公式卡的两段式 JSON（doc/design/mobile-display.md）:
+#   公式头(formula) + 结果(stats/hist/alert) + 输入插槽列表(slots)
+# 插槽分两类: 上游算子 → kind=operator, 点击拉取下一张公式卡;
+#             上游数据 → kind=data, 点击进详情抽屉(名称+值+证据类型,详情经 /api/focus)。
+
+
+def build_drilldown(graph, focus_id):
+    """以 focus_id 为 focus 返回其公式卡 JSON;focus 不存在返回 None。
+
+    只渲染一层（slots 里的 operator 不递归），端上按需逐节点拉取。
+    """
+    if focus_id not in graph.nodes:
+        return None
+    node = graph.nodes[focus_id]
+    if isinstance(node, DataNode):
+        # 叶节点直接给详情（公式钻取的终点 = 数据详情抽屉）
+        graph.evaluate(focus_id)
+        return _build_node(graph, focus_id)
+
+    graph.evaluate(focus_id)
+    stats = graph.stats[focus_id]
+    # 插槽名: 公式模板里的占位就是输入节点名(算子=output_metric, 数据=metric)
+    parts = [graph.nodes[i].output_metric if isinstance(graph.nodes[i], OperatorNode)
+             else graph.nodes[i].metric for i in node.inputs]
+    formula = formula_of(node.operator, parts, node.params)
+    slots = []
+    for i in node.inputs:
+        child = graph.nodes[i]
+        cst = graph.stats.get(i, {})
+        if isinstance(child, OperatorNode):
+            slots.append({
+                "kind": "operator",
+                "id": i,
+                "label": child.output_metric,
+                "unit": child.unit,
+                "stats": {k: round(v, 4) for k, v in cst.items()},
+                "alert": graph.alerts.get(i),
+            })
+        else:
+            slots.append({
+                "kind": "data",
+                "id": i,
+                "label": child.metric,
+                "unit": child.unit,
+                "value": _data_value(child),
+                "evidence_type": child.evidence_type,
+                "is_assumption": child.evidence_type == "assumption",
+                "confidence": round(confidence_for(child.evidence_type), 3),
+            })
+    return {
+        "id": focus_id,
+        "kind": "operator",
+        "label": node.output_metric,
+        "unit": node.unit,
+        "formula": formula,
+        "stats": {k: round(v, 4) for k, v in stats.items()},
+        "hist": _histogram(graph.samples[focus_id]),
+        "alert": graph.alerts.get(focus_id),
+        "slots": slots,
+    }

@@ -153,3 +153,71 @@ OPERATORS = {
     "seg_gross_profit": op_seg_gross_profit,
     "mixture": op_mixture,
 }
+
+
+# ---------------------------------------------------------------- 公式模板库
+# 每个算子注册一个公式渲染函数: fn(parts, params) -> str。
+# parts 为按 inputs 顺序格式化好的上游表达式(端上=输入名, CLI level3=内联值表达式)。
+# 这是公式显示的单一事实源: CLI(render.py) 与 webexport 卡片共用, 模板写一次两端渲染。
+
+
+def _f_sum(parts, params):
+    return " + ".join(parts)
+
+
+def _f_product(parts, params):
+    return " × ".join(parts)
+
+
+def _f_divide(parts, params):
+    return f"({parts[0]} ÷ {parts[1]})"
+
+
+def _f_subtract(parts, params):
+    return f"({parts[0]} − {parts[1]})"
+
+
+def _f_growth(parts, params):
+    return f"({parts[0]} ÷ {parts[1]} − 1)"
+
+
+def _f_affine(parts, params):
+    return f"({params.get('a', 0)} + {params.get('b', 1)}·{parts[0]})"
+
+
+def _f_hoh_growth(parts, params):
+    return f"({parts[0]} ÷ {parts[1]} − 2)"
+
+
+def _f_cross_growth(parts, params):
+    return f"({parts[0]} ÷ ({parts[1]} − {parts[2]}) − 1)"
+
+
+def _f_seg_gross_profit(parts, params):
+    return f"{parts[0]} × (2 + {parts[1]}) × {parts[2]} × {parts[3]}"
+
+
+def _f_mixture(parts, params):
+    return f"mix({', '.join(parts)})"
+
+
+FORMULA_TEMPLATES = {
+    "sum": _f_sum,
+    "product": _f_product,
+    "divide": _f_divide,
+    "subtract": _f_subtract,
+    "growth": _f_growth,
+    "affine": _f_affine,
+    "hoh_growth": _f_hoh_growth,
+    "cross_growth": _f_cross_growth,
+    "seg_gross_profit": _f_seg_gross_profit,
+    "mixture": _f_mixture,
+}
+
+
+def formula_of(op, parts, params=None):
+    """按算子公式模板渲染表达式；未注册的算子回退为 op(...) 形式。"""
+    fn = FORMULA_TEMPLATES.get(op)
+    if fn is None:
+        return f"{op}({', '.join(parts)})"
+    return fn(parts, params or {})

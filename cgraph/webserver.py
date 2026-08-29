@@ -5,6 +5,7 @@
   GET /web/*            -> web/ 下静态资源
   GET /api/nodes        -> 可 focus 的节点列表
   GET /api/focus?node=  -> 以该节点为根、求值后的贡献树 JSON
+  GET /api/drilldown?node= -> 公式钻取卡片 JSON(公式头+结果+输入插槽, 只渲染一层)
 
 前端与后端只通过 /api/* JSON 通信,便于日后把同一份 API 接到微信小程序。
 """
@@ -16,7 +17,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse, parse_qs
 
 from .loader import load_world
-from .webexport import build_focus, list_focusable
+from .webexport import build_drilldown, build_focus, list_focusable
 
 WEB_DIR = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "web"))
 _CT = {".html": "text/html", ".js": "application/javascript",
@@ -68,6 +69,14 @@ def _make_handler(sources_dir, operators_dir, samples, seed):
                         self._json({"error": f"节点不存在: {node}"}, 404)
                     else:
                         self._json(tree)
+                elif u.path == "/api/drilldown":
+                    # 公式钻取卡片: 公式头+结果+输入插槽, 只渲染一层, 端上逐节点拉取
+                    node = (parse_qs(u.query).get("node") or [""])[0]
+                    card = build_drilldown(load(), node)
+                    if card is None:
+                        self._json({"error": f"节点不存在: {node}"}, 404)
+                    else:
+                        self._json(card)
                 else:
                     self._send(404, "not found", "text/plain")
             except Exception as e:  # 把异常回给前端而不是崩服务
