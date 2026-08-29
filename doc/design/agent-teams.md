@@ -20,13 +20,16 @@ CausalGraph 的建图工作由**一支分工明确的 Agent 团队**协作完成
 
 | 角色 | 职责 | 明确**不做** |
 |------|------|------------|
-| **主 Agent（= 对话/默认 Agent）** | 把目标（如"预测新宙邦 2026 全年净利"）拆成子任务；分发搜索任务；汇总结果；判断图是否完整；触发求值与呈现。**即当前与用户对话的默认 Agent，职责写在 [AGENTS.md](../../AGENTS.md)，无独立 `.agent.md`** | 不亲自提取内容、不亲自写节点、不亲自写算子 |
-| **Scout（搜索提取 Agent）** | 领取具体数据需求 → 检索来源 → 提取**原子事实**为 DataNode（分布+证据类型+quote+出处）；缺算子/缺数据时上报，不自行凑 | 不做任何数值计算；不把估计塞进数据节点；不评审自己 |
-| **Reviewer（审核 Agent）** | 审核新建节点是否守铁律：数据零计算、证据类型诚实、出处齐全、id 唯一、分布合理、不成环；通过或打回并给出理由 | 不新建数据、不改数据内容（只批准/打回） |
-| **Operator Author（算子作者 Agent）** | 当"没有合适算子"时，把所需运算实现为受控、可复现的具名算子代码入库；写清语义与参数 | 不新建数据节点；不内联一次性公式 |
+| **主 Agent（= 对话/默认 Agent）** | 思考建模：决定用什么公式计算某值、需要哪些信息节点；把信息需求派给 Scout、把节点增删派给 Persister、把审核派给 Reviewer；汇总结果、触发求值与呈现。**即当前与用户对话的默认 Agent，职责写在 [AGENTS.md](../../AGENTS.md)，无独立 `.agent.md`** | 不亲自搜索/提取原文、不亲自增删节点、不亲自写算子代码、不亲自做数值计算 |
+| **Scout（搜索提取 Agent）** | 领取具体信息需求 → 检索来源 → 提取**原子事实**（含出处 URL）回报给主 Agent，不落盘；缺算子/缺数据时上报，不自行凑 | 不做任何数值计算；不写数据节点；不评审自己 |
+| **Persister（落盘 Agent）** | 领取具体节点增删任务（主 Agent 给出节点 id/字段内容或要删的 id）→ 按节点 schema 格式写入/修改/删除 data/sources 与 data/operators 下的 JSON 文件；只做"照填"不做"设计" | 不决定分布参数/公式/节点设计（那是主 Agent 的建模职责）；不检索；不评审自己 |
+| **Reviewer（审核 Agent）** | 审核节点/算子是否符合铁律与 schema、图结构是否被破坏（断边/成环/悬空/id 冲突）；通过或打回并给出理由 | 不新建数据、不改数据内容（只批准/打回）；完全不接触 URL、不做网络验证（Scout 的摘要+URL 即溯源终点） |
+| **Operator Author（算子作者 Agent）** | 主 Agent 把**公式语义**（用什么公式算、参数含义）告诉它 → 实现为受控、可复现的具名算子代码入库（`cgraph/operators.py`），写清语义与参数 | 不新建数据节点；不内联一次性公式；不自行决定公式（公式由主 Agent 给出） |
 
 > **为什么要分工**：单一 Agent 既当运动员又当裁判会自我合理化（如把假设伪装成披露值）。
 > 提取与审核分离、数据与算子分离，形成**制衡**，把"可审计"落到组织结构上。
+> 另两个纯上下文隔离收益：Scout 消化搜索结果、Persister 消化节点文件——大量原文与
+> schema 细节都不进主 Agent 上下文，主 Agent 只保留建模思维。
 
 ---
 
@@ -34,30 +37,35 @@ CausalGraph 的建图工作由**一支分工明确的 Agent 团队**协作完成
 
 ```mermaid
 flowchart TD
-    U[目标/问题] --> O["主 Agent（对话 Agent）"]
-    O -->|分发搜索任务| S[Scout 搜索提取]
-    S -->|提取节点| N[(候选 DataNode)]
-    S -.->|缺算子上报| O
-    O -->|派发算子需求| A[Operator Author 算子作者]
-    A -->|提交算子代码| OPS[(cgraph/operators.py)]
+    U[目标/问题] --> O["主 Agent（思考建模：公式/需要哪些信息）"]
+    O -->|信息需求| S[Scout 搜索提取]
+    S -->|原子事实+出处URL| O
+    O -->|节点设计(字段内容)| P[Persister 落盘]
+    P -->|增删节点 JSON| N[(data/sources + data/operators)]
     N --> R[Reviewer 审核]
-    R -->|打回+理由| S
-    R -->|通过| G[并入全局图 data/sources + data/operators]
-    A --> R
+    R -->|打回+理由| O
+    R -->|通过| G[并入全局图]
     G --> O
     O -->|图完整?| E[求值 + CLI 呈现]
 ```
 
 关键点：
-- **分发与执行解耦**：主 Agent（对话 Agent）只分发和汇总，具体提取/审核/写算子由专职子 Agent 做。
+- **主 Agent 思考、子 Agent 执行**：主 Agent（对话 Agent）只做建模决策（公式、需要的节点、参数设计），
+  具体搜索/落盘/审核由专职子 Agent 做；子 Agent 各自消化原文与 schema，主 Agent 上下文不被污染。
+- **Scout 只搜不落盘**：Scout 返回原子事实（含出处 URL）给主 Agent，主 Agent 设计节点后由 Persister 落盘。
+- **Persister 只填不设计**：Persister 是"照填"机器——主 Agent 给出 id/字段/分布/quote，Persister 按 schema
+  写入或删除；任何节点设计决策留在主 Agent（或打回时由 Reviewer 指出）。
 - **数据侦察在前、算子在后（强制顺序）**：算子需求是被数据形态与建模方案倒推出来的。必须
   先派 Scout 摸清"有哪些披露口径、数据长什么样、缺口在哪"，主 Agent 据此定建模方案，
-  再由方案倒推需要的算子；**只有在方案确定缺算子时才派 Operator Author**。禁止在数据侦察
-  之前预先拍板算子——那是"拿锤子找钉子"，会补上用不到的算子或漏掉真正需要的。
-- **双闸门**：候选节点必须过 Reviewer 才能并入全局图；新算子代码同样过 Reviewer。
-- **Reviewer 自动触发**：主 Agent 在节点/算子写好后**自动派发 Reviewer 审核，无需征询用户**；
-  仅在 Reviewer 打回或涉及 AI 自造假设值需确认时才回到用户。
-- **上报回路**：Scout 遇到"缺算子/缺数据/冲突"不自行硬凑，而是回报主 Agent 走手册。
+  再由方案倒推需要的算子；**只有在方案确定缺算子时才派 Operator Author**（主 Agent 把公式语义
+  告诉它，它实现代码入库）。禁止在数据侦察之前预先拍板算子——那是"拿锤子找钉子"。
+- **算子先落代码、后落节点**：新算子流程 = 主 Agent 给公式 → Operator Author 实现代码入库 →
+  Persister 落盘引用该算子的节点前校验算子名已存在（见 [agents/persister.md](agents/persister.md)）。
+  Persister 绝不自行发明算子名或改动算子语义。
+- **Reviewer 触发**：主 Agent 在节点/算子写好后**自动派发 Reviewer 审核，无需征询用户**；
+  复杂计算（新节点/新算子/改结构）必审；用户直接要求增删某节点时也要过 Reviewer（审核量小，
+  耗时与跑一次脚本相当），仅当 Reviewer 打回或涉及 AI 自造假设值需确认时才回到用户。
+- **上报回路**：Scout/Persister 遇到"缺算子/缺数据/冲突"不自行硬凑，而是回报主 Agent 走手册。
 
 ---
 
@@ -70,8 +78,9 @@ flowchart TD
 |------|------------------------|
 | 全体共守的铁律 | [agents/invariants.md](agents/invariants.md) |
 | Scout | [agents/scout.md](agents/scout.md) |
+| Persister | [agents/persister.md](agents/persister.md) |
 | Reviewer | [agents/reviewer.md](agents/reviewer.md) |
-| Operator Author | [agents/operator-author.md](agents/operator-author.md) |
+| Operator Author（仅缺算子时启用） | [agents/operator-author.md](agents/operator-author.md) |
 
 各 harness 适配时可增加自己的格式外壳（工具声明、输出模板），但**不得删改**角色边界与铁律引用。
 
@@ -137,15 +146,17 @@ Agent 执行任务时常见障碍及**标准解法**（对应铁律"遇阻不放
 - **主 Agent = 对话/默认 Agent**：不做独立 `.agent.md`（那是过度设计）；其编排职责写入 [AGENTS.md](../../AGENTS.md)，
   对每次对话常驻生效——**跟用户对话的默认 Agent 就是主 Agent**。主 Agent 只需知道各角色提示词文件的**路径**，
   编排时**不读提示词内容**（防上下文污染）。
-- **只有三个专家角色做成子 Agent**（需要上下文隔离 + 工具收窄 + 独立人格）：
+- **四个专家角色做成子 Agent**（需要上下文隔离 + 工具收窄 + 独立人格）：
   - VS Code Copilot：`.github/agents/<role>.agent.md`（**已落地**），frontmatter 配 `tools`。当前工具权限：
-    `scout` = [read, edit, search, web, execute]（检索/写数据节点）；
+    `scout` = [read, edit, search, web, execute]（检索/提取，不落盘）；
+    `persister` = [read, edit, execute]（落盘：读写 JSON + 跑 check 自检）；
     `reviewer` = [read, search, execute]（**只读审核 + 否决权**；`execute` 仅用于跑 `check`）；
-    `operator-author` = [read, edit, search, execute]（写算子代码）。
+    `operator-author` = [read, edit, search, execute]（写算子代码，仅缺算子时启用）。
   - Hermes（delegate_task 现场派发，无注册文件）：派发时 context 只写指针——
-    "你是 Scout/Reviewer/Operator Author，用 read 依次打开 doc/design/agents/invariants.md 与
+    "你是 Scout/Persister/Reviewer/Operator Author，用 read 依次打开 doc/design/agents/invariants.md 与
     对应角色文件，逐字执行，然后完成：<任务>"；toolsets 映射：
-    `scout` = [web, file, terminal]；`reviewer` = [file, terminal]（terminal 仅用于跑 check）；
+    `scout` = [web, file, terminal]；`persister` = [file, terminal]（terminal 用于跑 check 自检）；
+    `reviewer` = [file, terminal]（terminal 仅用于跑 check）；
     `operator-author` = [file, terminal]。
   - 其它 harness（Claude subagents 等）：按各自的 subagent/system-prompt 机制承载同一套提示词。
 - **角色提示词按文件拆分（防双份 + 防上下文污染）**：每个角色一个文件、只含该角色的正文；
