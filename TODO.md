@@ -14,9 +14,9 @@
 
 ## D. 产品/工程
 
-- [ ] **D19 覆盖式演绎会话**：引擎 `_eval` 加 overrides 覆盖层（user_override 证据类型，
-      原数据不丢只旁路），scenario CLI + 基线/情景 diff，详见
-      [doc/design/overlay-scenario.md](doc/design/overlay-scenario.md)。
+- [ ] **D19 情景演绎**：情景文件（data/scenarios/<链条>/<名>.json，overrides+mutes），
+      focus --scenario 求值 + --diff 基线对比，覆盖带 user_override 痕迹、屏蔽不显示，
+      详见 [doc/design/overlay-scenario.md](doc/design/overlay-scenario.md)。
 - [ ] **D8 持久化与版本化**：SQLite/DuckDB 存节点边 + Git 存 DSL JSON，可 diff/回滚。
 - [ ] **D9 循环依赖检测**：图须为 DAG，插入边时拒绝成环。
 - [ ] **D10 单位系统**：节点带 unit 字段，算子处做量纲校验。

@@ -55,12 +55,13 @@ def load_operators(operators_dir):
     return nodes
 
 
-def load_world(sources_dir, operators_dir, n_samples=20000):
-    """加载全局图：所有数据源节点 + 所有算子节点合成一张 Graph。"""
+def load_world(sources_dir, operators_dir, n_samples=20000, overrides=None, mutes=None):
+    """加载全局图：所有数据源节点 + 所有算子节点合成一张 Graph（可带情景覆盖/屏蔽）。"""
     data_nodes, sources = load_sources(sources_dir)
     op_nodes = load_operators(operators_dir)
     data_ids = {n.id for n in data_nodes}
     clash = data_ids & {n.id for n in op_nodes}
     if clash:
         raise ValueError(f"节点 id 冲突（同一 id 既是数据又是算子）: {sorted(clash)}")
-    return Graph(data_nodes + op_nodes, sources=sources, n_samples=n_samples)
+    return Graph(data_nodes + op_nodes, sources=sources, n_samples=n_samples,
+                 overrides=overrides, mutes=mutes)

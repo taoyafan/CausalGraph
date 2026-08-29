@@ -37,7 +37,7 @@ def subtree_ids(graph, node_id):
         ids.add(nid)
         node = graph.nodes[nid]
         if not isinstance(node, DataNode):
-            stack.extend(node.inputs)
+            stack.extend(i for i in node.inputs if i not in graph.mutes)
     return ids
 
 
@@ -69,8 +69,12 @@ def _summary_line(graph, focus_id):
 def data_label(graph, nid):
     n = graph.nodes[nid]
     c = confidence_for(n.evidence_type)
-    return (f"({n.metric}) ~ {describe(n.distribution)} "
-            f"C={c:.2f}[{n.evidence_type}] src={n.source_id}  id={nid}")
+    # 情景覆盖：显示临时值并带 ✎ 标记（不与基线混淆）
+    ov = graph.overrides.get(nid)
+    dist_desc = describe(ov["distribution"]) if ov else describe(n.distribution)
+    tag = " ✎临时" if ov else ""
+    return (f"({n.metric}) ~ {dist_desc} "
+            f"C={c:.2f}[{n.evidence_type}] src={n.source_id}{tag}  id={nid}")
 
 
 def op_label(graph, nid):
@@ -138,8 +142,9 @@ def render_tree(graph, focus_id):
         expanded.add(nid)
         print(prefix + connector + op_label(graph, nid))
         child_prefix = prefix + ("" if is_root else ("   " if is_last else "│  "))
-        for i, child in enumerate(node.inputs):
-            rec(child, child_prefix, i == len(node.inputs) - 1)
+        live = [i for i in node.inputs if i not in graph.mutes]
+        for i, child in enumerate(live):
+            rec(child, child_prefix, i == len(live) - 1)
 
     rec(focus_id, "", True, is_root=True)
     _summary_line(graph, focus_id)
@@ -166,7 +171,10 @@ def _slot_label(graph, nid):
     """输入插槽的显示名: 下游公式由下一缩进层自己展开, 此处只给名字。"""
     node = graph.nodes[nid]
     if isinstance(node, DataNode):
-        return f"{node.metric}[{_data_value(node)}]" + ("?" if node.evidence_type == "assumption" else "")
+        ov = graph.overrides.get(nid)
+        val = _data_value(type("_Ov", (), {"distribution": ov["distribution"]})) if ov else _data_value(node)
+        q = "?" if node.evidence_type == "assumption" else ""
+        return f"{node.metric}[{val}]{q}" + ("✎" if ov else "")
     return node.output_metric
 
 
@@ -178,20 +186,29 @@ def render_formula(graph, focus_id):
         node = graph.nodes[nid]
         pad = "  " * depth
         if isinstance(node, DataNode):
-            print(pad + f"{node.metric}[{_data_value(node)}]"
-                  + ("?" if node.evidence_type == "assumption" else ""))
+            ov = graph.overrides.get(nid)
+            d = ov["distribution"] if ov else node.distribution
+            q = "?" if node.evidence_type == "assumption" else ""
+            t = "✎" if ov else ""
+            print(pad + f"{node.metric}[{_data_value(type('_Ov', (), {'distribution': d}))}]{q}{t}")
             return
         if nid in done:
             print(pad + f"{node.output_metric} ↺（上文已展开）")
             return
         done.add(nid)
-        parts = [_slot_label(graph, i) for i in node.inputs]
+        live = [i for i in node.inputs if i not in graph.mutes]
+        parts = [_slot_label(graph, i) for i in live]
         print(pad + f"{node.output_metric} = {formula_of(node.operator, parts, node.params)}")
-        for i in node.inputs:
+        for i in live:
             if not isinstance(graph.nodes[i], DataNode):
                 rec(i, depth + 1)
 
     rec(focus_id, 0)
+
+    if graph.overrides:
+        print(f"\n✎ 临时覆盖 {len(graph.overrides)} 项:")
+        for oid, ov in graph.overrides.items():
+            print(f"  - {oid} ~ {describe(ov['distribution'])}  {ov.get('reason', '')}")
 
     ids = subtree_ids(graph, focus_id)
     asmp, min_c = _assumptions(graph, ids)
