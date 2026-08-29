@@ -13,7 +13,7 @@
       "unit": "比率(增速点数)",
       "evidence_type": "assumption",
       "distribution": {"type": "triangular", "low": -0.086, "mode": 0.0, "high": 0.084, "domain": [-1, 1]},
-      "quote": "2026H2 环比相对跨期动能 g2(+48.8%, audited) 的偏离。方向：六氟磷酸锂 2026-07 约10万元/吨(2025-07 不足5万)、宁德30万吨长单(2026年5万吨)、Q4六氟供需缺口0.7万吨、公司表态下半年高景气——动能延续，偏离中心≈0。证据：ind.battery.li6_price_2026、ind.battery.catl_contract_2026、ind.battery.li6_gap_q4_2026、ind.battery.company_outlook"
+      "quote": "证据①六氟磷酸锂价格（SMM 新闻 https://news.smm.cn/news/104011684，2026-07-17）：2026-07 约 10 万元/吨，2025-07 不足 5 万元/吨（一年间翻倍以上）。②宁德时代电解液长单（SMM 新闻转述 https://news.smm.cn/news/104011684，2026-07-17）：2026-06 签订长单至 2028 年合计 30 万吨（2026 年 5 万吨 / 2027 年 10 万吨 / 2028 年 15 万吨）。③六氟供需缺口（SMM 新闻转述中信建投估计 https://news.smm.cn/news/103820182，2026-03-23）：Q4 缺口约 0.7 万吨，Q3/Q4 供需比 105%/93%。④公司表态（同花顺 https://goodsfu.10jqka.com.cn/20260521/c676860385.shtml，2026-05-21）：\"预计行业今年下半年至明年仍将维持高景气态势\"。结论：2026H2 环比相对跨期动能 g2(+48.8%, audited) 偏离中心≈0（动能延续），分布 Tri(-0.086/0/0.084)。"
     },
     {
       "id": "seg.electronic.eps",
@@ -21,7 +21,7 @@
       "unit": "比率(增速点数)",
       "evidence_type": "assumption",
       "distribution": {"type": "triangular", "low": -0.06, "mode": 0.0, "high": 0.09, "domain": [-1, 1]},
-      "quote": "2026H2 环比相对跨期动能 g2(+21.8%, audited) 的偏离，中心≈0。证据：ind.electronic.hf_price_2026（电子级氢氟酸较年初涨17%-19%）"
+      "quote": "证据（同花顺行业报道 https://field.10jqka.com.cn/20260716/c678226944.shtml，2026-07-16）：电子级氢氟酸价格较年初上涨约 17%-19%，韩国半导体企业高价抢货。结论：2026H2 环比相对跨期动能 g2(+21.8%, audited) 偏离中心≈0，分布 Tri(-0.06/0/0.09)。"
     },
     {
       "id": "seg.fluorine.eps",
@@ -29,7 +29,7 @@
       "unit": "比率(增速点数)",
       "evidence_type": "assumption",
       "distribution": {"type": "triangular", "low": -0.05, "mode": 0.0, "high": 0.07, "domain": [-1, 1]},
-      "quote": "2026H2 环比相对跨期动能 g2(+0.5%, audited) 的偏离，中心≈0，带宽收窄（证据弱）。证据：ind.fluorine.refrigerant_2026、ind.fluorine.liquid_cooling_2026（公司自述液冷对业绩影响非常小）"
+      "quote": "证据①三代制冷剂价格（同花顺行业报道 https://field.10jqka.com.cn/20260716/c678226944.shtml，2026-07-16）：2026-07-03 较年初 R32 +1.6%、R125 +14.6%、R134a +10.3%。②公司互动平台表态（证券时报·e公司 https://www.stcn.com/article/detail/3943649.html，2026-06-04）：氟化液数据中心浸没式液冷\"对公司现在的业绩影响非常小\"。结论：2026H2 环比相对跨期动能 g2(+0.5%, audited) 偏离中心≈0（证据弱、谨慎），分布 Tri(-0.05/0/0.07)。"
     },
     {
       "id": "seg.other.g3",
