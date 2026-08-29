@@ -162,12 +162,12 @@ def _data_value(n):
     return describe(d)
 
 
-def _formula_expr(graph, nid):
+def _slot_label(graph, nid):
+    """输入插槽的显示名: 下游公式由下一缩进层自己展开, 此处只给名字。"""
     node = graph.nodes[nid]
     if isinstance(node, DataNode):
         return f"{node.metric}[{_data_value(node)}]" + ("?" if node.evidence_type == "assumption" else "")
-    parts = [_formula_expr(graph, i) for i in node.inputs]
-    return formula_of(node.operator, parts, node.params)
+    return node.output_metric
 
 
 def render_formula(graph, focus_id):
@@ -185,7 +185,8 @@ def render_formula(graph, focus_id):
             print(pad + f"{node.output_metric} ↺（上文已展开）")
             return
         done.add(nid)
-        print(pad + f"{node.output_metric} = {_formula_expr(graph, nid)}")
+        parts = [_slot_label(graph, i) for i in node.inputs]
+        print(pad + f"{node.output_metric} = {formula_of(node.operator, parts, node.params)}")
         for i in node.inputs:
             if not isinstance(graph.nodes[i], DataNode):
                 rec(i, depth + 1)
