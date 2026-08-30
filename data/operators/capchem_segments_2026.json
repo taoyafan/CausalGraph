@@ -1,19 +1,12 @@
 {
   "subgraph": "capchem_segments_2026",
-  "note": "新宙邦 2026 全年归母净利润——分业务自下而上（不含券商）。每业务全年毛利由富算子 seg_gross_profit(H1收入, g3, H1毛利率, 全年毛利率调整系数) 一步算出 = H1收入 × (2+g3) × H1毛利率 × 调整系数（2 来自恒等式 全年=两个半年）。关键：g3(2026 H1→H2 增速) = g2_cross(2025H2→2026H1 跨年环比增速锚，audited 由 cross_growth 算出，进路径) + eps(唯一假设：H2 环比相对跨期动能的偏离，assumptions 中三个 eps 原子假设、众数≈0)，用算子 sum 相加。原 g1_2025(2025 同期季节性) 节点因改锚后不再被引用已删除；seg.other.g1_2025 保留作参考产出（其他业务 g3 走原子假设）。算子皆纯数学(C_op=1.0，定义即代码)，全部主观性集中在 assumptions 里的 eps 与两个调整系数。",
+  "note": "新宙邦 2026 全年归母净利润——分业务自下而上（不含券商）。电池化学品链已重建为 H2量×H2价 结构：H2 收入 = H1 均价×(1+价环比)×H1 产量×(1+量环比)。其中 H2 量环比 = mixture(产能锚, 东吴出货锚) 融合（东吴锚由算子链推出：shipment_h1=sum(Q1,Q2) → shipment_h2=subtract(全年,H1) → volume_growth_h2_dongwu=growth(H2,H1)）；H2 价环比 = mixture(电解液现货, 六氟价格, 成本传导) 三锚融合；H2 毛利率 = margin_h1_2026(audited) + margin_delta_h2，margin_delta_h2 = mixture(东吴单吨盈利, 券商修复)。电子/氟/其他业务全年毛利由 seg_gross_profit(H1收入, g3, H1毛利率, 全年调整系数) 一步算出，g3 = g2_cross(跨年锚, audited) + eps(偏离假设)。算子皆纯数学(C_op=1.0，定义即代码)，主观性集中在 assumptions 文件的假设节点——本文件输入的数据节点含 audited（公司披露）与 assumption/analyst_estimate（我方/券商锚）两类——及两个调整系数。",
   "operators": [
     {
       "id": "seg.other.g1_2025",
       "operator": "hoh_growth",
       "inputs": ["seg.other.rev_fy_2025", "seg.other.rev_h1_2025"],
       "output_metric": "其他业务_2025_H1→H2季节性环比增速(g3基础)",
-      "unit": "比率"
-    },
-    {
-      "id": "seg.battery.g2_cross",
-      "operator": "cross_growth",
-      "inputs": ["seg.battery.rev_h1_2026", "seg.battery.rev_fy_2025", "seg.battery.rev_h1_2025"],
-      "output_metric": "电池化学品_2025H2→2026H1跨年环比增速(跨期增速锚，audited派生)",
       "unit": "比率"
     },
     {
@@ -38,13 +31,6 @@
       "unit": "比率"
     },
     {
-      "id": "seg.battery.g3",
-      "operator": "sum",
-      "inputs": ["seg.battery.g2_cross", "seg.battery.eps"],
-      "output_metric": "电池化学品_2026_H1→H2收入环比增速(=跨期动能+偏离)",
-      "unit": "比率"
-    },
-    {
       "id": "seg.electronic.g3",
       "operator": "sum",
       "inputs": ["seg.electronic.g2_cross", "seg.electronic.eps"],
@@ -57,13 +43,6 @@
       "inputs": ["seg.fluorine.g2_cross", "seg.fluorine.eps"],
       "output_metric": "有机氟化学品_2026_H1→H2收入环比增速(=跨期动能+偏离)",
       "unit": "比率"
-    },
-    {
-      "id": "seg.battery.gp_fy2026",
-      "operator": "seg_gross_profit",
-      "inputs": ["seg.battery.rev_h1_2026", "seg.battery.g3", "seg.battery.margin_h1_2026", "capchem.margin_fy_factor"],
-      "output_metric": "电池化学品_全年毛利_2026",
-      "unit": "亿元"
     },
     {
       "id": "seg.electronic.gp_fy2026",
@@ -119,6 +98,120 @@
       "operator": "product",
       "inputs": ["seg.other.rev_h1_2026", "seg.other.margin_h1_2026"],
       "output_metric": "其他业务_H1毛利_2026",
+      "unit": "亿元"
+    },
+    {
+      "id": "seg.battery.price_h1_2026",
+      "operator": "divide",
+      "inputs": ["seg.battery.rev_h1_2026", "seg.battery.volume_h1_2026"],
+      "output_metric": "电池化学品_H1均价_2026(audited派生)",
+      "unit": "万元/吨"
+    },
+    {
+      "id": "seg.battery.shipment_h1_2026_est",
+      "operator": "sum",
+      "inputs": ["seg.battery.shipment_q1_2026_est", "seg.battery.shipment_q2_2026_est"],
+      "output_metric": "电池化学品_H1电解液出货量_2026_东吴测算",
+      "unit": "万吨"
+    },
+    {
+      "id": "seg.battery.shipment_h2_2026_est",
+      "operator": "subtract",
+      "inputs": ["seg.battery.shipment_fy2026_est", "seg.battery.shipment_h1_2026_est"],
+      "output_metric": "电池化学品_H2电解液出货量_2026_东吴测算派生",
+      "unit": "万吨"
+    },
+    {
+      "id": "seg.battery.volume_growth_h2_dongwu",
+      "operator": "growth",
+      "inputs": ["seg.battery.shipment_h2_2026_est", "seg.battery.shipment_h1_2026_est"],
+      "output_metric": "电池化学品_H2出货环比增速_东吴口径",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.battery.volume_growth_h2",
+      "operator": "mixture",
+      "inputs": ["seg.battery.volume_growth_h2_capacity", "seg.battery.volume_growth_h2_dongwu"],
+      "output_metric": "电池化学品_H2量环比增速_融合",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.battery.price_growth_h2",
+      "operator": "mixture",
+      "inputs": ["seg.battery.price_growth_h2_spot", "seg.battery.price_growth_h2_lif6", "seg.battery.price_growth_h2_transfer"],
+      "output_metric": "电池化学品_H2均价环比变动_融合",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.battery.margin_delta_h2",
+      "operator": "mixture",
+      "inputs": ["seg.battery.margin_delta_h2_dongwu", "seg.battery.margin_delta_h2_brokers"],
+      "output_metric": "电池化学品_H2毛利率相对H1偏离_融合",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.battery.margin_h2_2026",
+      "operator": "sum",
+      "inputs": ["seg.battery.margin_h1_2026", "seg.battery.margin_delta_h2"],
+      "output_metric": "电池化学品_H2毛利率_2026",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.battery.volume_growth_h2_plus1",
+      "operator": "affine",
+      "inputs": ["seg.battery.volume_growth_h2"],
+      "params": {"a": 1.0, "b": 1.0},
+      "output_metric": "电池化学品_H2量增速+1",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.battery.volume_h2_2026",
+      "operator": "product",
+      "inputs": ["seg.battery.volume_h1_2026", "seg.battery.volume_growth_h2_plus1"],
+      "output_metric": "电池化学品_H2产量_2026",
+      "unit": "万吨"
+    },
+    {
+      "id": "seg.battery.price_growth_h2_plus1",
+      "operator": "affine",
+      "inputs": ["seg.battery.price_growth_h2"],
+      "params": {"a": 1.0, "b": 1.0},
+      "output_metric": "电池化学品_H2价格变动+1",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.battery.price_h2_2026",
+      "operator": "product",
+      "inputs": ["seg.battery.price_h1_2026", "seg.battery.price_growth_h2_plus1"],
+      "output_metric": "电池化学品_H2均价_2026",
+      "unit": "万元/吨"
+    },
+    {
+      "id": "seg.battery.rev_h2_2026",
+      "operator": "product",
+      "inputs": ["seg.battery.price_h2_2026", "seg.battery.volume_h2_2026"],
+      "output_metric": "电池化学品_H2收入_2026",
+      "unit": "亿元"
+    },
+    {
+      "id": "seg.battery.rev_fy2026",
+      "operator": "sum",
+      "inputs": ["seg.battery.rev_h1_2026", "seg.battery.rev_h2_2026"],
+      "output_metric": "电池化学品_全年收入_2026",
+      "unit": "亿元"
+    },
+    {
+      "id": "seg.battery.gp_h2_2026",
+      "operator": "product",
+      "inputs": ["seg.battery.rev_h2_2026", "seg.battery.margin_h2_2026"],
+      "output_metric": "电池化学品_H2毛利_2026",
+      "unit": "亿元"
+    },
+    {
+      "id": "seg.battery.gp_fy2026",
+      "operator": "sum",
+      "inputs": ["seg.battery.gp_h1_2026", "seg.battery.gp_h2_2026"],
+      "output_metric": "电池化学品_全年毛利_2026",
       "unit": "亿元"
     },
     {

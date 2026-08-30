@@ -2,7 +2,7 @@
   "desc": "电池让价更狠 + 剔除有机氟贡献（演示覆盖与屏蔽）",
   "created_by": "user",
   "overrides": {
-    "seg.battery.eps": {
+    "seg.battery.volume_growth_h2_capacity": {
       "distribution": {"type": "triangular", "low": -0.15, "mode": 0.0, "high": 0.1},
       "reason": "假设 H2 电解液让价更狠，季节性弱于去年"
     }
