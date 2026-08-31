@@ -167,13 +167,17 @@ def _data_value(n):
     return describe(d)
 
 
-def _slot_label(graph, nid):
-    """输入插槽的显示名: 下游公式由下一缩进层自己展开, 此处只给名字。"""
+def _slot_label(graph, nid, seen=None):
+    """输入插槽显示名；共享数据节点第二次出现只印名(↖)以省 token。"""
     node = graph.nodes[nid]
     if isinstance(node, DataNode):
+        q = "?" if node.evidence_type == "assumption" else ""
+        if seen is not None and nid in seen:
+            return f"{node.metric}↖{q}"
+        if seen is not None:
+            seen.add(nid)
         ov = graph.overrides.get(nid)
         val = _data_value(type("_Ov", (), {"distribution": ov["distribution"]})) if ov else _data_value(node)
-        q = "?" if node.evidence_type == "assumption" else ""
         return f"{node.metric}[{val}]{q}" + ("✎" if ov else "")
     return node.output_metric
 
@@ -181,14 +185,19 @@ def _slot_label(graph, nid):
 def render_formula(graph, focus_id):
     _header(graph, focus_id)
     done = set()
+    seen_data = set()
 
     def rec(nid, depth):
         node = graph.nodes[nid]
         pad = "  " * depth
         if isinstance(node, DataNode):
+            q = "?" if node.evidence_type == "assumption" else ""
+            if nid in seen_data:
+                print(pad + f"{node.metric}↖{q}")
+                return
+            seen_data.add(nid)
             ov = graph.overrides.get(nid)
             d = ov["distribution"] if ov else node.distribution
-            q = "?" if node.evidence_type == "assumption" else ""
             t = "✎" if ov else ""
             print(pad + f"{node.metric}[{_data_value(type('_Ov', (), {'distribution': d}))}]{q}{t}")
             return
@@ -197,7 +206,7 @@ def render_formula(graph, focus_id):
             return
         done.add(nid)
         live = [i for i in node.inputs if i not in graph.mutes]
-        parts = [_slot_label(graph, i) for i in live]
+        parts = [_slot_label(graph, i, seen_data) for i in live]
         print(pad + f"{node.output_metric} = {formula_of(node.operator, parts, node.params)}")
         for i in live:
             if not isinstance(graph.nodes[i], DataNode):
@@ -210,11 +219,5 @@ def render_formula(graph, focus_id):
         for oid, ov in graph.overrides.items():
             print(f"  - {oid} ~ {describe(ov['distribution'])}  {ov.get('reason', '')}")
 
-    ids = subtree_ids(graph, focus_id)
-    asmp, min_c = _assumptions(graph, ids)
-    if asmp:
-        print(f"\n假设清单（? 标记，{len(asmp)} 个，最低 C={min_c:.2f}）:")
-        for aid in asmp:
-            n = graph.nodes[aid]
-            print(f"  - {aid} ~ {describe(n.distribution)}  src={n.source_id}")
+    # 假设分布已在正文首次内联(带 ? 标记)，不再列重复清单；计数/最低 C/告警看下方汇总行。
     _summary_line(graph, focus_id)
