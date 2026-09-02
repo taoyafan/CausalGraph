@@ -1,6 +1,6 @@
 {
   "subgraph": "capchem_segments_2026",
-  "note": "新宙邦 2026 全年归母净利润——分业务自下而上（不含券商）。电池化学品链已重建为 H2量×H2价 结构：H2 收入 = H1 均价×(1+价环比)×H1 产量×(1+量环比)。其中 H2 量环比 = mixture(产能锚, 东吴出货锚) 融合（东吴锚由算子链推出：shipment_h1=sum(Q1,Q2) → shipment_h2=subtract(全年,H1) → volume_growth_h2_dongwu=growth(H2,H1)）；H2 价环比 = mixture(电解液现货, 六氟价格, 成本传导) 三锚融合；H2 毛利率 = margin_h1_2026(audited) + margin_delta_h2，margin_delta_h2 = mixture(东吴单吨盈利, 券商修复)。电子/氟/其他业务全年毛利由 seg_gross_profit(H1收入, g3, H1毛利率, 全年调整系数) 一步算出，g3 = g2_cross(跨年锚, audited) + eps(偏离假设)。算子皆纯数学(C_op=1.0，定义即代码)，主观性集中在 assumptions 文件的假设节点——本文件输入的数据节点含 audited（公司披露）与 assumption/analyst_estimate（我方/券商锚）两类——及两个调整系数。",
+  "note": "新宙邦 2026 全年归母净利润——分业务自下而上（不含券商）。电池化学品链已重建为 H2量×H2价 结构：H2 收入 = H1 均价×(1+价环比)×H1 产量×(1+量环比)。全链统一为【产量】口径（严禁产量/出货混用）：东吴给的是电解液【出货量】，先经 电解液产销比假设(≈1) 折算为电解液产量，再与非电解液产量相加。H2 全产品产量 = 电解液H2产量(=(全年50−H1)出货×产销比) + 非电解液H2产量；非电解液H1产量 = 全产品产量32.11 − 电解液H1产量；非电解液H2产量 = 非电解液H1产量 ×(1+非电解液H2环比增速假设)。原 4% 产能投放锚(volume_growth_h2_capacity)及“电解液增速直接乘全产品”的 mixture 已退役——电解液仅占 67%，用其增速乘全产品属口径错配，且 4% 会逼非电解液暴跌，故改为全产品口径自下而上；H2 价环比 = mixture(电解液现货, 六氟价格, 成本传导) 三锚融合；H2 毛利率 = margin_h1_2026(audited) + margin_delta_h2，margin_delta_h2 = mixture(东吴单吨盈利, 券商修复)。电子/氟/其他业务全年毛利由 seg_gross_profit(H1收入, g3, H1毛利率, 全年调整系数) 一步算出；其中电子/氟的 g3 已由“跨期环比外推”改为“同季同比驱动”：g3 = growth(2026H2, 2026H1)、 2026H2 = 2025H2(audited派生)×(1+H2同比增速假设)，避免拿跨年 H2→H1 的环比去代年内 H1→H2 的季节性方向错配；其他业务占比<1% 仍用原子假设 g3。算子皆纯数学(C_op=1.0，定义即代码)，主观性集中在 assumptions 文件的假设节点——本文件输入的数据节点含 audited（公司披露）与 assumption/analyst_estimate（我方/券商锚）两类——及两个调整系数。",
   "operators": [
     {
       "id": "seg.other.g1_2025",
@@ -10,18 +10,48 @@
       "unit": "比率"
     },
     {
-      "id": "seg.electronic.g2_cross",
-      "operator": "cross_growth",
-      "inputs": ["seg.electronic.rev_h1_2026", "seg.electronic.rev_fy_2025", "seg.electronic.rev_h1_2025"],
-      "output_metric": "电子信息化学品_2025H2→2026H1跨年环比增速(跨期增速锚，audited派生)",
+      "id": "seg.electronic.rev_h2_2025",
+      "operator": "subtract",
+      "inputs": ["seg.electronic.rev_fy_2025", "seg.electronic.rev_h1_2025"],
+      "output_metric": "电子信息化学品_2025H2营业收入(audited派生)",
+      "unit": "亿元"
+    },
+    {
+      "id": "seg.electronic.yoy_h2_plus1",
+      "operator": "affine",
+      "inputs": ["seg.electronic.yoy_h2"],
+      "params": {"a": 1.0, "b": 1.0},
+      "output_metric": "电子信息化学品_H2营收同比增速+1",
       "unit": "比率"
     },
     {
-      "id": "seg.fluorine.g2_cross",
-      "operator": "cross_growth",
-      "inputs": ["seg.fluorine.rev_h1_2026", "seg.fluorine.rev_fy_2025", "seg.fluorine.rev_h1_2025"],
-      "output_metric": "有机氟化学品_2025H2→2026H1跨年环比增速(跨期增速锚，audited派生)",
+      "id": "seg.electronic.rev_h2_2026",
+      "operator": "product",
+      "inputs": ["seg.electronic.rev_h2_2025", "seg.electronic.yoy_h2_plus1"],
+      "output_metric": "电子信息化学品_2026H2营业收入(H2同比驱动)",
+      "unit": "亿元"
+    },
+    {
+      "id": "seg.fluorine.rev_h2_2025",
+      "operator": "subtract",
+      "inputs": ["seg.fluorine.rev_fy_2025", "seg.fluorine.rev_h1_2025"],
+      "output_metric": "有机氟化学品_2025H2营业收入(audited派生)",
+      "unit": "亿元"
+    },
+    {
+      "id": "seg.fluorine.yoy_h2_plus1",
+      "operator": "affine",
+      "inputs": ["seg.fluorine.yoy_h2"],
+      "params": {"a": 1.0, "b": 1.0},
+      "output_metric": "有机氟化学品_H2营收同比增速+1",
       "unit": "比率"
+    },
+    {
+      "id": "seg.fluorine.rev_h2_2026",
+      "operator": "product",
+      "inputs": ["seg.fluorine.rev_h2_2025", "seg.fluorine.yoy_h2_plus1"],
+      "output_metric": "有机氟化学品_2026H2营业收入(H2同比驱动)",
+      "unit": "亿元"
     },
     {
       "id": "seg.other.g2_cross",
@@ -32,16 +62,16 @@
     },
     {
       "id": "seg.electronic.g3",
-      "operator": "sum",
-      "inputs": ["seg.electronic.g2_cross", "seg.electronic.eps"],
-      "output_metric": "电子信息化学品_2026_H1→H2收入环比增速(=跨期动能+偏离)",
+      "operator": "growth",
+      "inputs": ["seg.electronic.rev_h2_2026", "seg.electronic.rev_h1_2026"],
+      "output_metric": "电子信息化学品_2026_H1→H2收入环比增速(由H2同比驱动派生)",
       "unit": "比率"
     },
     {
       "id": "seg.fluorine.g3",
-      "operator": "sum",
-      "inputs": ["seg.fluorine.g2_cross", "seg.fluorine.eps"],
-      "output_metric": "有机氟化学品_2026_H1→H2收入环比增速(=跨期动能+偏离)",
+      "operator": "growth",
+      "inputs": ["seg.fluorine.rev_h2_2026", "seg.fluorine.rev_h1_2026"],
+      "output_metric": "有机氟化学品_2026_H1→H2收入环比增速(由H2同比驱动派生)",
       "unit": "比率"
     },
     {
@@ -122,18 +152,40 @@
       "unit": "万吨"
     },
     {
-      "id": "seg.battery.volume_growth_h2_dongwu",
-      "operator": "growth",
-      "inputs": ["seg.battery.shipment_h2_2026_est", "seg.battery.shipment_h1_2026_est"],
-      "output_metric": "电池化学品_H2出货环比增速_东吴口径",
+      "id": "seg.battery.volume_h1_electrolyte",
+      "operator": "product",
+      "inputs": ["seg.battery.shipment_h1_2026_est", "seg.battery.electrolyte_prod_ship_ratio"],
+      "output_metric": "电池化学品_H1电解液产量_2026(出货×产销比)",
+      "unit": "万吨"
+    },
+    {
+      "id": "seg.battery.volume_h2_electrolyte",
+      "operator": "product",
+      "inputs": ["seg.battery.shipment_h2_2026_est", "seg.battery.electrolyte_prod_ship_ratio"],
+      "output_metric": "电池化学品_H2电解液产量_2026(出货×产销比)",
+      "unit": "万吨"
+    },
+    {
+      "id": "seg.battery.volume_h1_nonelectrolyte",
+      "operator": "subtract",
+      "inputs": ["seg.battery.volume_h1_2026", "seg.battery.volume_h1_electrolyte"],
+      "output_metric": "电池化学品_H1非电解液产量_2026(派生)",
+      "unit": "万吨"
+    },
+    {
+      "id": "seg.battery.volume_growth_h2_nonelectrolyte_plus1",
+      "operator": "affine",
+      "inputs": ["seg.battery.volume_growth_h2_nonelectrolyte"],
+      "params": {"a": 1.0, "b": 1.0},
+      "output_metric": "电池化学品_H2非电解液量增速+1",
       "unit": "比率"
     },
     {
-      "id": "seg.battery.volume_growth_h2",
-      "operator": "mixture",
-      "inputs": ["seg.battery.volume_growth_h2_capacity", "seg.battery.volume_growth_h2_dongwu"],
-      "output_metric": "电池化学品_H2量环比增速_融合",
-      "unit": "比率"
+      "id": "seg.battery.volume_h2_nonelectrolyte",
+      "operator": "product",
+      "inputs": ["seg.battery.volume_h1_nonelectrolyte", "seg.battery.volume_growth_h2_nonelectrolyte_plus1"],
+      "output_metric": "电池化学品_H2非电解液产量_2026",
+      "unit": "万吨"
     },
     {
       "id": "seg.battery.price_growth_h2",
@@ -157,17 +209,9 @@
       "unit": "比率"
     },
     {
-      "id": "seg.battery.volume_growth_h2_plus1",
-      "operator": "affine",
-      "inputs": ["seg.battery.volume_growth_h2"],
-      "params": {"a": 1.0, "b": 1.0},
-      "output_metric": "电池化学品_H2量增速+1",
-      "unit": "比率"
-    },
-    {
       "id": "seg.battery.volume_h2_2026",
-      "operator": "product",
-      "inputs": ["seg.battery.volume_h1_2026", "seg.battery.volume_growth_h2_plus1"],
+      "operator": "sum",
+      "inputs": ["seg.battery.volume_h2_electrolyte", "seg.battery.volume_h2_nonelectrolyte"],
       "output_metric": "电池化学品_H2产量_2026",
       "unit": "万吨"
     },

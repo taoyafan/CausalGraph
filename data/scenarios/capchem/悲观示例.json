@@ -2,9 +2,9 @@
   "desc": "电池让价更狠 + 剔除有机氟贡献（演示覆盖与屏蔽）",
   "created_by": "user",
   "overrides": {
-    "seg.battery.volume_growth_h2_capacity": {
+    "seg.battery.volume_growth_h2_nonelectrolyte": {
       "distribution": {"type": "triangular", "low": -0.15, "mode": 0.0, "high": 0.1},
-      "reason": "假设 H2 电解液让价更狠，季节性弱于去年"
+      "reason": "悲观：非电解液 H2 需求走弱/渠道去库，环比转负"
     }
   },
   "mutes": ["seg.fluorine.gp_fy2026"]

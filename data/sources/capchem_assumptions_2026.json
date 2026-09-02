@@ -5,7 +5,7 @@
   "as_of": "2026-08-28",
   "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-24/1225026296.PDF",
   "retrieved_at": "2026-08-28",
-  "note": "本文件含 audited 与 assumption/analyst_estimate 两类节点：audited 为公司定期报告披露值（如 2026 半年报电池化学品产量），assumption/analyst_estimate 为我方与券商测算的假设锚。电池化学品链已重建为 H2量×H2价 结构，原 volume_growth_h2/price_growth_h2/margin_h2_2026 三个电池假设节点已改为图内算子（见 operators 文件），本文件仅保留各锚的原子证据节点：H2 量环比 = mixture(产能投放锚, 东吴出货锚：Q1/Q2/全年出货量)、H2 价环比 = mixture(电解液现货, 六氟价格, 成本传导)、H2 毛利率 = H1(audited) + δ，δ = mixture(东吴单吨盈利下探, 券商修复上探)。电子/氟业务 g3 = g2_cross(跨年锚, audited) + eps 机制不变，eps 仍为本文件假设（众数≈0，待协作者确认）；毛利转净利率的 H1 实际值由图从真实节点算出（capchem.gross_to_net.h1_actual = H1 归母 ÷ H1 毛利合计），本文件只保留“H2≈H1”的调整系数假设。预测整体偏保守。",
+  "note": "本文件含 audited 与 assumption/analyst_estimate 两类节点：audited 为公司定期报告披露值（如 2026 半年报电池化学品产量），assumption/analyst_estimate 为我方与券商测算的假设锚。电池化学品链已重建为 H2量×H2价 结构，原 volume_growth_h2/price_growth_h2/margin_h2_2026 三个电池假设节点已改为图内算子（见 operators 文件），本文件仅保留各锚的原子证据节点：H2 全产品产量自下而上（统一【产量】口径，严禁产量/出货混用）= 电解液H2产量(东吴出货×电解液产销比≈1) + 非电解液H2产量(= 非电解液H1产量 ×(1+非电解液H2环比增速假设))；非电解液H1产量 = 全产品产量32.11 − 电解液H1产量；原 4% 产能投放锚已退役(口径错配且过低)、H2 价环比 = mixture(电解液现货, 六氟价格, 成本传导)、H2 毛利率 = H1(audited) + δ，δ = mixture(东吴单吨盈利下探, 券商修复上探)。电子/氟业务已把 g3 从“跨期环比外推(g2_cross+eps)”改为“同季同比驱动”：本文件仅保留 H2 同比增速假设(seg.electronic.yoy_h2 / seg.fluorine.yoy_h2)，g3 由图内算子 growth(2026H2, 2026H1) 得出、 2026H2=2025H2(audited派生)×(1+H2同比)；其他业务仍用原子假设 g3；毛利转净利率的 H1 实际值由图从真实节点算出（capchem.gross_to_net.h1_actual = H1 归母 ÷ H1 毛利合计），本文件只保留“H2≈H1”的调整系数假设。预测整体偏保守。",
   "nodes": [
     {
       "id": "seg.battery.volume_h1_2026",
@@ -16,12 +16,20 @@
       "quote": "2026 半年报：电池化学品产量 321,052 吨（产能 365,238 吨、产能利用率 87.90%）。来源：新宙邦 2026 半年报 https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?stockid=300037&id=12512537，2026-08-21"
     },
     {
-      "id": "seg.battery.volume_growth_h2_capacity",
-      "metric": "电池化学品_H2量环比增速_产能投放锚_重构",
+      "id": "seg.battery.electrolyte_prod_ship_ratio",
+      "metric": "电解液_产量÷出货比_2026_假设",
       "unit": "比率",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 0.0, "mode": 0.04, "high": 0.10, "domain": [0, 1]},
-      "quote": "假设：新增产能 Q4 投产、爬坡慢，对 H2 产量的贡献有限，H2 量增速保守取 0-10%、众数 4%（证据：马来西亚诺莱特一期 3 万吨/年预计 2026 年底投产）。此为我方判断，非披露值，待协作者确认。来源：新宙邦 2026 半年报 https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?stockid=300037&id=12512537，2026-08-21"
+      "distribution": {"type": "triangular", "low": 0.97, "mode": 1.00, "high": 1.03, "domain": [0, null]},
+      "quote": "假设：电解液 产量÷出货 ≈ 1、带宽 0.97–1.03。核心理由：电解液满产满销、库存周转快，产销基本一致。此节点仅用于把东吴的电解液【出货量】折算为电解液【产量】，使其与全产品【产量】32.11 同口径相加/相减（严禁产量−出货直接混用），众数 1.00，窄带反映库存波动。"
+    },
+    {
+      "id": "seg.battery.volume_growth_h2_nonelectrolyte",
+      "metric": "电池化学品_H2非电解液量环比增速",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 0.0, "mode": 0.05, "high": 0.12, "domain": [-0.5, 1]},
+      "quote": "假设：非电解液(VC/FEC 添加剂、LiFSI 锂盐等)2026H2 产量环比 0–12%、众数 5%。核心理由：供给受限——存量线已近满产(半年报电池整体产能利用率 87.90%)，VC/FEC 新增线 H2 才投产需爬坡、LiFSI 扩产跨年不贡献 H2 增量，故环比远低于电解液(+32.6%)。六氟磷酸锂为参股合营(投资收益列示)不计入自产量，已排除。无公开出货硬数据，为供给约束下的推断。来源：新宙邦 2026 半年报，2026-08-21。"
     },
     {
       "id": "seg.battery.shipment_q1_2026_est",
@@ -29,7 +37,7 @@
       "unit": "万吨",
       "evidence_type": "analyst_estimate",
       "distribution": {"type": "point", "value": 9.5},
-      "quote": "东吴证券测算 26Q1 电解液出货 9.5 万吨（+64%）。来源：https://pdf.dfcfw.com/pdf/H3_AP202604121821142264_1.pdf，2026-04-12 近似假设标注：电解液为电池化学品业务主体（H1 出货 21.5 万吨 vs 电池化学品全产品产量 32.11 万吨，约占 67%），本口径增速用作全产品量增速的近似，非精确等同。"
+      "quote": "东吴证券测算 26Q1 电解液出货 9.5 万吨（+64%）。来源：https://pdf.dfcfw.com/pdf/H3_AP202604121821142264_1.pdf，2026-04-12。口径说明：此为电解液【出货量】，图内经 电解液产销比(≈1) 折算为电解液产量后与非电解液产量相加得全产品产量，不再用作全产品增速近似。"
     },
     {
       "id": "seg.battery.shipment_q2_2026_est",
@@ -37,7 +45,7 @@
       "unit": "万吨",
       "evidence_type": "analyst_estimate",
       "distribution": {"type": "point", "value": 12.0},
-      "quote": "东吴证券测算 26Q2 电解液出货近 12 万吨（+80%，环增 25%）。来源：https://stock.quote.stockstar.com/corp_300037.shtml，2026-07-10 近似假设标注：电解液为电池化学品业务主体（H1 出货 21.5 万吨 vs 电池化学品全产品产量 32.11 万吨，约占 67%），本口径增速用作全产品量增速的近似，非精确等同。"
+      "quote": "东吴证券测算 26Q2 电解液出货近 12 万吨（+80%，环增 25%）。来源：https://stock.quote.stockstar.com/corp_300037.shtml，2026-07-10。口径说明：此为电解液【出货量】，图内经 电解液产销比(≈1) 折算为电解液产量后与非电解液产量相加得全产品产量，不再用作全产品增速近似。"
     },
     {
       "id": "seg.battery.shipment_fy2026_est",
@@ -45,7 +53,7 @@
       "unit": "万吨",
       "evidence_type": "analyst_estimate",
       "distribution": {"type": "point", "value": 50.0},
-      "quote": "东吴证券测算 2026 全年电解液出货 50 万吨（+65%）。来源：https://pdf.dfcfw.com/pdf/H3_AP202604121821142264_1.pdf，2026-04-12 近似假设标注：电解液为电池化学品业务主体（H1 出货 21.5 万吨 vs 电池化学品全产品产量 32.11 万吨，约占 67%），本口径增速用作全产品量增速的近似，非精确等同。"
+      "quote": "东吴证券测算 2026 全年电解液出货 50 万吨（+65%）。来源：https://pdf.dfcfw.com/pdf/H3_AP202604121821142264_1.pdf，2026-04-12。口径说明：此为电解液【出货量】，图内经 电解液产销比(≈1) 折算为电解液产量后与非电解液产量相加得全产品产量，不再用作全产品增速近似。"
     },
     {
       "id": "seg.battery.price_growth_h2_spot",
@@ -88,20 +96,20 @@
       "quote": "券商修复锚：中金——六氟涨价逐步传导至电解液、电池化学品板块盈利有望修复，H2 毛利率有上探空间（0 至+3pct、众数+1pct）。来源：https://finance.sina.com.cn/stock/aiassist/agqsjs/2025-10-31/doc-infvuxsr3973331.shtml，2025-10-31 近似假设标注：电解液盈利变动近似代表电池化学品全产品毛利率变动（电解液为主体）。此为我方判断，非披露值，待协作者确认。"
     },
     {
-      "id": "seg.electronic.eps",
-      "metric": "电子信息化学品_2026H2环比相对跨期动能的偏离_假设",
-      "unit": "比率(增速点数)",
+      "id": "seg.electronic.yoy_h2",
+      "metric": "电子信息化学品_2026H2营收同比增速_假设",
+      "unit": "比率",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": -0.06, "mode": 0.0, "high": 0.09, "domain": [-1, 1]},
-      "quote": "证据（同花顺行业报道 https://field.10jqka.com.cn/20260716/c678226944.shtml，2026-07-16）：电子级氢氟酸价格较年初上涨约 17%-19%，韩国半导体企业高价抢货。结论：2026H2 环比相对跨期动能 g2(+21.8%, audited) 偏离中心≈0，分布 Tri(-0.06/0/0.09)。"
+      "distribution": {"type": "triangular", "low": 0.22, "mode": 0.30, "high": 0.40, "domain": [-1, 2]},
+      "quote": "假设：2026H2 电子信息化学品营收同比(vs 2025H2=7.854 亿)取 +22%~+40%、众数 +30%。核心理由：2026H1 该板块营收同比 +40.8%、产能利用率仅 55.69%(三板块最低、放量弹性最大)，下半年延续放量；但 2025H2 基数较 2025H1 高约 15.6%，基数效应使 H2 同比自 H1 的 +40.8% 回落至 +30% 一线。AI 液冷/氟化液属有机氟板块，已剔除。无券商分部定量，为供需/利用率推断。来源：光大证券 2026-08-26 半年报点评；公司 2026H1 半年报。"
     },
     {
-      "id": "seg.fluorine.eps",
-      "metric": "有机氟化学品_2026H2环比相对跨期动能的偏离_假设",
-      "unit": "比率(增速点数)",
+      "id": "seg.fluorine.yoy_h2",
+      "metric": "有机氟化学品_2026H2营收同比增速_假设",
+      "unit": "比率",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": -0.05, "mode": 0.0, "high": 0.07, "domain": [-1, 1]},
-      "quote": "证据①三代制冷剂价格（同花顺行业报道 https://field.10jqka.com.cn/20260716/c678226944.shtml，2026-07-16）：2026-07-03 较年初 R32 +1.6%、R125 +14.6%、R134a +10.3%。②公司互动平台表态（证券时报·e公司 https://www.stcn.com/article/detail/3943649.html，2026-06-04）：氟化液数据中心浸没式液冷\"对公司现在的业绩影响非常小\"。结论：2026H2 环比相对跨期动能 g2(+0.5%, audited) 偏离中心≈0（证据弱、谨慎），分布 Tri(-0.05/0/0.07)。"
+      "distribution": {"type": "triangular", "low": 0.0, "mode": 0.06, "high": 0.15, "domain": [-1, 2]},
+      "quote": "假设：2026H2 有机氟化学品营收同比(vs 2025H2=7.045 亿)取 0~+15%、众数 +6%。核心理由：三明海斯福 3 万吨新产能据福建省工信厅审查 2027 年才投产，2026H2 无新产能增量，H2 增量仅来自现有氟化液产线技改(Q1 试产逐季爬坡)+2025H2 低基数，故温和；浸没式液冷仍处推广初期、传统含氟精细品需求平淡(H1 −1.9%)，均不给 H2 爆发。无券商分部定量，为推断。来源：光大证券 2026-08-26 半年报点评；福建省工信厅项目审查意见(2026-04)。"
     },
     {
       "id": "seg.other.g3",
