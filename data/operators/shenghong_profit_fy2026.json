@@ -1,0 +1,41 @@
+{
+  "subgraph": "shenghong_profit_fy2026",
+  "note": "胜宏科技(300476.SZ) 2026 全年归母净利润——券商一致预期单路模型。因 2026H1 未披露分产品/分季度归母拆分，且下半年核心变量为 NVIDIA Rubin 平台放量（台阶式，无法机械外推），故不做自下而上外推，直接把 10 家券商各自独立披露的 2026E 全年归母净利润(shenghong.broker.*.fy2026e，analyst_estimate)用 mixture 等权融合为最终结论 shenghong.profit.fy2026。这些全年预测本身已含 Rubin H2 放量假设。另派生两个透明展示节点：h2_2026.implied = 全年一致预期 − H1实际(28.57 audited)，展示券商隐含的下半年放量幅度（≈2×H1）；fy2026.yoy = 全年一致预期相对 2025 实际(43.12) 的同比增速。inputs 按预测值升序排列，weights 不填即等权(1/10)。",
+  "operators": [
+    {
+      "id": "shenghong.profit.fy2026",
+      "operator": "mixture",
+      "inputs": [
+        "shenghong.broker.nomura.fy2026e",
+        "shenghong.broker.yongxing.fy2026e",
+        "shenghong.broker.huaan.fy2026e",
+        "shenghong.broker.caixin.fy2026e",
+        "shenghong.broker.guangfa.fy2026e",
+        "shenghong.broker.dongguan.fy2026e",
+        "shenghong.broker.guosheng.fy2026e",
+        "shenghong.broker.guohai.fy2026e",
+        "shenghong.broker.dongbei.fy2026e",
+        "shenghong.broker.kaiyuan.fy2026e"
+      ],
+      "output_metric": "归母净利润_2026全年（券商一致预期）",
+      "unit": "亿元",
+      "op_confidence": 1.0
+    },
+    {
+      "id": "shenghong.profit.h2_2026.implied",
+      "operator": "subtract",
+      "inputs": ["shenghong.profit.fy2026", "shenghong.profit.h1_2026"],
+      "output_metric": "隐含H2归母净利润_2026（=全年一致预期−H1实际，展示Rubin下半年放量幅度）",
+      "unit": "亿元",
+      "op_confidence": 1.0
+    },
+    {
+      "id": "shenghong.profit.fy2026.yoy",
+      "operator": "growth",
+      "inputs": ["shenghong.profit.fy2026", "shenghong.profit.fy2025"],
+      "output_metric": "归母净利润_2026全年同比增速（相对2025实际）",
+      "unit": "比率",
+      "op_confidence": 1.0
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "source_id": "shenghong_broker_forecasts_2026",
+  "source_name": "胜宏科技 2026E 券商盈利预测（同花顺 F10 汇总，检索 2026-09-02）",
+  "publisher": "同花顺 F10（汇总各券商研究所研报）",
+  "as_of": "2026-09-02",
+  "source_url": "http://basic.10jqka.com.cn/48/300476/worth.html",
+  "retrieved_at": "2026-09-02",
+  "note": "10 家券商对胜宏科技(300476.SZ) 2026E 归母净利润的预测，逐字转写自同花顺 F10 盈利预测页汇总，全部 evidence_type=analyst_estimate，各自独立披露值、零计算。这些全年预测均已把 NVIDIA Rubin 平台 H2 放量定价在内（隐含 H2≈全年−H1(28.57)），因此本模型不再对 H2 做自下而上外推。各家发布日期不同：国盛(08-30)为 H1 中报披露后唯一更新，其余为 4-7 月发布。id 统一加 shenghong. 前缀以区别于其它标的的 broker 节点。",
+  "nodes": [
+    {
+      "id": "shenghong.broker.guosheng.fy2026e",
+      "metric": "归母净利润_2026全年_国盛证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-08-30",
+      "distribution": {"type": "point", "value": 88.89, "domain": [0, null]},
+      "quote": "国盛证券 2026E 归母净利预测 88.89 亿元（2027E 159.01/2028E 224.86 亿），买入，发布 2026-08-30（H1 中报后唯一更新），检索自同花顺F10。"
+    },
+    {
+      "id": "shenghong.broker.nomura.fy2026e",
+      "metric": "归母净利润_2026全年_野村东方国际证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-07-14",
+      "distribution": {"type": "point", "value": 74.97, "domain": [0, null]},
+      "quote": "野村东方国际证券 2026E 归母净利预测 74.97 亿元（2027E 141.64/2028E 209.32 亿），发布 2026-07-14，检索自同花顺F10。"
+    },
+    {
+      "id": "shenghong.broker.yongxing.fy2026e",
+      "metric": "归母净利润_2026全年_甬兴证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-07-06",
+      "distribution": {"type": "point", "value": 79.74, "domain": [0, null]},
+      "quote": "甬兴证券 2026E 归母净利预测 79.74 亿元（2027E 141.20/2028E 212.09 亿），买入首次覆盖，发布 2026-07-06，检索自同花顺F10。"
+    },
+    {
+      "id": "shenghong.broker.guangfa.fy2026e",
+      "metric": "归母净利润_2026全年_广发证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-06-17",
+      "distribution": {"type": "point", "value": 86.15, "domain": [0, null]},
+      "quote": "广发证券 2026E 归母净利预测 86.15 亿元（2027E 143.84/2028E 210.14 亿），发布 2026-06-17，检索自同花顺F10。"
+    },
+    {
+      "id": "shenghong.broker.caixin.fy2026e",
+      "metric": "归母净利润_2026全年_财信证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-05-05",
+      "distribution": {"type": "point", "value": 84.06, "domain": [0, null]},
+      "quote": "财信证券 2026E 归母净利预测 84.06 亿元（2027E 138.50/2028E 196.83 亿），买入，发布 2026-05-05，检索自同花顺F10。"
+    },
+    {
+      "id": "shenghong.broker.dongbei.fy2026e",
+      "metric": "归母净利润_2026全年_东北证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-05-05",
+      "distribution": {"type": "point", "value": 89.47, "domain": [0, null]},
+      "quote": "东北证券 2026E 归母净利预测 89.47 亿元（2027E 147.75/2028E 236.26 亿），发布 2026-05-05，检索自同花顺F10。"
+    },
+    {
+      "id": "shenghong.broker.guohai.fy2026e",
+      "metric": "归母净利润_2026全年_国海证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-05-02",
+      "distribution": {"type": "point", "value": 89.11, "domain": [0, null]},
+      "quote": "国海证券 2026E 归母净利预测 89.11 亿元（2027E 159.82/2028E 257.16 亿），买入首次覆盖，发布 2026-05-02，检索自同花顺F10。"
+    },
+    {
+      "id": "shenghong.broker.huaan.fy2026e",
+      "metric": "归母净利润_2026全年_华安证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-04-30",
+      "distribution": {"type": "point", "value": 80.17, "domain": [0, null]},
+      "quote": "华安证券 2026E 归母净利预测 80.17 亿元（自此前 86.38 亿下调），买入，发布 2026-04-30，检索自同花顺F10。"
+    },
+    {
+      "id": "shenghong.broker.dongguan.fy2026e",
+      "metric": "归母净利润_2026全年_东莞证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-04-29",
+      "distribution": {"type": "point", "value": 88.21, "domain": [0, null]},
+      "quote": "东莞证券 2026E 归母净利预测 88.21 亿元（2027E 159.15/2028E 251.94 亿），发布 2026-04-29，检索自同花顺F10。"
+    },
+    {
+      "id": "shenghong.broker.kaiyuan.fy2026e",
+      "metric": "归母净利润_2026全年_开源证券预测",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-04-29",
+      "distribution": {"type": "point", "value": 91.19, "domain": [0, null]},
+      "quote": "开源证券 2026E 归母净利预测 91.19 亿元（2027E 154.41/2028E 222.88 亿），发布 2026-04-29，检索自同花顺F10。"
+    }
+  ]
+}
