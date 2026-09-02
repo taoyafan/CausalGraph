@@ -1,0 +1,70 @@
+{
+  "subgraph": "shenghong_profit_capacity_method",
+  "note": "胜宏科技 2026 全年归母——产能法(Path A之一,供给侧)。历史周转率图内计算:2025H2营收=全年−H1(subtract);两期周转率=对应半年营收÷期初固定资产(divide);mixture融合为校准基准;乘前瞻调整系数(assumption)得前瞻周转率。前瞻:H2营收=2026-06-30固定资产×前瞻周转率;H2归母=H2营收×H2净利率(复用 shenghong.net_margin.2026_h2);全年=H1实际(28.57)+H2。算子皆纯数学(op_confidence=1.0)。最终结论 shenghong.profit.fy2026.capacity 与存货法 shenghong.profit.fy2026.inv_method、券商法 shenghong.profit.fy2026 并列,不在本文件融合。",
+  "operators": [
+    {
+      "id": "shenghong.revenue.2025_h2",
+      "operator": "subtract",
+      "inputs": ["shenghong.revenue.fy2025", "shenghong.revenue.h1_2025"],
+      "output_metric": "营业收入_2025H2(=全年−H1,audited派生)",
+      "unit": "亿元",
+      "op_confidence": 1.0
+    },
+    {
+      "id": "shenghong.fa_turnover.2025_h2",
+      "operator": "divide",
+      "inputs": ["shenghong.revenue.2025_h2", "shenghong.fixed_asset.2025_06_30"],
+      "output_metric": "固定资产半年周转率_2025H2(=2025H2营收÷期初固定资产)",
+      "unit": "比率",
+      "op_confidence": 1.0
+    },
+    {
+      "id": "shenghong.fa_turnover.2026_h1",
+      "operator": "divide",
+      "inputs": ["shenghong.revenue.h1_2026", "shenghong.fixed_asset.2025_12_31"],
+      "output_metric": "固定资产半年周转率_2026H1(=2026H1营收÷期初固定资产)",
+      "unit": "比率",
+      "op_confidence": 1.0
+    },
+    {
+      "id": "shenghong.fa_turnover.calibrated",
+      "operator": "mixture",
+      "inputs": ["shenghong.fa_turnover.2025_h2", "shenghong.fa_turnover.2026_h1"],
+      "output_metric": "固定资产半年周转率_历史校准基准(两期等权融合)",
+      "unit": "比率",
+      "op_confidence": 1.0
+    },
+    {
+      "id": "shenghong.fa_turnover.forward",
+      "operator": "product",
+      "inputs": ["shenghong.fa_turnover.calibrated", "shenghong.fa_turnover.adjustment"],
+      "output_metric": "固定资产半年周转率_2026H2前瞻(=校准基准×调整系数)",
+      "unit": "比率",
+      "op_confidence": 1.0
+    },
+    {
+      "id": "shenghong.revenue.2026_h2.capacity",
+      "operator": "product",
+      "inputs": ["shenghong.fixed_asset.2026_06_30", "shenghong.fa_turnover.forward"],
+      "output_metric": "隐含营业收入_2026H2(产能法=期初固定资产×前瞻周转率)",
+      "unit": "亿元",
+      "op_confidence": 1.0
+    },
+    {
+      "id": "shenghong.profit.2026_h2.capacity",
+      "operator": "product",
+      "inputs": ["shenghong.revenue.2026_h2.capacity", "shenghong.net_margin.2026_h2"],
+      "output_metric": "归母净利润_2026H2(产能法)",
+      "unit": "亿元",
+      "op_confidence": 1.0
+    },
+    {
+      "id": "shenghong.profit.fy2026.capacity",
+      "operator": "sum",
+      "inputs": ["shenghong.profit.h1_2026", "shenghong.profit.2026_h2.capacity"],
+      "output_metric": "归母净利润_2026全年(产能法,独立于券商)",
+      "unit": "亿元",
+      "op_confidence": 1.0
+    }
+  ]
+}
