@@ -2,9 +2,13 @@
   "desc": "电池让价更狠 + 剔除有机氟贡献（演示覆盖与屏蔽）",
   "created_by": "user",
   "overrides": {
-    "seg.battery.volume_growth_h2_nonelectrolyte": {
-      "distribution": {"type": "triangular", "low": -0.15, "mode": 0.0, "high": 0.1},
-      "reason": "悲观：非电解液 H2 需求走弱/渠道去库，环比转负"
+    "seg.battery.volume_growth_h2_nonelec_ceiling": {
+      "distribution": {"type": "triangular", "low": -0.15, "mode": -0.05, "high": 0.03},
+      "reason": "悲观：存量需求走弱/渠道去库，环比转负"
+    },
+    "seg.battery.volume_growth_h2_nonelec_newline": {
+      "distribution": {"type": "triangular", "low": -0.10, "mode": 0.0, "high": 0.06},
+      "reason": "悲观：VC/FEC 新线投产爬坡放缓、增量有限"
     }
   },
   "mutes": ["seg.fluorine.gp_fy2026"]
