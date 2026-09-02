@@ -6,6 +6,7 @@
 
 - **"记住" = 写进本文件**：只要协作者说"记住 X / 记一下 X"，就把 X 追加进
   本 `AGENTS.md`（而不是别处的 memory）。
+- **每次提交同步 push**：每次 `git commit` 后立即 `git push` 到 origin，不积压本地提交。
 - **项目知识只进项目文档，严禁创建/更新 skill**：本项目的规范、流程教训、实战经验
   一律写入 README.md / TODO.md / doc/design/ / 本文件；**任何情况下不创建本项目专属
   skill，也不把项目经验补丁进通用 skill**（曾违规将 scout 超时、reviewer 范围、改名残留
