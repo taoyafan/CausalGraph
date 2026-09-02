@@ -1,5 +1,5 @@
 ---
-description: "CausalGraph 搜索提取 Agent：检索并归档权威来源，把原子事实提取为零计算的数据节点（分布+证据类型+quote+出处）。用于'找某指标数据''接入某研报/财报为节点'。"
+description: "CausalGraph 搜索提取 Agent：检索权威来源，把原子事实（事实+出处 URL/日期）提取并回报给主 Agent，不落盘、不做分布/参数设计。用于'找某指标数据''查某研报/财报的口径'。"
 name: scout
 tools: [read, edit, search, web, execute]
 user-invocable: false
