@@ -1,0 +1,98 @@
+{
+  "source_id": "shenghong_inventory_method_2026",
+  "source_name": "胜宏科技 2026 全年归母——存货法（独立于券商/英伟达）",
+  "publisher": "胜宏科技定期报告(存货/营业成本/营收为audited) + CausalGraph协作者假设(前瞻调整系数/H2毛利率/H2净利率系数)",
+  "as_of": "2026-08-27",
+  "source_url": "http://basic.10jqka.com.cn/48/300476/",
+  "retrieved_at": "2026-09-02",
+  "note": "存货法(Path A之一)：年中存货是下半年放量的备货信号。用『期末存货÷下半年营业成本』比率把 2026-06-30 存货(58.90亿)反推 2026H2 营业成本,再经毛利率→H2营收、净利率→H2归母,加 H1 实际(28.57)得全年。历史校准比率全部由图内算子算出(不在quote手算):2025-06-30存货÷2025H2成本(=全年−H1)、2025-12-31存货÷2026H1成本,两半年样本各建节点、mixture融合为校准基准,再乘一个前瞻调整系数(assumption)得前瞻比率。H2净利率=图内算出的H1净利率(归母÷营收)×环比调整系数(assumption)。本法独立于券商与英伟达美元营收,作独立标尺。三个assumption(前瞻调整系数/H2毛利率/H2净利率系数)为我方假设,带宽见各quote,协作者可否决。",
+  "nodes": [
+    {
+      "id": "shenghong.inventory.2026_06_30",
+      "metric": "存货_2026年6月30日",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "as_of": "2026-08-27",
+      "distribution": {"type": "point", "value": 58.90, "domain": [0, null]},
+      "quote": "2026半年报资产负债表：存货 58.90 亿元(较2025-12-31的31.62亿增87%,较2026-03-31的39.05亿增51%,较2025-06-30的26.83亿增2.20倍)。管理层调研纪要(2026-08-27)：Q2存货增约20亿为下半年新一代产品大规模量产备货。披露日2026-08-27。"
+    },
+    {
+      "id": "shenghong.inventory.2025_06_30",
+      "metric": "存货_2025年6月30日",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "as_of": "2025-08-27",
+      "distribution": {"type": "point", "value": 26.83, "domain": [0, null]},
+      "quote": "2025半年报资产负债表：存货 26.83 亿元。来源同花顺F10,披露日2025-08-27。用于历史校准『期末存货÷下半年营业成本』比率。"
+    },
+    {
+      "id": "shenghong.inventory.2025_12_31",
+      "metric": "存货_2025年12月31日",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "as_of": "2026-03-15",
+      "distribution": {"type": "point", "value": 31.62, "domain": [0, null]},
+      "quote": "2025年报资产负债表：存货 31.62 亿元。来源同花顺F10,披露日2026-03-15。用于历史校准『期末存货÷下半年营业成本』比率。"
+    },
+    {
+      "id": "shenghong.cogs.fy2025",
+      "metric": "营业成本_2025全年",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "as_of": "2026-03-15",
+      "distribution": {"type": "point", "value": 125.00, "domain": [0, null]},
+      "quote": "2025年报利润表：营业成本 125.00 亿元。来源同花顺F10,披露日2026-03-15。与H1营业成本相减得2025H2营业成本(图内subtract)。"
+    },
+    {
+      "id": "shenghong.cogs.2025_h1",
+      "metric": "营业成本_2025H1",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "as_of": "2025-08-27",
+      "distribution": {"type": "point", "value": 57.60, "domain": [0, null]},
+      "quote": "2025半年报利润表：营业成本 57.60 亿元。来源同花顺F10,披露日2025-08-27。用于图内算出2025H2营业成本(全年−H1)。"
+    },
+    {
+      "id": "shenghong.cogs.2026_h1",
+      "metric": "营业成本_2026H1",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "as_of": "2026-08-27",
+      "distribution": {"type": "point", "value": 77.66, "domain": [0, null]},
+      "quote": "2026半年报利润表：营业成本 77.66 亿元。来源同花顺F10,披露日2026-08-27。作历史校准第二样本(2025-12-31存货÷本值)的分母。"
+    },
+    {
+      "id": "shenghong.revenue.h1_2026",
+      "metric": "营业收入_2026H1",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "as_of": "2026-08-27",
+      "distribution": {"type": "point", "value": 116.29, "domain": [0, null]},
+      "quote": "2026半年报：营业收入 116.29 亿元(同比+28.77%)。披露日2026-08-27。图内与归母(28.57)相除得H1归母净利率,作H2净利率的锚。"
+    },
+    {
+      "id": "shenghong.inv_cogs_ratio.adjustment",
+      "metric": "前瞻存货成本比率_调整系数_2026假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 0.92, "mode": 1.00, "high": 1.14, "domain": [0, null]},
+      "quote": "假设:前瞻比率相对历史校准基准(图内 shenghong.inv_cogs_ratio.calibrated,由两次半年度审计数据算出)的调整系数。中枢1.0=沿用历史;上探1.14(Rubin预防性超额囤货→比率升→隐含H2营业成本降→利润偏低,为主要下行风险);下探0.92(爬坡期存货周转更快→比率降→利润偏高)。带宽反映样本仅2个半年+2026为爬坡年的不确定。"
+    },
+    {
+      "id": "shenghong.gross_margin.2026_h2",
+      "metric": "毛利率_2026H2_假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 0.32, "mode": 0.335, "high": 0.35, "domain": [0, 1]},
+      "quote": "假设:2026H2毛利率。锚:2026H1毛利率33.22%(audited,同比-3.00pct,因员工上半年+30%培训储备及新厂折旧拖累)。管理层指引:营收上台阶后毛利率有望向上。故 mode=33.5%(略高于H1),下探32%(压力延续),上探35%(规模效应显现)。用于将H2营业成本反算为H2营收。"
+    },
+    {
+      "id": "shenghong.net_margin_h2.factor",
+      "metric": "H2归母净利率_环比调整系数_2026假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 0.96, "mode": 1.02, "high": 1.08, "domain": [0, null]},
+      "quote": "假设:2026H2归母净利率相对H1实际净利率(图内 shenghong.net_margin.h1_2026,由归母÷营收算出)的环比调整系数。依据:管理层调研纪要指引毛利率向上+费用率随营收规模摊薄→H2净利率略高于H1。中枢1.02、带宽0.96–1.08。"
+    }
+  ]
+}
