@@ -34,51 +34,92 @@ def _node_confidence(node):
     return node.op_confidence
 
 
-# 展示层配置: 把节点 id 的命名空间(根 token)映射成"图/标的"中文名, 供网页第一级下拉分组。
-# 无映射的标的回退显示 id 根 token; 新增标的时在此加一行即可(不影响求值)。
-GROUP_ALIASES = {"seg": "capchem"}   # capchem 的分部节点 id 以 seg. 开头, 归入同一张图
+# 纯展示: 把自动分出的图簇(id 根 token)显示成人类可读名字; 缺失则回退显示 id 根本身。
+# 这是唯一的外部知识(图无从得知 capchem=新宙邦), 不参与任何排序/分组逻辑。
 GROUP_LABELS = {"capchem": "新宙邦", "shenghong": "胜宏科技"}
 
 
-def _group_key(nid):
-    root = nid.split(".", 1)[0]
-    return GROUP_ALIASES.get(root, root)
+def _components(graph):
+    """按弱连通性把全图自动分簇: 互不相连的子图各为一个标的。返回 {node_id: comp_index}。"""
+    adj = {nid: set() for nid in graph.nodes}
+    for nid, node in graph.nodes.items():
+        if isinstance(node, OperatorNode):
+            for src in node.inputs:
+                if src in adj:
+                    adj[nid].add(src)
+                    adj[src].add(nid)
+    comp, idx = {}, 0
+    for start in graph.nodes:
+        if start in comp:
+            continue
+        stack = [start]
+        comp[start] = idx
+        while stack:
+            u = stack.pop()
+            for v in adj[u]:
+                if v not in comp:
+                    comp[v] = idx
+                    stack.append(v)
+        idx += 1
+    return comp
 
 
-def _headline_rank(nid, terminal):
-    """组内排序键(越小越靠前): 年度利润 <标的>.profit.fyXXXX 靠前, 派生量(yoy/implied)不算头条;
-    终端(收口)权重更高, 保证最终融合节点(利润+终端)压过其各条方法分支。"""
-    idl = nid.lower()
-    is_profit_year = (".profit.fy" in idl) and not any(x in idl for x in (".yoy", ".implied"))
-    rank = 0
-    if is_profit_year:
-        rank -= 100
-    if terminal:
-        rank -= 50
-    return rank
+def _ancestor_set(nid, graph, memo):
+    """nid 传递依赖的全部上游节点集合(结构性): 越大=汇聚证据越多。DAG 已由 check 保证无环。"""
+    if nid in memo:
+        return memo[nid]
+    memo[nid] = set()  # 占位, 防御异常环导致的无限递归
+    acc = set()
+    node = graph.nodes.get(nid)
+    if isinstance(node, OperatorNode):
+        for src in node.inputs:
+            acc.add(src)
+            acc |= _ancestor_set(src, graph, memo)
+    memo[nid] = acc
+    return acc
 
 
 def list_focusable(graph):
-    """可 focus 的算子节点列表, 带图分组(group/group_label)。
-    排序: 先按图名, 组内年度利润(头条)置顶、终端优先, 便于网页两级下拉默认落在年利润。"""
+    """可 focus 的算子节点列表, 带图分组。分组与头条均由图结构自动导出, 不依赖 id 命名约定:
+    - group  : 弱连通分量(每个互不相连的子图=一个标的);
+    - 头条    : 该簇内汇聚上游证据最多的终端算子(收口融合节点), 网页默认落在它;
+    - 组内排序: 头条置顶, 其余按祖先数降序(越聚合越靠前), 同数按标签。"""
+    comp = _components(graph)
     referenced = set()
     for node in graph.nodes.values():
         if isinstance(node, OperatorNode):
             referenced.update(node.inputs)
+    memo = {}
+    anc = {nid: len(_ancestor_set(nid, graph, memo))
+           for nid, node in graph.nodes.items() if isinstance(node, OperatorNode)}
+    # 每个连通分量的头条 = 祖先数最大的终端算子节点(纯结构, 无 id 字符串)
+    headline = {}
+    for nid, node in graph.nodes.items():
+        if isinstance(node, OperatorNode) and nid not in referenced:
+            c = comp[nid]
+            if c not in headline or anc[nid] > anc[headline[c]]:
+                headline[c] = nid
+    # 簇的分组键取其头条节点的 id 根 token(整簇一致); 无终端的簇回退用任一成员根 token
+    comp_key = {}
+    for nid in graph.nodes:
+        c = comp[nid]
+        if c not in comp_key:
+            comp_key[c] = (headline[c] if c in headline else nid).split(".", 1)[0]
     items = []
     for nid, node in graph.nodes.items():
         if isinstance(node, OperatorNode):
-            terminal = nid not in referenced
-            gkey = _group_key(nid)
+            c = comp[nid]
+            key = comp_key[c]
             items.append({
                 "id": nid,
                 "label": node.output_metric,
                 "unit": node.unit,
-                "terminal": terminal,
-                "group": gkey,
-                "group_label": GROUP_LABELS.get(gkey, gkey),
+                "terminal": nid not in referenced,
+                "group": key,
+                "group_label": GROUP_LABELS.get(key, key),
+                "is_headline": headline.get(c) == nid,
             })
-    items.sort(key=lambda x: (x["group_label"], _headline_rank(x["id"], x["terminal"]), x["label"]))
+    items.sort(key=lambda x: (x["group_label"], not x["is_headline"], -anc[x["id"]], x["label"]))
     return items
 
 

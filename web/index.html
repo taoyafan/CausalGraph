@@ -212,7 +212,7 @@ function fillNodePicker(group) {
   np.innerHTML = "";
   ALL_NODES.filter(n => n.group === group).forEach(n => {
     const o = el("option"); o.value = n.id;
-    o.textContent = (n.terminal ? "★ " : "") + n.label;
+    o.textContent = (n.is_headline ? "★ " : "") + n.label;
     np.appendChild(o);
   });
 }
