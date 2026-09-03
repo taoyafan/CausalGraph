@@ -1,54 +1,48 @@
 {
   "subgraph": "shenghong_profit_inv_method",
-  "note": "胜宏科技 2026 全年归母——存货法(Path A之一,独立于券商)。历史校准全部图内计算:2025H2营业成本=全年−H1(subtract);两历史比率=存货÷对应半年成本(divide);mixture融合为校准基准;乘前瞻调整系数(assumption)得前瞻比率。前瞻链路:H2营业成本=2026-06-30存货÷前瞻比率;H2营收=H2营业成本÷(1−H2毛利率),其中营业成本率=affine(毛利率,a=1,b=-1);H2净利率=H1净利率(归母÷营收,图内divide)×环比系数(assumption);H2归母=H2营收×H2净利率;全年=H1实际(28.57,audited)+H2归母。算子皆纯数学(op_confidence=1.0),主观性集中在3个assumption节点。最终结论 shenghong.profit.fy2026.inv_method 与券商法 shenghong.profit.fy2026e.consensus 并列,不融合,互为独立标尺。",
+  "note": "胜宏科技 2026 全年归母——存货法(Path A之一,独立于券商)。历史校准全部图内计算:2025H2营业成本=全年−H1(subtract);两历史比率=存货÷对应半年成本(divide);mixture融合为校准基准;乘前瞻调整系数(assumption)得前瞻比率。前瞻链路:H2营业成本=2026-06-30存货÷前瞻比率;H2营收=H2营业成本÷(1−H2毛利率),其中营业成本率=affine(毛利率,a=1,b=-1);H2净利率=H1净利率(归母÷营收,图内divide)×环比系数(assumption);H2归母=H2营收×H2净利率;全年=H1实际(28.57,audited)+H2归母。算子皆纯数学(精确、无自身不确定性),主观性集中在3个assumption节点。最终结论 shenghong.profit.fy2026.inv_method 与券商法 shenghong.profit.fy2026e.consensus 并列,不融合,互为独立标尺。",
   "operators": [
     {
       "id": "shenghong.cogs.2025_h2",
       "operator": "subtract",
       "inputs": ["shenghong.cogs.fy2025", "shenghong.cogs.2025_h1"],
       "output_metric": "营业成本_2025H2(=全年−H1,audited派生)",
-      "unit": "亿元",
-      "op_confidence": 1.0
+      "unit": "亿元"
     },
     {
       "id": "shenghong.inv_cogs_ratio.2025_h2",
       "operator": "divide",
       "inputs": ["shenghong.inventory.2025_06_30", "shenghong.cogs.2025_h2"],
       "output_metric": "历史校准比率_2025H2(=2025-06-30存货÷2025H2营业成本)",
-      "unit": "比率",
-      "op_confidence": 1.0
+      "unit": "比率"
     },
     {
       "id": "shenghong.inv_cogs_ratio.2026_h1",
       "operator": "divide",
       "inputs": ["shenghong.inventory.2025_12_31", "shenghong.cogs.2026_h1"],
       "output_metric": "历史校准比率_2026H1(=2025-12-31存货÷2026H1营业成本)",
-      "unit": "比率",
-      "op_confidence": 1.0
+      "unit": "比率"
     },
     {
       "id": "shenghong.inv_cogs_ratio.calibrated",
       "operator": "mixture",
       "inputs": ["shenghong.inv_cogs_ratio.2025_h2", "shenghong.inv_cogs_ratio.2026_h1"],
       "output_metric": "存货成本比率_历史校准基准(两半年样本等权融合)",
-      "unit": "比率",
-      "op_confidence": 1.0
+      "unit": "比率"
     },
     {
       "id": "shenghong.inv_cogs_ratio.forward",
       "operator": "product",
       "inputs": ["shenghong.inv_cogs_ratio.calibrated", "shenghong.inv_cogs_ratio.adjustment"],
       "output_metric": "存货成本比率_2026前瞻(=校准基准×调整系数)",
-      "unit": "比率",
-      "op_confidence": 1.0
+      "unit": "比率"
     },
     {
       "id": "shenghong.cogs.2026_h2.implied",
       "operator": "divide",
       "inputs": ["shenghong.inventory.2026_06_30", "shenghong.inv_cogs_ratio.forward"],
       "output_metric": "隐含营业成本_2026H2(=年中存货÷前瞻比率)",
-      "unit": "亿元",
-      "op_confidence": 1.0
+      "unit": "亿元"
     },
     {
       "id": "shenghong.cogs_ratio.2026_h2",
@@ -56,48 +50,42 @@
       "inputs": ["shenghong.gross_margin.2026_h2"],
       "params": {"a": 1.0, "b": -1.0},
       "output_metric": "营业成本率_2026H2(=1−毛利率)",
-      "unit": "比率",
-      "op_confidence": 1.0
+      "unit": "比率"
     },
     {
       "id": "shenghong.revenue.2026_h2.implied",
       "operator": "divide",
       "inputs": ["shenghong.cogs.2026_h2.implied", "shenghong.cogs_ratio.2026_h2"],
       "output_metric": "隐含营业收入_2026H2(=H2营业成本÷营业成本率)",
-      "unit": "亿元",
-      "op_confidence": 1.0
+      "unit": "亿元"
     },
     {
       "id": "shenghong.net_margin.h1_2026",
       "operator": "divide",
       "inputs": ["shenghong.profit.h1_2026", "shenghong.revenue.h1_2026"],
       "output_metric": "归母净利率_2026H1(=归母÷营收,audited派生)",
-      "unit": "比率",
-      "op_confidence": 1.0
+      "unit": "比率"
     },
     {
       "id": "shenghong.net_margin.2026_h2",
       "operator": "product",
       "inputs": ["shenghong.net_margin.h1_2026", "shenghong.net_margin_h2.factor"],
       "output_metric": "归母净利率_2026H2(=H1净利率×环比系数)",
-      "unit": "比率",
-      "op_confidence": 1.0
+      "unit": "比率"
     },
     {
       "id": "shenghong.profit.2026_h2.inv_method",
       "operator": "product",
       "inputs": ["shenghong.revenue.2026_h2.implied", "shenghong.net_margin.2026_h2"],
       "output_metric": "归母净利润_2026H2(存货法)",
-      "unit": "亿元",
-      "op_confidence": 1.0
+      "unit": "亿元"
     },
     {
       "id": "shenghong.profit.fy2026.inv_method",
       "operator": "sum",
       "inputs": ["shenghong.profit.h1_2026", "shenghong.profit.2026_h2.inv_method"],
       "output_metric": "归母净利润_2026全年(存货法,独立于券商)",
-      "unit": "亿元",
-      "op_confidence": 1.0
+      "unit": "亿元"
     }
   ]
 }

@@ -7,8 +7,7 @@
       "operator": "mixture",
       "inputs": ["shenghong.profit.fy2026.inv_method", "shenghong.profit.fy2026.capacity"],
       "output_metric": "归母净利润_2026全年(独立Path A综合:存货法+产能法等权)",
-      "unit": "亿元",
-      "op_confidence": 1.0
+      "unit": "亿元"
     }
   ]
 }

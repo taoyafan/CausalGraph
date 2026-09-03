@@ -76,7 +76,6 @@ class Graph:
             # 固定元数算子被屏蔽后输入不足：报错拒绝，不算出错误结果
             _check_arity(node.operator, len(vals))
             xs, meta = fn(vals, node.params)
-            xs = dist.widen_samples(xs, node.op_confidence)
             if meta.get("alert"):
                 self.alerts[node_id] = meta["alert"]
         else:

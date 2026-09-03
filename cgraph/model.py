@@ -42,7 +42,6 @@ class OperatorNode:
     inputs: list          # 上游节点 id 列表（= 入边）
     output_metric: str
     unit: str
-    op_confidence: float = 1.0
     params: dict = field(default_factory=dict)
     kind: str = "operator"
 
@@ -54,6 +53,5 @@ class OperatorNode:
             inputs=d["inputs"],
             output_metric=d["output_metric"],
             unit=d["unit"],
-            op_confidence=d.get("op_confidence", 1.0),
             params=d.get("params", {}),
         )

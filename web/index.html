@@ -42,6 +42,9 @@
   .summary .range { font-size: 13px; opacity: .92; }
   .spark { display: flex; align-items: flex-end; gap: 2px; height: 40px; margin-top: 12px; }
   .spark i { flex: 1; background: rgba(255,255,255,.55); border-radius: 2px 2px 0 0; min-height: 2px; }
+  .spark i:hover { background: #fff; }
+  .spark-axis { display: flex; justify-content: space-between; font-size: 11px; opacity: .85; margin-top: 4px; }
+  .spark-axis span:nth-child(2) { opacity: .7; }
   .sec-title { font-size: 12px; color: var(--sub); font-weight: 600; margin: 4px 2px 8px; letter-spacing: .5px; }
   .node { margin: 0 0 8px; }
   .card {
@@ -95,12 +98,38 @@ const el = (t, c) => { const e = document.createElement(t); if (c) e.className =
 function confColor(c) { return c >= 0.8 ? "var(--hi)" : c >= 0.4 ? "var(--mid)" : "var(--lo)"; }
 function confLabel(c) { return c >= 0.8 ? "高" : c >= 0.4 ? "中" : "低"; }
 
-function spark(hist) {
+function spark(hist, unit) {
   const box = el("div", "spark");
   if (!hist) return box;
   const max = hist.max || 1;
-  hist.counts.forEach(c => { const b = el("i"); b.style.height = (6 + 34 * c / max) + "%"; box.appendChild(b); });
+  const edges = hist.edges || [];
+  const total = hist.counts.reduce((a, b) => a + b, 0) || 1;
+  const u = unit || "";
+  hist.counts.forEach((c, i) => {
+    const b = el("i");
+    b.style.height = (6 + 34 * c / max) + "%";
+    const lo = edges[i], hi = edges[i + 1];
+    if (lo !== undefined && hi !== undefined) {
+      const pct = (100 * c / total).toFixed(1);
+      b.title = `${fmt(lo)} ~ ${fmt(hi)}${u} · ${c} 样本 (${pct}%)`;
+    }
+    box.appendChild(b);
+  });
   return box;
+}
+
+// 直方图下方的坐标轴: 左端(最小) / 中位 / 右端(最大)
+function sparkAxis(hist, unit) {
+  const ax = el("div", "spark-axis");
+  if (!hist || !hist.edges || hist.edges.length < 2) return ax;
+  const e = hist.edges, u = unit || "";
+  const lo = e[0], hi = e[e.length - 1], mid = (lo + hi) / 2;
+  [lo, mid, hi].forEach((v, i) => {
+    const s = el("span");
+    s.textContent = fmt(v) + (i === 2 ? u : "");
+    ax.appendChild(s);
+  });
+  return ax;
 }
 
 function summaryCard(root) {
@@ -108,7 +137,8 @@ function summaryCard(root) {
   c.innerHTML = `<div class="lbl">${root.label}</div>
     <div class="p50">${fmt(root.stats.p50)}<span>${root.unit || ""}</span></div>
     <div class="range">区间 P10–P90: ${fmt(root.stats.p10)} ~ ${fmt(root.stats.p90)} · 均值 ${fmt(root.stats.mean)}</div>`;
-  c.appendChild(spark(root.hist));
+  c.appendChild(spark(root.hist, root.unit));
+  c.appendChild(sparkAxis(root.hist, root.unit));
   return c;
 }
 
@@ -117,20 +147,22 @@ function nodeView(n, depth) {
   const card = el("div", "card");
   const row = el("div", "row" + (n.children && n.children.length ? " tap" : ""));
 
-  const bar = el("div", "cbar"); bar.style.background = confColor(n.confidence);
+  const bar = el("div", "cbar");
   const caret = el("div", "caret" + (n.children && n.children.length ? "" : " leaf"));
   caret.textContent = "▶";
   const title = el("div", "title");
   const meta = el("div", "meta");
   if (n.kind === "operator") {
+    bar.style.background = "var(--op)";      // 算子=计算节点,紫色条,不表达置信度
     meta.innerHTML = `<span class="chip op">${n.operator}</span>`;
   } else {
+    bar.style.background = confColor(n.confidence);   // 数据节点:条色=证据置信度
     meta.innerHTML = `<span class="chip">${n.dist || "data"}</span>`;
+    const badge = el("span", "badge");
+    badge.style.background = confColor(n.confidence);
+    badge.textContent = n.evidence_type + " · " + confLabel(n.confidence);
+    meta.appendChild(badge);
   }
-  const badge = el("span", "badge");
-  badge.style.background = confColor(n.confidence);
-  badge.textContent = (n.evidence_type || "算子") + " · " + confLabel(n.confidence);
-  meta.appendChild(badge);
   title.innerHTML = `<b>${n.label}</b>`;
   title.appendChild(meta);
 
@@ -150,8 +182,7 @@ function nodeView(n, depth) {
     if (n.as_of) detail.innerHTML += `<div class="kv">数据时点: ${n.as_of}</div>`;
     if (s.url) detail.innerHTML += `<div class="kv"><a href="${s.url}" target="_blank" rel="noopener">原始出处 ↗</a></div>`;
   } else {
-    detail.innerHTML += `<div class="kv">算子: ${n.operator} · 算子置信度 ${fmt(n.confidence, 2)}</div>`;
-    detail.appendChild(spark(n.hist));
+    detail.innerHTML += `<div class="kv">算子: ${n.operator}</div>`;
   }
   card.appendChild(detail);
   wrap.appendChild(card);

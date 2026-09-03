@@ -18,8 +18,7 @@
         "broker.huayuan.fy2026e"
       ],
       "output_metric": "归母净利润_2026全年_券商一致预期",
-      "unit": "亿元",
-      "op_confidence": 1.0
+      "unit": "亿元"
     }
   ]
 }

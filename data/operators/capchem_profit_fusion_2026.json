@@ -11,7 +11,6 @@
       ],
       "output_metric": "归母净利润_2026全年（融合）",
       "unit": "亿元",
-      "op_confidence": 1.0,
       "note": "最终融合：Path A（分业务自下而上）与 Path B（券商一致预期）等权 Mixture 融合；权重为占位（TODO C8 校准），分歧过大时引擎自动触发 Method Conflict 告警。"
     },
     {
@@ -20,7 +19,6 @@
       "inputs": ["capchem.profit.fy2026", "capchem.profit.fy2025"],
       "output_metric": "归母净利润_2026全年同比增速（基于融合结论，相对 2025 实际）",
       "unit": "比率",
-      "op_confidence": 1.0,
       "note": "分子为融合后的全年结论 capchem.profit.fy2026（非券商单路），分母为 2025 实际归母 10.97（audited）。"
     }
   ]

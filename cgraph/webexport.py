@@ -12,26 +12,28 @@ from .model import DataNode, OperatorNode
 from .render import _data_value
 
 
-def _histogram(samples, bins=24):
-    """把样本压成直方图: 返回 {edges, counts, max} —— 前端画迷你分布条。"""
-    lo, hi = min(samples), max(samples)
+def _histogram(samples, bins=24, trim=0.05):
+    """把样本压成直方图: 返回 {edges, counts, max} —— 前端画迷你分布条。
+
+    trim: 两端各截掉的分位比例(默认 5%,即只画 P5–P95),避免长尾把主峰压扁。
+    """
+    xs = sorted(samples)
+    n = len(xs)
+    if trim > 0 and n >= 20:
+        k = int(n * trim)
+        xs = xs[k:n - k] or xs
+    lo, hi = xs[0], xs[-1]
     if hi <= lo:  # Point / 退化分布
-        return {"edges": [lo, hi], "counts": [len(samples)], "max": len(samples)}
+        return {"edges": [lo, hi], "counts": [len(xs)], "max": len(xs)}
     width = (hi - lo) / bins
     counts = [0] * bins
-    for x in samples:
+    for x in xs:
         k = int((x - lo) / width)
         if k >= bins:
             k = bins - 1
         counts[k] += 1
     edges = [lo + i * width for i in range(bins + 1)]
     return {"edges": edges, "counts": counts, "max": max(counts)}
-
-
-def _node_confidence(node):
-    if isinstance(node, DataNode):
-        return confidence_for(node.evidence_type)
-    return node.op_confidence
 
 
 # 纯展示: 把自动分出的图簇(id 根 token)显示成人类可读名字; 缺失则回退显示 id 根本身。
@@ -130,7 +132,6 @@ def _build_node(graph, node_id):
     common = {
         "id": node_id,
         "kind": node.kind,
-        "confidence": round(_node_confidence(node), 3),
         "stats": {k: round(v, 4) for k, v in stats.items()},
         "hist": _histogram(samples) if samples else None,
     }
@@ -139,6 +140,7 @@ def _build_node(graph, node_id):
         common.update({
             "label": node.metric,
             "unit": node.unit,
+            "confidence": round(confidence_for(node.evidence_type), 3),
             "evidence_type": node.evidence_type,
             "dist": describe(node.distribution),
             "quote": node.quote,

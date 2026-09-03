@@ -118,8 +118,7 @@ def _deterministic(graph, nid, memo):
     if isinstance(node, DataNode):
         r = node.distribution["type"] == "point" and confidence_for(node.evidence_type) >= 0.999
     else:
-        r = node.op_confidence >= 0.999 and all(
-            _deterministic(graph, i, memo) for i in node.inputs)
+        r = all(_deterministic(graph, i, memo) for i in node.inputs)
     memo[nid] = r
     return r
 

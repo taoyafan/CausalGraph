@@ -49,15 +49,6 @@ def sample(dist, c, n):
     return xs
 
 
-def widen_samples(samples, c):
-    """对已有样本集绕中位数按 1/C 展宽（用于算子节点的 op_confidence 折损）。"""
-    if c >= 1.0:
-        return samples
-    s = sorted(samples)
-    med = s[len(s) // 2]
-    return [med + (x - med) / c for x in samples]
-
-
 def describe(dist):
     """分布的紧凑文字表示，用于字符树渲染。"""
     t = dist["type"]
