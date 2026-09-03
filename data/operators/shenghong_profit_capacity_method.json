@@ -1,6 +1,6 @@
 {
   "subgraph": "shenghong_profit_capacity_method",
-  "note": "胜宏科技 2026 全年归母——产能法(Path A之一,供给侧)。历史周转率图内计算:2025H2营收=全年−H1(subtract);两期周转率=对应半年营收÷期初固定资产(divide);mixture融合为校准基准;乘前瞻调整系数(assumption)得前瞻周转率。前瞻:H2营收=2026-06-30固定资产×前瞻周转率;H2归母=H2营收×H2净利率(复用 shenghong.net_margin.2026_h2);全年=H1实际(28.57)+H2。算子皆纯数学(op_confidence=1.0)。最终结论 shenghong.profit.fy2026.capacity 与存货法 shenghong.profit.fy2026.inv_method、券商法 shenghong.profit.fy2026 并列,不在本文件融合。",
+  "note": "胜宏科技 2026 全年归母——产能法(Path A之一,供给侧)。历史周转率图内计算:2025H2营收=全年−H1(subtract);两期周转率=对应半年营收÷期初固定资产(divide);mixture融合为校准基准;乘前瞻调整系数(assumption)得前瞻周转率。前瞻:H2营收=2026-06-30固定资产×前瞻周转率;H2归母=H2营收×H2净利率(复用 shenghong.net_margin.2026_h2);全年=H1实际(28.57)+H2。算子皆纯数学(op_confidence=1.0)。最终结论 shenghong.profit.fy2026.capacity 与存货法 shenghong.profit.fy2026.inv_method、券商法 shenghong.profit.fy2026e.consensus 并列,不在本文件融合。",
   "operators": [
     {
       "id": "shenghong.revenue.2025_h2",

@@ -1,6 +1,6 @@
 {
   "subgraph": "shenghong_profit_path_a",
-  "note": "胜宏科技 2026 全年归母——独立 Path A 综合(不含券商)。把两条视角互异的独立方法等权 mixture 融合:存货法 shenghong.profit.fy2026.inv_method(备货侧,P50≈81亿)、产能法 shenghong.profit.fy2026.capacity(供给侧/固定资产周转,P50≈66亿,因产能前置投放偏保守)。两法各含独立的审计数据锚与我方assumption,融合结果 shenghong.profit.fy2026.path_a 作为独立于券商的自主判断标尺,用于对照券商法 shenghong.profit.fy2026(P50≈88亿)。等权反映两法均为合理独立视角、不预设孰优。佐证(不入图,仅陈述):应付账款2026-06-30达86.54亿(YoY2.22×)、购买商品现金H1 67.54亿(1.42×)、在建工程52.23亿(5.76×)均印证H2大幅扩产备货。",
+  "note": "胜宏科技 2026 全年归母——独立 Path A 综合(不含券商)。把两条视角互异的独立方法等权 mixture 融合:存货法 shenghong.profit.fy2026.inv_method(备货侧,P50≈81亿)、产能法 shenghong.profit.fy2026.capacity(供给侧/固定资产周转,P50≈66亿,因产能前置投放偏保守)。两法各含独立的审计数据锚与我方assumption,融合结果 shenghong.profit.fy2026.path_a 作为独立于券商的自主判断标尺,用于对照券商法 shenghong.profit.fy2026e.consensus(P50≈88亿)。等权反映两法均为合理独立视角、不预设孰优。佐证(不入图,仅陈述):应付账款2026-06-30达86.54亿(YoY2.22×)、购买商品现金H1 67.54亿(1.42×)、在建工程52.23亿(5.76×)均印证H2大幅扩产备货。",
   "operators": [
     {
       "id": "shenghong.profit.fy2026.path_a",

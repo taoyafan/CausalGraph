@@ -1,6 +1,6 @@
 {
   "subgraph": "shenghong_profit_inv_method",
-  "note": "胜宏科技 2026 全年归母——存货法(Path A之一,独立于券商)。历史校准全部图内计算:2025H2营业成本=全年−H1(subtract);两历史比率=存货÷对应半年成本(divide);mixture融合为校准基准;乘前瞻调整系数(assumption)得前瞻比率。前瞻链路:H2营业成本=2026-06-30存货÷前瞻比率;H2营收=H2营业成本÷(1−H2毛利率),其中营业成本率=affine(毛利率,a=1,b=-1);H2净利率=H1净利率(归母÷营收,图内divide)×环比系数(assumption);H2归母=H2营收×H2净利率;全年=H1实际(28.57,audited)+H2归母。算子皆纯数学(op_confidence=1.0),主观性集中在3个assumption节点。最终结论 shenghong.profit.fy2026.inv_method 与券商法 shenghong.profit.fy2026 并列,不融合,互为独立标尺。",
+  "note": "胜宏科技 2026 全年归母——存货法(Path A之一,独立于券商)。历史校准全部图内计算:2025H2营业成本=全年−H1(subtract);两历史比率=存货÷对应半年成本(divide);mixture融合为校准基准;乘前瞻调整系数(assumption)得前瞻比率。前瞻链路:H2营业成本=2026-06-30存货÷前瞻比率;H2营收=H2营业成本÷(1−H2毛利率),其中营业成本率=affine(毛利率,a=1,b=-1);H2净利率=H1净利率(归母÷营收,图内divide)×环比系数(assumption);H2归母=H2营收×H2净利率;全年=H1实际(28.57,audited)+H2归母。算子皆纯数学(op_confidence=1.0),主观性集中在3个assumption节点。最终结论 shenghong.profit.fy2026.inv_method 与券商法 shenghong.profit.fy2026e.consensus 并列,不融合,互为独立标尺。",
   "operators": [
     {
       "id": "shenghong.cogs.2025_h2",

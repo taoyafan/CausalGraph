@@ -1,0 +1,18 @@
+{
+  "subgraph": "shenghong_profit_fusion_2026",
+  "note": "胜宏科技 2026 全年归母净利润——最终融合节点。Path A（独立综合 shenghong.profit.fy2026.path_a，=存货法×产能法等权）与 Path B（券商一致预期 shenghong.profit.fy2026e.consensus）经 mixture 等权融合为最终结论 shenghong.profit.fy2026；权重暂为占位（待校准）。两路视角互异、分歧较大时引擎自动触发 Method Conflict 告警。",
+  "operators": [
+    {
+      "id": "shenghong.profit.fy2026",
+      "operator": "mixture",
+      "inputs": [
+        "shenghong.profit.fy2026.path_a",
+        "shenghong.profit.fy2026e.consensus"
+      ],
+      "output_metric": "归母净利润_2026全年（融合）",
+      "unit": "亿元",
+      "op_confidence": 1.0,
+      "note": "最终融合：Path A（独立综合：存货法+产能法）与 Path B（券商一致预期）等权 Mixture；权重为占位（待校准），分歧过大时引擎自动触发 Method Conflict 告警。"
+    }
+  ]
+}
