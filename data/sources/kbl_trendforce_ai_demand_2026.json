@@ -12,7 +12,7 @@
       "metric": "H2_volume_AI_demand_factor_assumption",
       "unit": "factor",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 1.00, "mode": 1.03, "high": 1.06, "domain": [0, null]},
+      "distribution": {"type": "triangular", "low": 1.00, "mode": 1.03, "high": 1.06, "domain": [1, null]},
       "quote": "Positive AI-demand thesis: TrendForce forecast 2026 AI server shipments to grow by more than 28%. Source: TrendForce, 2026-01-20. The factor range is an AI-proposed assumption confirmed by the collaborator in this conversation."
     }
   ]

@@ -5,7 +5,7 @@
   "as_of": "2026-06-30",
   "source_url": "https://www.kblaminates.com/upload/portal/20260824/202608241221457290.pdf",
   "retrieved_at": "2026-09-03",
-  "note": "Company interim announcement published 2026-08-24 for the six months ended 2026-06-30. Point nodes transcribe disclosed HKD values without calculation. Assumption nodes are AI-proposed and were confirmed by the collaborator in this conversation. Major CCL and copper-foil expansion starts in 2027, so 2026 volume assumptions remain restrained. July profit of about HKD1.1 billion has unclear accounting basis and is background only, never a formula input.",
+  "note": "Company interim announcement published 2026-08-24 for the six months ended 2026-06-30. Point nodes transcribe disclosed HKD values without calculation. Assumption nodes are AI-proposed and were confirmed by the collaborator in this conversation. Major CCL and copper-foil expansion starts in 2027, so 2026 volume assumptions remain restrained. July profit of about HKD1.1 billion has unclear accounting basis and is background only, never a formula input. kbl.h2.fair_value_signed_multiplier is an AI-proposed signed multiplier confirmed by the collaborator in this conversation: a positive value represents an H2 gain, a negative value represents an H2 loss, and the range is not company guidance.",
   "nodes": [
     {
       "id": "kbl.h1.revenue",
@@ -72,14 +72,6 @@
       "quote": "Consolidated statement of profit or loss, six months ended 30 June 2026 — Income tax expense: HKD 628,462,000, recorded here as a positive expense magnitude. Announcement published 2026-08-24."
     },
     {
-      "id": "kbl.h1.net_profit",
-      "metric": "Profit_for_the_period_2026H1",
-      "unit": "HKD",
-      "evidence_type": "audited",
-      "distribution": {"type": "point", "value": 2886566000, "domain": [0, null]},
-      "quote": "Consolidated statement of profit or loss, six months ended 30 June 2026 — Profit for the period: HKD 2,886,566,000. Announcement published 2026-08-24."
-    },
-    {
       "id": "kbl.h1.attributable_profit",
       "metric": "Profit_attributable_to_owners_2026H1",
       "unit": "HKD",
@@ -108,7 +100,7 @@
       "metric": "H2_volume_company_supply_support_factor_assumption",
       "unit": "factor",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 1.00, "mode": 1.04, "high": 1.06, "domain": [0, null]},
+      "distribution": {"type": "triangular", "low": 1.00, "mode": 1.04, "high": 1.06, "domain": [1, null]},
       "quote": "Positive supply-support thesis: the company reported near-full production, H1 average shipments above 10 million sheets per month, Shaoguan 70,000-tonne yarn capacity commencing at end-June, and 95 million metres of cloth capacity due for full production in Q3. Source: Kingboard Laminates 2026 interim announcement, published 2026-08-24. The factor range is an AI-proposed assumption confirmed by the collaborator in this conversation; major CCL and copper-foil expansion starts in 2027, so the 2026 volume assumption remains restrained."
     },
     {
@@ -116,7 +108,7 @@
       "metric": "H2_ASP_uplift_factor_assumption",
       "unit": "factor",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 1.08, "mode": 1.18, "high": 1.30, "domain": [0, null]},
+      "distribution": {"type": "triangular", "low": 1.08, "mode": 1.18, "high": 1.30, "domain": [1, null]},
       "quote": "Positive pricing thesis: the company reported multiple price rises in H1, acceleration in Q2, and H2 prices continuing to soar, but disclosed no ASP or rise percentage. Source: Kingboard Laminates 2026 interim announcement, published 2026-08-24. The factor range is an AI-proposed assumption confirmed by the collaborator in this conversation. July profit of about HKD1.1 billion has unclear accounting basis and is background only, never a formula input."
     },
     {
@@ -124,23 +116,23 @@
       "metric": "H2_unit_cost_vertical_integration_mitigation_factor_assumption",
       "unit": "factor",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 0.96, "mode": 0.97, "high": 1.00, "domain": [0, null]},
+      "distribution": {"type": "triangular", "low": 0.96, "mode": 0.97, "high": 1.00, "domain": [0, 1]},
       "quote": "Cost-mitigation thesis: the company reported that vertical integration maintained near-full production and delivery amid peers' glass-fibre-cloth shortages. Source: Kingboard Laminates 2026 interim announcement, published 2026-08-24. The factor range is an AI-proposed assumption confirmed by the collaborator in this conversation."
     },
     {
-      "id": "kbl.h2.fair_value_result",
-      "metric": "H2_equity_fair_value_result_assumption",
-      "unit": "HKD",
+      "id": "kbl.h2.fair_value_signed_multiplier",
+      "metric": "H2_equity_fair_value_signed_multiplier_assumption",
+      "unit": "factor",
       "evidence_type": "assumption",
-      "distribution": {"type": "normal", "mu": 0, "sigma": 300000000, "domain": [null, null]},
-      "quote": "H1 disclosed an equity-instrument fair-value loss of HKD 269,242,000; the direction of H2 fair-value movement is unpredictable and this distribution is not company guidance. Source: Kingboard Laminates 2026 interim announcement, published 2026-08-24. The zero-centred distribution is an AI-proposed assumption confirmed by the collaborator in this conversation."
+      "distribution": {"type": "uniform", "low": -1.5, "high": 1.5, "domain": [-1.5, 1.5]},
+      "quote": "H1 disclosed an equity-instrument fair-value loss of HKD 269,242,000. Source: https://www.kblaminates.com/upload/portal/20260824/202608241221457290.pdf"
     },
     {
       "id": "kbl.h2.finance_cost_factor",
       "metric": "H2_finance_cost_factor_assumption",
       "unit": "factor",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 1.00, "mode": 1.20, "high": 1.50, "domain": [0, null]},
+      "distribution": {"type": "triangular", "low": 1.00, "mode": 1.20, "high": 1.50, "domain": [1, null]},
       "quote": "Financing-cost-up thesis: the company reported net gearing of approximately 30% at 30 June 2026 versus approximately 16% at 31 December 2025. Source: Kingboard Laminates 2026 interim announcement, published 2026-08-24. The factor range is an AI-proposed assumption confirmed by the collaborator in this conversation."
     }
   ]

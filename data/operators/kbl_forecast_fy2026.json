@@ -18,6 +18,7 @@
     {"id": "kbl.h2.core_net", "operator": "subtract", "inputs": ["kbl.h2.core_pbt", "kbl.h2.core_tax"], "output_metric": "Core_net_profit_2026H2", "unit": "HKD"},
     {"id": "kbl.h2.core_attributable", "operator": "subtract", "inputs": ["kbl.h2.core_net", "kbl.h1.nci_profit"], "output_metric": "Core_profit_attributable_to_owners_2026H2", "unit": "HKD"},
     {"id": "kbl.fy2026.core_attributable_profit", "operator": "sum", "inputs": ["kbl.h1.attributable_profit", "kbl.h2.core_attributable"], "output_metric": "Core_profit_attributable_to_owners_FY2026_excluding_H2_fair_value_movement", "unit": "HKD"},
+    {"id": "kbl.h2.fair_value_result", "operator": "product", "inputs": ["kbl.h1.fair_value_equity_loss", "kbl.h2.fair_value_signed_multiplier"], "output_metric": "H2_equity_fair_value_result_positive_gain_negative_loss", "unit": "HKD"},
     {"id": "kbl.h2.reported_pbt", "operator": "sum", "inputs": ["kbl.h2.core_pbt", "kbl.h2.fair_value_result"], "output_metric": "Reported_profit_before_taxation_2026H2_including_fair_value_movement", "unit": "HKD"},
     {"id": "kbl.h2.reported_tax", "operator": "product", "inputs": ["kbl.h2.reported_pbt", "kbl.h1.effective_tax_rate"], "output_metric": "Reported_income_tax_2026H2", "unit": "HKD"},
     {"id": "kbl.h2.reported_net", "operator": "subtract", "inputs": ["kbl.h2.reported_pbt", "kbl.h2.reported_tax"], "output_metric": "Reported_net_profit_2026H2", "unit": "HKD"},

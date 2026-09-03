@@ -12,7 +12,7 @@
       "metric": "H2_unit_cost_raw_material_inflation_factor_assumption",
       "unit": "factor",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 1.10, "mode": 1.17, "high": 1.22, "domain": [0, null]},
+      "distribution": {"type": "triangular", "low": 1.10, "mode": 1.17, "high": 1.22, "domain": [1, null]},
       "quote": "Cost-up thesis: TrendForce reported price increases of 30% for E-glass cloth and 15% for FLD2. Source: TrendForce News, 2026-06-30. The factor range is an AI-proposed assumption confirmed by the collaborator in this conversation."
     }
   ]

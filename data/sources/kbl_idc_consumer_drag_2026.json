@@ -12,7 +12,7 @@
       "metric": "H2_volume_consumer_drag_factor_assumption",
       "unit": "factor",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 0.98, "mode": 0.99, "high": 1.00, "domain": [0, null]},
+      "distribution": {"type": "triangular", "low": 0.98, "mode": 0.99, "high": 1.00, "domain": [0, 1]},
       "quote": "Negative consumer-demand thesis: IDC forecast worldwide smartphone shipments to decline 13.9% in 2026. Source: IDC page retrieved 2026-09-03. The factor range is an AI-proposed assumption confirmed by the collaborator in this conversation."
     }
   ]
