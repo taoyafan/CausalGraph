@@ -46,17 +46,15 @@ def _group_key(nid):
 
 
 def _headline_rank(nid, terminal):
-    """组内排序键(越小越靠前): 年度利润 <标的>.profit.fyXXXX 置顶, 综合(path_a)优先于单路,
-    派生量(yoy/implied)不算头条; 其次终端节点优先。"""
+    """组内排序键(越小越靠前): 年度利润 <标的>.profit.fyXXXX 靠前, 派生量(yoy/implied)不算头条;
+    终端(收口)权重更高, 保证最终融合节点(利润+终端)压过其各条方法分支。"""
     idl = nid.lower()
     is_profit_year = (".profit.fy" in idl) and not any(x in idl for x in (".yoy", ".implied"))
     rank = 0
     if is_profit_year:
         rank -= 100
-        if idl.endswith(".path_a"):
-            rank -= 10
     if terminal:
-        rank -= 1
+        rank -= 50
     return rank
 
 
