@@ -78,6 +78,15 @@
       "evidence_type": "audited",
       "distribution": {"type": "point", "value": 9.838, "domain": [0, null]},
       "quote": "2026 半年报：归母净利润 9.838 亿元（半年报直接披露），同比 +103.33%；Q1 4.805 / Q2 5.033 仅作对账佐证，非本值来源。经 divide 算子参与计算 H1 实际毛利转净利率。"
+    },
+    {
+      "id": "capchem.profit.fy2025",
+      "metric": "归母净利润_2025全年",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "as_of": "2025-12-31",
+      "distribution": {"type": "point", "value": 10.97, "domain": [0, null]},
+      "quote": "2025 年报：归母净利润 10.97 亿元，同比 +16.48%；营业总收入 96.39 亿元，同比 +22.84%（标准无保留意见）。用作 2026 全年同比增速基数（分子为融合后全年结论 capchem.profit.fy2026）。"
     }
   ]
 }
