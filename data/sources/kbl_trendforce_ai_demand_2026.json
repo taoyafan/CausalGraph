@@ -1,0 +1,19 @@
+{
+  "source_id": "kbl_trendforce_ai_demand_2026",
+  "source_name": "TrendForce 2026 AI server shipment outlook",
+  "publisher": "TrendForce",
+  "as_of": "2026-01-20",
+  "source_url": "https://www.trendforce.com/presscenter/news/20260120-12887.html",
+  "retrieved_at": "2026-09-03",
+  "note": "Single-source demand assumption. The factor range is AI-proposed and was confirmed by the collaborator in this conversation.",
+  "nodes": [
+    {
+      "id": "kbl.h2.ai_demand_factor",
+      "metric": "H2_volume_AI_demand_factor_assumption",
+      "unit": "factor",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 1.00, "mode": 1.03, "high": 1.06, "domain": [0, null]},
+      "quote": "Positive AI-demand thesis: TrendForce forecast 2026 AI server shipments to grow by more than 28%. Source: TrendForce, 2026-01-20. The factor range is an AI-proposed assumption confirmed by the collaborator in this conversation."
+    }
+  ]
+}

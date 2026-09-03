@@ -1,0 +1,19 @@
+{
+  "source_id": "kbl_trendforce_raw_materials_2026",
+  "source_name": "TrendForce raw-material inflation report",
+  "publisher": "TrendForce",
+  "as_of": "2026-06-30",
+  "source_url": "https://www.trendforce.com/news/2026/06/30/news-raw-material-inflation-deepens-as-fulltech-hikes-glass-fiber-cloth-prices-up-to-30-vpec-adjusts-epi-wafers/",
+  "retrieved_at": "2026-09-03",
+  "note": "Single-source raw-material cost assumption. The factor range is AI-proposed and was confirmed by the collaborator in this conversation.",
+  "nodes": [
+    {
+      "id": "kbl.h2.raw_material_inflation_factor",
+      "metric": "H2_unit_cost_raw_material_inflation_factor_assumption",
+      "unit": "factor",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 1.10, "mode": 1.17, "high": 1.22, "domain": [0, null]},
+      "quote": "Cost-up thesis: TrendForce reported price increases of 30% for E-glass cloth and 15% for FLD2. Source: TrendForce News, 2026-06-30. The factor range is an AI-proposed assumption confirmed by the collaborator in this conversation."
+    }
+  ]
+}

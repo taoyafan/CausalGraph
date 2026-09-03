@@ -1,0 +1,27 @@
+{
+  "source_id": "kbl_stockanalysis_consensus_2026",
+  "source_name": "StockAnalysis Kingboard Laminates forecast citing S&P Global Market Intelligence",
+  "publisher": "StockAnalysis.com / S&P Global Market Intelligence",
+  "as_of": "2026-08-26",
+  "source_url": "https://stockanalysis.com/quote/hkg/1888/forecast/",
+  "retrieved_at": "2026-09-03",
+  "note": "FY2026 forecast figures transcribed from the StockAnalysis page, updated 2026-08-26 and citing S&P Global Market Intelligence. The page states that EPS and Forward PE are non-GAAP adjusted; the matching basis of its Net Income figure is unclear.",
+  "nodes": [
+    {
+      "id": "kbl.consensus.fy2026.revenue",
+      "metric": "Revenue_FY2026_consensus",
+      "unit": "HKD",
+      "evidence_type": "analyst_estimate",
+      "distribution": {"type": "triangular", "low": 26800000000, "mode": 34610000000, "high": 41500000000, "domain": [0, null]},
+      "quote": "StockAnalysis forecast page citing S&P Global Market Intelligence, updated 2026-08-26 — FY2026 Revenue forecast: low HKD 26,800,000,000; average HKD 34,610,000,000; high HKD 41,500,000,000."
+    },
+    {
+      "id": "kbl.consensus.fy2026.net_income",
+      "metric": "Net_income_FY2026_consensus",
+      "unit": "HKD",
+      "evidence_type": "analyst_estimate",
+      "distribution": {"type": "point", "value": 7450000000, "domain": [0, null]},
+      "quote": "StockAnalysis forecast page citing S&P Global Market Intelligence, updated 2026-08-26 — FY2026 Net Income: HKD 7,450,000,000. The page states EPS and Forward PE are non-GAAP adjusted; the matching basis of Net Income is unclear."
+    }
+  ]
+}
