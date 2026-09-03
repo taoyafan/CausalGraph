@@ -34,8 +34,35 @@ def _node_confidence(node):
     return node.op_confidence
 
 
+# 展示层配置: 把节点 id 的命名空间(根 token)映射成"图/标的"中文名, 供网页第一级下拉分组。
+# 无映射的标的回退显示 id 根 token; 新增标的时在此加一行即可(不影响求值)。
+GROUP_ALIASES = {"seg": "capchem"}   # capchem 的分部节点 id 以 seg. 开头, 归入同一张图
+GROUP_LABELS = {"capchem": "新宙邦", "shenghong": "胜宏科技"}
+
+
+def _group_key(nid):
+    root = nid.split(".", 1)[0]
+    return GROUP_ALIASES.get(root, root)
+
+
+def _headline_rank(nid, terminal):
+    """组内排序键(越小越靠前): 年度利润 <标的>.profit.fyXXXX 置顶, 综合(path_a)优先于单路,
+    派生量(yoy/implied)不算头条; 其次终端节点优先。"""
+    idl = nid.lower()
+    is_profit_year = (".profit.fy" in idl) and not any(x in idl for x in (".yoy", ".implied"))
+    rank = 0
+    if is_profit_year:
+        rank -= 100
+        if idl.endswith(".path_a"):
+            rank -= 10
+    if terminal:
+        rank -= 1
+    return rank
+
+
 def list_focusable(graph):
-    """所有被引用为终端产出的算子节点(无人引用者优先),以及全部算子节点,供选择。"""
+    """可 focus 的算子节点列表, 带图分组(group/group_label)。
+    排序: 先按图名, 组内年度利润(头条)置顶、终端优先, 便于网页两级下拉默认落在年利润。"""
     referenced = set()
     for node in graph.nodes.values():
         if isinstance(node, OperatorNode):
@@ -43,13 +70,17 @@ def list_focusable(graph):
     items = []
     for nid, node in graph.nodes.items():
         if isinstance(node, OperatorNode):
+            terminal = nid not in referenced
+            gkey = _group_key(nid)
             items.append({
                 "id": nid,
                 "label": node.output_metric,
                 "unit": node.unit,
-                "terminal": nid not in referenced,
+                "terminal": terminal,
+                "group": gkey,
+                "group_label": GROUP_LABELS.get(gkey, gkey),
             })
-    items.sort(key=lambda x: (not x["terminal"], x["label"]))
+    items.sort(key=lambda x: (x["group_label"], _headline_rank(x["id"], x["terminal"]), x["label"]))
     return items
 
 

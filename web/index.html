@@ -82,7 +82,8 @@
   <header>
     <h1>CausalGraph <small>因果推理图 · 可溯源</small></h1>
     <div class="picker">
-      <select id="picker"></select>
+      <select id="graphPicker"></select>
+      <select id="nodePicker"></select>
     </div>
   </header>
   <main id="main"><div class="loading">加载中…</div></main>
@@ -196,18 +197,42 @@ async function loadFocus(node) {
   }
 }
 
+let ALL_NODES = [];  // /api/nodes 返回的全部算子节点(已按 图→头条→字母 排好序)
+
+// 按出现顺序取出去重后的图分组 [{key, label}]
+function graphGroups(nodes) {
+  const seen = [], label = {};
+  nodes.forEach(n => { if (!(n.group in label)) { label[n.group] = n.group_label; seen.push(n.group); } });
+  return seen.map(k => ({ key: k, label: label[k] }));
+}
+
+// 用选定图的节点填充第二级下拉(ALL_NODES 已排序: 组内头条置顶)
+function fillNodePicker(group) {
+  const np = document.getElementById("nodePicker");
+  np.innerHTML = "";
+  ALL_NODES.filter(n => n.group === group).forEach(n => {
+    const o = el("option"); o.value = n.id;
+    o.textContent = (n.terminal ? "★ " : "") + n.label;
+    np.appendChild(o);
+  });
+}
+
 async function init() {
-  const picker = document.getElementById("picker");
+  const gp = document.getElementById("graphPicker");
+  const np = document.getElementById("nodePicker");
   try {
-    const nodes = await (await fetch("/api/nodes")).json();
-    nodes.forEach(n => {
-      const o = el("option"); o.value = n.id;
-      o.textContent = (n.terminal ? "★ " : "") + n.label;
-      picker.appendChild(o);
+    ALL_NODES = await (await fetch("/api/nodes")).json();
+    if (!ALL_NODES.length) {
+      document.getElementById("main").innerHTML = `<div class="err">图中没有算子节点</div>`;
+      return;
+    }
+    graphGroups(ALL_NODES).forEach(g => {
+      const o = el("option"); o.value = g.key; o.textContent = g.label; gp.appendChild(o);
     });
-    picker.addEventListener("change", () => loadFocus(picker.value));
-    if (nodes.length) loadFocus(nodes[0].id);
-    else document.getElementById("main").innerHTML = `<div class="err">图中没有算子节点</div>`;
+    gp.addEventListener("change", () => { fillNodePicker(gp.value); loadFocus(np.value); });
+    np.addEventListener("change", () => loadFocus(np.value));
+    fillNodePicker(gp.value);
+    loadFocus(np.value);
   } catch (e) {
     document.getElementById("main").innerHTML = `<div class="err">无法连接服务: ${e}</div>`;
   }
