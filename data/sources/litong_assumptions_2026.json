@@ -1,0 +1,59 @@
+{
+  "source_id": "litong_assumptions_2026",
+  "source_name": "利通电子 2026 H2 外推——我方假设(非公司/非券商)",
+  "publisher": "CausalGraph 协作者假设",
+  "as_of": "2026-09-03",
+  "source_url": "http://static.cninfo.com.cn/finalpage/2026-08-29/1225529563.PDF",
+  "retrieved_at": "2026-09-03",
+  "note": "利通无券商 2026 覆盖、无公司全年指引，H2 只能外推。本文件含 6 个原子 assumption 锚(每锚仅一条证据)，下游由算子融合(见 data/operators/litong_profit_fy2026.json)：经常性增长 = mixture(产能封顶压制锚, 预收及在手订单托底锚)；设备经销残留 = mixture(在手大额订单支撑锚, 净额法均值回归压制锚)；H2其它 = sum(制造端延续小亏, 非经常性不外推)。",
+  "nodes": [
+    {
+      "id": "litong.compute.recurring_growth_h2_ceiling",
+      "metric": "算力经常性_H2增长_产能封顶压制锚_假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 1.0, "mode": 1.08, "high": 1.15, "domain": [0, null]},
+      "quote": "单锚(产能封顶压制)：可调度算力 38,000P 较年初零新增、公司称『利用率接近100%』，H2 经常性(租赁+技服)毛利在无新增产能下有机增长空间有限；下界托底 1.0(满产满租不降)。仅此一条证据支撑，取 1.0~1.15、众数 1.08。来源：利通 2026 半年报 p.15。"
+    },
+    {
+      "id": "litong.compute.recurring_growth_h2_backlog",
+      "metric": "算力经常性_H2增长_预收及在手订单托底锚_假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 1.1, "mode": 1.22, "high": 1.35, "domain": [0, null]},
+      "quote": "单锚(预收及在手订单托底)：预收款项 3.44 亿全为算力租赁款(含预收5年租金)、半年报称『在手订单 H2 分批交付』、2025下半年新签租赁订单持续执行，支撑 H2 经常性毛利高于 H1。仅此一条证据支撑，取 1.1~1.35、众数 1.22。来源：利通 2026 半年报 p.13/附注37。"
+    },
+    {
+      "id": "litong.compute.equip_persist_h2_backlog",
+      "metric": "设备经销_H2残留_在手大额订单支撑锚_假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 0.8, "mode": 1.0, "high": 1.25, "domain": [0, null]},
+      "quote": "单锚(在手大额订单支撑)：合同负债期末货款 10.05 亿(较年初+3334%)、预付算力贸易款 5.46 亿(+900%)，代理大额已签约待 H2 交付的设备/贸易订单，支撑设备经销 H2≈H1。仅此一条证据支撑，取 0.8~1.25、众数 1.0。来源：利通 2026 半年报附注37/38。"
+    },
+    {
+      "id": "litong.compute.equip_persist_h2_meanrev",
+      "metric": "设备经销_H2残留_净额法持续性弱及均值回归压制锚_假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 0.4, "mode": 0.65, "high": 0.9, "domain": [0, null]},
+      "quote": "单锚(持续性弱及均值回归压制)：设备经销按净额法核算、公司在半年报明确标注该业务持续性弱、系一次性价差；2026H1 单半年设备经销毛利已显著高于 2025 全年水平，量级异常，H2 存在向常态回归的下行压力。取 0.4~0.9、众数 0.65。来源：利通 2026 半年报 p.13(公司持续性弱定性表述)。"
+    },
+    {
+      "id": "litong.profit.manufacturing_h2",
+      "metric": "制造端_归母净利_2026H2_假设",
+      "unit": "亿元",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": -0.25, "mode": -0.15, "high": 0.0, "domain": [-1, 1]},
+      "quote": "单锚(制造端延续小亏)：精密结构件+电子元器件制造端 H1 净亏 0.1624 亿(同比减亏71.03%)，减亏趋势延续下 H2 仍小幅亏损、不至转正。仅此一条证据支撑，取 -0.25~0.0、众数 -0.15。来源：利通 2026 半年报。"
+    },
+    {
+      "id": "litong.profit.nonrecurring_h2",
+      "metric": "非经常性损益_2026H2_假设",
+      "unit": "亿元",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": -0.1, "mode": 0.05, "high": 0.15, "domain": [-1, 1]},
+      "quote": "单锚(非经常性不外推)：H1 非经常性损益约 0.88 亿(归母7.02 vs 扣非6.15)属一次性(政府补助/投资收益等)，不具可预测性，H2 保守不外推、取 0 附近小额。仅此一条证据支撑，取 -0.1~0.15、众数 0.05。来源：利通 2026 半年报。"
+    }
+  ]
+}

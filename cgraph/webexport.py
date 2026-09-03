@@ -38,7 +38,7 @@ def _histogram(samples, bins=24, trim=0.05):
 
 # 纯展示: 把自动分出的图簇(id 根 token)显示成人类可读名字; 缺失则回退显示 id 根本身。
 # 这是唯一的外部知识(图无从得知 capchem=新宙邦), 不参与任何排序/分组逻辑。
-GROUP_LABELS = {"capchem": "新宙邦", "shenghong": "胜宏科技"}
+GROUP_LABELS = {"capchem": "新宙邦", "shenghong": "胜宏科技", "litong": "利通电子"}
 
 
 def _components(graph):

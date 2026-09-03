@@ -1,0 +1,21 @@
+{
+  "subgraph": "litong_profit_fy2026",
+  "note": "利通电子 2026 全年归母净利润——单路外推(无券商可融合)。结构：全年 = H1实际(7.024,audited) + H2；H2 = 算力净利H2 + 其它(制造+非经常)。算力净利H2 = 算力总毛利H2 × 毛利转净系数(由H1实际反推=净利6.34÷总毛利8.69)；算力总毛利H2 = 经常性(租赁+技服)毛利H1×增长系数 + 设备经销毛利H1×残留系数。不确定性集中在3个assumption(增长系数、残留系数、其它)。同比 = growth(全年, 2025实际2.93)。",
+  "operators": [
+    {"id": "litong.compute.recurring_growth_h2", "operator": "mixture", "inputs": ["litong.compute.recurring_growth_h2_ceiling", "litong.compute.recurring_growth_h2_backlog"], "output_metric": "算力经常性_H2相对H1增长系数_融合", "unit": "比率"},
+    {"id": "litong.compute.equip_persist_h2", "operator": "mixture", "inputs": ["litong.compute.equip_persist_h2_backlog", "litong.compute.equip_persist_h2_meanrev"], "output_metric": "设备经销_H2相对H1残留系数_融合", "unit": "比率"},
+    {"id": "litong.profit.other_h2", "operator": "sum", "inputs": ["litong.profit.manufacturing_h2", "litong.profit.nonrecurring_h2"], "output_metric": "制造端+非经常损益_H2合计", "unit": "亿元"},
+    {"id": "litong.compute.lease_gp_h1", "operator": "product", "inputs": ["litong.compute.lease_rev_h1", "litong.compute.lease_gm_h1"], "output_metric": "算力租赁_毛利_2026H1", "unit": "亿元"},
+    {"id": "litong.compute.svc_gp_h1", "operator": "product", "inputs": ["litong.compute.svc_rev_h1", "litong.compute.svc_gm_h1"], "output_metric": "技服维保_毛利_2026H1", "unit": "亿元"},
+    {"id": "litong.compute.recurring_gp_h1", "operator": "sum", "inputs": ["litong.compute.lease_gp_h1", "litong.compute.svc_gp_h1"], "output_metric": "算力经常性(租赁+技服)_毛利_2026H1", "unit": "亿元"},
+    {"id": "litong.compute.total_gp_h1", "operator": "sum", "inputs": ["litong.compute.recurring_gp_h1", "litong.compute.equip_gp_h1"], "output_metric": "算力业务_总毛利_2026H1", "unit": "亿元"},
+    {"id": "litong.compute.gp_to_net", "operator": "divide", "inputs": ["litong.compute.net_h1", "litong.compute.total_gp_h1"], "output_metric": "算力毛利转净利系数_2026H1(=净利÷总毛利)", "unit": "比率"},
+    {"id": "litong.compute.recurring_gp_h2", "operator": "product", "inputs": ["litong.compute.recurring_gp_h1", "litong.compute.recurring_growth_h2"], "output_metric": "算力经常性_毛利_2026H2(=H1×增长系数)", "unit": "亿元"},
+    {"id": "litong.compute.equip_gp_h2", "operator": "product", "inputs": ["litong.compute.equip_gp_h1", "litong.compute.equip_persist_h2"], "output_metric": "设备经销_毛利_2026H2(=H1×残留系数)", "unit": "亿元"},
+    {"id": "litong.compute.total_gp_h2", "operator": "sum", "inputs": ["litong.compute.recurring_gp_h2", "litong.compute.equip_gp_h2"], "output_metric": "算力业务_总毛利_2026H2", "unit": "亿元"},
+    {"id": "litong.compute.net_h2", "operator": "product", "inputs": ["litong.compute.total_gp_h2", "litong.compute.gp_to_net"], "output_metric": "算力业务_净利润_2026H2(=总毛利×毛利转净系数)", "unit": "亿元"},
+    {"id": "litong.profit.h2_2026", "operator": "sum", "inputs": ["litong.compute.net_h2", "litong.profit.other_h2"], "output_metric": "归母净利润_2026H2(=算力净利+制造及非经常)", "unit": "亿元"},
+    {"id": "litong.profit.fy2026", "operator": "sum", "inputs": ["litong.profit.h1_2026", "litong.profit.h2_2026"], "output_metric": "归母净利润_2026全年", "unit": "亿元"},
+    {"id": "litong.profit.fy2026.yoy", "operator": "growth", "inputs": ["litong.profit.fy2026", "litong.profit.fy2025"], "output_metric": "归母净利润_2026全年同比增速(相对2025实际)", "unit": "比率"}
+  ]
+}
