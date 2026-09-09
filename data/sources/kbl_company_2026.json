@@ -1,139 +1,171 @@
 {
   "source_id": "kbl_company_2026",
-  "source_name": "Kingboard Laminates 2026 Interim Results Announcement",
-  "publisher": "Kingboard Laminates Holdings Limited (1888.HK)",
+  "source_name": "建滔积层板 2026 年中期业绩公告",
+  "publisher": "建滔积层板控股有限公司（1888.HK）",
   "as_of": "2026-06-30",
   "source_url": "https://www.kblaminates.com/upload/portal/20260824/202608241221457290.pdf",
   "retrieved_at": "2026-09-03",
-  "note": "Company interim announcement published 2026-08-24 for the six months ended 2026-06-30. Point nodes transcribe disclosed HKD values without calculation. Assumption nodes are AI-proposed and were confirmed by the collaborator in this conversation. Major CCL and copper-foil expansion starts in 2027, so 2026 volume assumptions remain restrained. July profit of about HKD1.1 billion has unclear accounting basis and is background only, never a formula input. kbl.h2.fair_value_signed_multiplier is an AI-proposed signed multiplier confirmed by the collaborator in this conversation: a positive value represents an H2 gain, a negative value represents an H2 loss, and the range is not company guidance.",
+  "note": "公司于 2026-08-24 发布截至 2026-06-30 止六个月的中期公告。点值节点仅转录披露的港元金额，不作计算。假设节点由 AI 提出，并已获本次对话中的协作者确认。覆铜板（CCL）及铜箔的大规模扩产自 2027 年开始，因此 2026 年销量假设保持克制。7 月利润约 11 亿港元，但会计口径不明，仅作背景信息，绝不作为公式输入。kbl.h2.fair_value_signed_multiplier 是由 AI 提出并经协作者确认的有符号倍数：正值表示下半年收益，负值表示下半年亏损；该区间并非公司指引。",
   "nodes": [
     {
       "id": "kbl.h1.revenue",
-      "metric": "Revenue_2026H1",
+      "metric": "2026年上半年收入",
       "unit": "HKD",
+      "display_unit": "亿港元",
+      "display_scale": 100000000,
       "evidence_type": "audited",
       "distribution": {"type": "point", "value": 14903809000, "domain": [0, null]},
-      "quote": "Consolidated statement of profit or loss, six months ended 30 June 2026 — Revenue: HKD 14,903,809,000. Announcement published 2026-08-24."
+      "quote": "综合损益表：截至 2026 年 6 月 30 日止六个月，收入为 14,903,809,000 港元。公告发布于 2026-08-24。"
     },
     {
       "id": "kbl.h1.cogs",
-      "metric": "Cost_of_sales_2026H1",
+      "metric": "2026年上半年销售成本",
       "unit": "HKD",
+      "display_unit": "亿港元",
+      "display_scale": 100000000,
       "evidence_type": "audited",
       "distribution": {"type": "point", "value": 10323576000, "domain": [0, null]},
-      "quote": "Consolidated statement of profit or loss, six months ended 30 June 2026 — Cost of sales: HKD 10,323,576,000. Announcement published 2026-08-24."
+      "quote": "综合损益表：截至 2026 年 6 月 30 日止六个月，销售成本为 10,323,576,000 港元。公告发布于 2026-08-24。"
     },
     {
       "id": "kbl.h1.other_income_gains_losses",
-      "metric": "Other_income_gains_and_losses_2026H1",
+      "metric": "2026年上半年其他收入、收益及亏损",
       "unit": "HKD",
+      "display_unit": "亿港元",
+      "display_scale": 100000000,
       "evidence_type": "audited",
       "distribution": {"type": "point", "value": 18514000, "domain": [0, null]},
-      "quote": "Consolidated statement of profit or loss, six months ended 30 June 2026 — Other income, gains and losses: HKD 18,514,000. Announcement published 2026-08-24."
+      "quote": "综合损益表：截至 2026 年 6 月 30 日止六个月，其他收入、收益及亏损为 18,514,000 港元。公告发布于 2026-08-24。"
     },
     {
       "id": "kbl.h1.distribution_expense",
-      "metric": "Distribution_expense_2026H1_positive_magnitude",
+      "metric": "2026年上半年分销费用（正数幅度）",
       "unit": "HKD",
+      "display_unit": "亿港元",
+      "display_scale": 100000000,
       "evidence_type": "audited",
       "distribution": {"type": "point", "value": 273283000, "domain": [0, null]},
-      "quote": "Consolidated statement of profit or loss, six months ended 30 June 2026 — Distribution expenses: HKD 273,283,000, recorded here as a positive expense magnitude. Announcement published 2026-08-24."
+      "quote": "综合损益表：截至 2026 年 6 月 30 日止六个月，分销费用为 273,283,000 港元；本节点按费用的正数幅度记录。公告发布于 2026-08-24。"
     },
     {
       "id": "kbl.h1.administrative_expense",
-      "metric": "Administrative_expense_2026H1_positive_magnitude",
+      "metric": "2026年上半年行政费用（正数幅度）",
       "unit": "HKD",
+      "display_unit": "亿港元",
+      "display_scale": 100000000,
       "evidence_type": "audited",
       "distribution": {"type": "point", "value": 438927000, "domain": [0, null]},
-      "quote": "Consolidated statement of profit or loss, six months ended 30 June 2026 — Administrative expenses: HKD 438,927,000, recorded here as a positive expense magnitude. Announcement published 2026-08-24."
+      "quote": "综合损益表：截至 2026 年 6 月 30 日止六个月，行政费用为 438,927,000 港元；本节点按费用的正数幅度记录。公告发布于 2026-08-24。"
     },
     {
       "id": "kbl.h1.finance_cost",
-      "metric": "Finance_cost_2026H1_positive_magnitude",
+      "metric": "2026年上半年融资成本（正数幅度）",
       "unit": "HKD",
+      "display_unit": "亿港元",
+      "display_scale": 100000000,
       "evidence_type": "audited",
       "distribution": {"type": "point", "value": 102267000, "domain": [0, null]},
-      "quote": "Consolidated statement of profit or loss, six months ended 30 June 2026 — Finance costs: HKD 102,267,000, recorded here as a positive expense magnitude. Announcement published 2026-08-24."
+      "quote": "综合损益表：截至 2026 年 6 月 30 日止六个月，融资成本为 102,267,000 港元；本节点按费用的正数幅度记录。公告发布于 2026-08-24。"
     },
     {
       "id": "kbl.h1.pbt",
-      "metric": "Profit_before_taxation_2026H1",
+      "metric": "2026年上半年税前利润",
       "unit": "HKD",
+      "display_unit": "亿港元",
+      "display_scale": 100000000,
       "evidence_type": "audited",
       "distribution": {"type": "point", "value": 3515028000, "domain": [0, null]},
-      "quote": "Consolidated statement of profit or loss, six months ended 30 June 2026 — Profit before taxation: HKD 3,515,028,000. Announcement published 2026-08-24."
+      "quote": "综合损益表：截至 2026 年 6 月 30 日止六个月，税前利润为 3,515,028,000 港元。公告发布于 2026-08-24。"
     },
     {
       "id": "kbl.h1.income_tax",
-      "metric": "Income_tax_expense_2026H1_positive_magnitude",
+      "metric": "2026年上半年所得税费用（正数幅度）",
       "unit": "HKD",
+      "display_unit": "亿港元",
+      "display_scale": 100000000,
       "evidence_type": "audited",
       "distribution": {"type": "point", "value": 628462000, "domain": [0, null]},
-      "quote": "Consolidated statement of profit or loss, six months ended 30 June 2026 — Income tax expense: HKD 628,462,000, recorded here as a positive expense magnitude. Announcement published 2026-08-24."
+      "quote": "综合损益表：截至 2026 年 6 月 30 日止六个月，所得税费用为 628,462,000 港元；本节点按费用的正数幅度记录。公告发布于 2026-08-24。"
     },
     {
       "id": "kbl.h1.attributable_profit",
-      "metric": "Profit_attributable_to_owners_2026H1",
+      "metric": "2026年上半年归母利润",
       "unit": "HKD",
+      "display_unit": "亿港元",
+      "display_scale": 100000000,
       "evidence_type": "audited",
       "distribution": {"type": "point", "value": 2886561000, "domain": [0, null]},
-      "quote": "Consolidated statement of profit or loss, six months ended 30 June 2026 — Profit attributable to owners of the Company: HKD 2,886,561,000. Announcement published 2026-08-24."
+      "quote": "综合损益表：截至 2026 年 6 月 30 日止六个月，公司持有人应占利润为 2,886,561,000 港元。公告发布于 2026-08-24。"
     },
     {
       "id": "kbl.h1.nci_profit",
-      "metric": "Profit_attributable_to_non_controlling_interests_2026H1_positive",
+      "metric": "2026年上半年非控股权益应占利润（正数）",
       "unit": "HKD",
+      "display_unit": "亿港元",
+      "display_scale": 100000000,
       "evidence_type": "audited",
       "distribution": {"type": "point", "value": 5000, "domain": [0, null]},
-      "quote": "Consolidated statement of profit or loss, six months ended 30 June 2026 — Profit attributable to non-controlling interests: HKD 5,000. Announcement published 2026-08-24."
+      "quote": "综合损益表：截至 2026 年 6 月 30 日止六个月，非控股权益应占利润为 5,000 港元。公告发布于 2026-08-24。"
     },
     {
       "id": "kbl.h1.fair_value_equity_loss",
-      "metric": "Fair_value_equity_loss_2026H1_positive_magnitude_history",
+      "metric": "2026年上半年权益工具公允价值亏损（正数幅度，仅作历史基准）",
       "unit": "HKD",
+      "display_unit": "亿港元",
+      "display_scale": 100000000,
       "evidence_type": "audited",
       "distribution": {"type": "point", "value": 269242000, "domain": [0, null]},
-      "quote": "Consolidated statement of profit or loss, six months ended 30 June 2026 — Fair value loss on equity instruments: HKD 269,242,000, recorded here as a positive loss magnitude for history only. Announcement published 2026-08-24."
+      "quote": "综合损益表：截至 2026 年 6 月 30 日止六个月，权益工具公允价值亏损为 269,242,000 港元；本节点按亏损的正数幅度记录，仅作历史基准。公告发布于 2026-08-24。"
     },
     {
       "id": "kbl.h2.company_supply_support_factor",
-      "metric": "H2_volume_company_supply_support_factor_assumption",
+      "metric": "下半年公司供给支撑系数假设",
       "unit": "factor",
+      "display_unit": "倍",
+      "display_scale": 1,
       "evidence_type": "assumption",
       "distribution": {"type": "triangular", "low": 1.00, "mode": 1.04, "high": 1.06, "domain": [1, null]},
-      "quote": "Positive supply-support thesis: the company reported near-full production, H1 average shipments above 10 million sheets per month, Shaoguan 70,000-tonne yarn capacity commencing at end-June, and 95 million metres of cloth capacity due for full production in Q3. Source: Kingboard Laminates 2026 interim announcement, published 2026-08-24. The factor range is an AI-proposed assumption confirmed by the collaborator in this conversation; major CCL and copper-foil expansion starts in 2027, so the 2026 volume assumption remains restrained."
+      "quote": "供给支撑的正向论点：公司披露生产接近满负荷，上半年月均出货量超过 1,000 万张；韶关 7 万吨玻璃纱产能于 6 月底投产，9,500 万米玻璃布产能预计第三季度全面投产。来源：建滔积层板 2026 年中期公告，发布于 2026-08-24。该系数区间由 AI 提出，并已获本次对话中的协作者确认；覆铜板（CCL）及铜箔的大规模扩产自 2027 年开始，因此 2026 年销量假设保持克制。"
     },
     {
       "id": "kbl.h2.asp_uplift_factor",
-      "metric": "H2_ASP_uplift_factor_assumption",
+      "metric": "下半年平均售价提升系数假设",
       "unit": "factor",
+      "display_unit": "倍",
+      "display_scale": 1,
       "evidence_type": "assumption",
       "distribution": {"type": "triangular", "low": 1.08, "mode": 1.18, "high": 1.30, "domain": [1, null]},
-      "quote": "Positive pricing thesis: the company reported multiple price rises in H1, acceleration in Q2, and H2 prices continuing to soar, but disclosed no ASP or rise percentage. Source: Kingboard Laminates 2026 interim announcement, published 2026-08-24. The factor range is an AI-proposed assumption confirmed by the collaborator in this conversation. July profit of about HKD1.1 billion has unclear accounting basis and is background only, never a formula input."
+      "quote": "提价的正向论点：公司披露上半年多次提价、第二季度提价加速，并称下半年价格继续飙升，但未披露平均售价或涨幅百分比。来源：建滔积层板 2026 年中期公告，发布于 2026-08-24。该系数区间由 AI 提出，并已获本次对话中的协作者确认。7 月利润约 11 亿港元，但会计口径不明，仅作背景信息，绝不作为公式输入。"
     },
     {
       "id": "kbl.h2.vertical_integration_mitigation_factor",
-      "metric": "H2_unit_cost_vertical_integration_mitigation_factor_assumption",
+      "metric": "下半年垂直整合成本缓释系数假设",
       "unit": "factor",
+      "display_unit": "倍",
+      "display_scale": 1,
       "evidence_type": "assumption",
       "distribution": {"type": "triangular", "low": 0.96, "mode": 0.97, "high": 1.00, "domain": [0, 1]},
-      "quote": "Cost-mitigation thesis: the company reported that vertical integration maintained near-full production and delivery amid peers' glass-fibre-cloth shortages. Source: Kingboard Laminates 2026 interim announcement, published 2026-08-24. The factor range is an AI-proposed assumption confirmed by the collaborator in this conversation."
+      "quote": "成本缓释论点：公司披露，在同行玻璃纤维布短缺期间，垂直整合使其维持接近满负荷生产和交付。来源：建滔积层板 2026 年中期公告，发布于 2026-08-24。该系数区间由 AI 提出，并已获本次对话中的协作者确认。"
     },
     {
       "id": "kbl.h2.fair_value_signed_multiplier",
-      "metric": "H2_equity_fair_value_signed_multiplier_assumption",
+      "metric": "下半年权益工具公允价值有符号倍数假设",
       "unit": "factor",
+      "display_unit": "倍",
+      "display_scale": 1,
       "evidence_type": "assumption",
       "distribution": {"type": "uniform", "low": -1.5, "high": 1.5, "domain": [-1.5, 1.5]},
-      "quote": "H1 disclosed an equity-instrument fair-value loss of HKD 269,242,000. Source: https://www.kblaminates.com/upload/portal/20260824/202608241221457290.pdf"
+      "quote": "上半年披露权益工具公允价值亏损 269,242,000 港元，仅作为历史基准。来源：https://www.kblaminates.com/upload/portal/20260824/202608241221457290.pdf。该有符号倍数区间由 AI 提出，并已获本次对话中的协作者确认：正值表示下半年收益，负值表示下半年亏损；该区间并非公司指引。"
     },
     {
       "id": "kbl.h2.finance_cost_factor",
-      "metric": "H2_finance_cost_factor_assumption",
+      "metric": "下半年融资成本系数假设",
       "unit": "factor",
+      "display_unit": "倍",
+      "display_scale": 1,
       "evidence_type": "assumption",
       "distribution": {"type": "triangular", "low": 1.00, "mode": 1.20, "high": 1.50, "domain": [1, null]},
-      "quote": "Financing-cost-up thesis: the company reported net gearing of approximately 30% at 30 June 2026 versus approximately 16% at 31 December 2025. Source: Kingboard Laminates 2026 interim announcement, published 2026-08-24. The factor range is an AI-proposed assumption confirmed by the collaborator in this conversation."
+      "quote": "融资成本上升论点：公司披露，2026 年 6 月 30 日的净负债率约为 30%，而 2025 年 12 月 31 日约为 16%。来源：建滔积层板 2026 年中期公告，发布于 2026-08-24。该系数区间由 AI 提出，并已获本次对话中的协作者确认。"
     }
   ]
 }

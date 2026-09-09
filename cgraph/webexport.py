@@ -6,13 +6,15 @@
 """
 
 from .confidence import confidence_for
-from .distributions import describe
 from .operators import formula_of
 from .model import DataNode, OperatorNode
-from .render import _data_value
+from .display import (
+    data_value, describe_distribution, display_stats,
+    display_unit, evidence_type_label, operator_label,
+)
 
 
-def _histogram(samples, bins=24, trim=0.05):
+def _histogram(samples, bins=24, trim=0.05, scale=1.0):
     """把样本压成直方图: 返回 {edges, counts, max} —— 前端画迷你分布条。
 
     trim: 两端各截掉的分位比例(默认 5%,即只画 P5–P95),避免长尾把主峰压扁。
@@ -24,7 +26,7 @@ def _histogram(samples, bins=24, trim=0.05):
         xs = xs[k:n - k] or xs
     lo, hi = xs[0], xs[-1]
     if hi <= lo:  # Point / 退化分布
-        return {"edges": [lo, hi], "counts": [len(xs)], "max": len(xs)}
+        return {"edges": [lo / scale, hi / scale], "counts": [len(xs)], "max": len(xs)}
     width = (hi - lo) / bins
     counts = [0] * bins
     for x in xs:
@@ -32,13 +34,13 @@ def _histogram(samples, bins=24, trim=0.05):
         if k >= bins:
             k = bins - 1
         counts[k] += 1
-    edges = [lo + i * width for i in range(bins + 1)]
+    edges = [(lo + i * width) / scale for i in range(bins + 1)]
     return {"edges": edges, "counts": counts, "max": max(counts)}
 
 
 # 纯展示: 把自动分出的图簇(id 根 token)显示成人类可读名字; 缺失则回退显示 id 根本身。
 # 这是唯一的外部知识(图无从得知 capchem=新宙邦), 不参与任何排序/分组逻辑。
-GROUP_LABELS = {"capchem": "新宙邦", "shenghong": "胜宏科技", "litong": "利通电子"}
+GROUP_LABELS = {"capchem": "新宙邦", "shenghong": "胜宏科技", "litong": "利通电子", "kbl": "建滔积层板"}
 
 
 def _components(graph):
@@ -116,6 +118,8 @@ def list_focusable(graph):
                 "id": nid,
                 "label": node.output_metric,
                 "unit": node.unit,
+                "display_unit": display_unit(node),
+                "display_scale": node.display_scale,
                 "terminal": nid not in referenced,
                 "group": key,
                 "group_label": GROUP_LABELS.get(key, key),
@@ -132,8 +136,10 @@ def _build_node(graph, node_id):
     common = {
         "id": node_id,
         "kind": node.kind,
-        "stats": {k: round(v, 4) for k, v in stats.items()},
-        "hist": _histogram(samples) if samples else None,
+        "stats": display_stats(node, stats, digits=4),
+        "hist": _histogram(samples, scale=node.display_scale) if samples else None,
+        "display_unit": display_unit(node),
+        "display_scale": node.display_scale,
     }
     if isinstance(node, DataNode):
         src = graph.sources.get(node.source_id, {})
@@ -142,7 +148,8 @@ def _build_node(graph, node_id):
             "unit": node.unit,
             "confidence": round(confidence_for(node.evidence_type), 3),
             "evidence_type": node.evidence_type,
-            "dist": describe(node.distribution),
+            "evidence_type_label": evidence_type_label(node.evidence_type),
+            "dist": describe_distribution(node, node.distribution),
             "quote": node.quote,
             "as_of": node.as_of,
             "source": {
@@ -158,6 +165,7 @@ def _build_node(graph, node_id):
             "label": node.output_metric,
             "unit": node.unit,
             "operator": node.operator,
+            "operator_label": operator_label(node.operator),
             "alert": graph.alerts.get(node_id),
             "children": [_build_node(graph, c) for c in node.inputs],
         })
@@ -208,7 +216,11 @@ def build_drilldown(graph, focus_id):
                 "id": i,
                 "label": child.output_metric,
                 "unit": child.unit,
-                "stats": {k: round(v, 4) for k, v in cst.items()},
+                "display_unit": display_unit(child),
+                "display_scale": child.display_scale,
+                "operator": child.operator,
+                "operator_label": operator_label(child.operator),
+                "stats": display_stats(child, cst, digits=4),
                 "alert": graph.alerts.get(i),
             })
         else:
@@ -217,8 +229,11 @@ def build_drilldown(graph, focus_id):
                 "id": i,
                 "label": child.metric,
                 "unit": child.unit,
-                "value": _data_value(child),
+                "display_unit": display_unit(child),
+                "display_scale": child.display_scale,
+                "value": data_value(child),
                 "evidence_type": child.evidence_type,
+                "evidence_type_label": evidence_type_label(child.evidence_type),
                 "is_assumption": child.evidence_type == "assumption",
                 "confidence": round(confidence_for(child.evidence_type), 3),
             })
@@ -227,9 +242,13 @@ def build_drilldown(graph, focus_id):
         "kind": "operator",
         "label": node.output_metric,
         "unit": node.unit,
+        "display_unit": display_unit(node),
+        "display_scale": node.display_scale,
         "formula": formula,
-        "stats": {k: round(v, 4) for k, v in stats.items()},
-        "hist": _histogram(graph.samples[focus_id]),
+        "operator": node.operator,
+        "operator_label": operator_label(node.operator),
+        "stats": display_stats(node, stats, digits=4),
+        "hist": _histogram(graph.samples[focus_id], scale=node.display_scale),
         "alert": graph.alerts.get(focus_id),
         "slots": slots,
     }

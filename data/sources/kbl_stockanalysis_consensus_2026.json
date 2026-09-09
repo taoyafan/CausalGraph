@@ -1,27 +1,31 @@
 {
   "source_id": "kbl_stockanalysis_consensus_2026",
-  "source_name": "StockAnalysis Kingboard Laminates forecast citing S&P Global Market Intelligence",
+  "source_name": "StockAnalysis 引用 S&P Global Market Intelligence 的建滔积层板预测",
   "publisher": "StockAnalysis.com / S&P Global Market Intelligence",
   "as_of": "2026-08-26",
   "source_url": "https://stockanalysis.com/quote/hkg/1888/forecast/",
   "retrieved_at": "2026-09-03",
-  "note": "FY2026 forecast figures transcribed from the StockAnalysis page, updated 2026-08-26 and citing S&P Global Market Intelligence. The page states that EPS and Forward PE are non-GAAP adjusted; the matching basis of its Net Income figure is unclear.",
+  "note": "2026 财年预测数据转录自 StockAnalysis 页面；页面更新于 2026-08-26，并引用 S&P Global Market Intelligence。页面注明每股收益和预期市盈率为非 GAAP 调整口径，但其净利润数据的对应口径不明确。",
   "nodes": [
     {
       "id": "kbl.consensus.fy2026.revenue",
-      "metric": "Revenue_FY2026_consensus",
+      "metric": "2026财年收入共识",
       "unit": "HKD",
+      "display_unit": "亿港元",
+      "display_scale": 100000000,
       "evidence_type": "analyst_estimate",
       "distribution": {"type": "triangular", "low": 26800000000, "mode": 34610000000, "high": 41500000000, "domain": [0, null]},
-      "quote": "StockAnalysis forecast page citing S&P Global Market Intelligence, updated 2026-08-26 — FY2026 Revenue forecast: low HKD 26,800,000,000; average HKD 34,610,000,000; high HKD 41,500,000,000."
+      "quote": "StockAnalysis 预测页面引用 S&P Global Market Intelligence，更新于 2026-08-26：2026 财年收入预测低值为 26,800,000,000 港元，平均值为 34,610,000,000 港元，高值为 41,500,000,000 港元。"
     },
     {
       "id": "kbl.consensus.fy2026.net_income",
-      "metric": "Net_income_FY2026_consensus",
+      "metric": "2026财年净利润共识",
       "unit": "HKD",
+      "display_unit": "亿港元",
+      "display_scale": 100000000,
       "evidence_type": "analyst_estimate",
       "distribution": {"type": "point", "value": 7450000000, "domain": [0, null]},
-      "quote": "StockAnalysis forecast page citing S&P Global Market Intelligence, updated 2026-08-26 — FY2026 Net Income: HKD 7,450,000,000. The page states EPS and Forward PE are non-GAAP adjusted; the matching basis of Net Income is unclear."
+      "quote": "StockAnalysis 预测页面引用 S&P Global Market Intelligence，更新于 2026-08-26：2026 财年净利润为 7,450,000,000 港元。页面注明每股收益和预期市盈率为非 GAAP 调整口径，但该净利润数据的对应口径不明确。"
     }
   ]
 }

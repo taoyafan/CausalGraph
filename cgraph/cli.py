@@ -17,6 +17,7 @@ from .render import render_level0, render_level1, render_tree, render_formula
 from .loader import load_world
 from .check import check_world
 from .model import DataNode
+from .display import display_number, display_unit, evidence_type_label
 from .scenario import load_scenario, list_scenarios, show_scenario, remove_scenario, scenario_path
 import json as _json
 
@@ -68,13 +69,15 @@ def _render_diff(args, focus_id, overrides, mutes, meta):
     scen.evaluate(focus_id)
 
     print(f"情景: {args.scenario}" + (f"  {meta.get('desc', '')}" if meta else ""))
-    bs, ss = base.stats[focus_id], scen.stats[focus_id]
+    node = base.nodes[focus_id]
+    bs = {k: display_number(node, v) for k, v in base.stats[focus_id].items()}
+    ss = {k: display_number(node, v) for k, v in scen.stats[focus_id].items()}
     d = ss["p50"] - bs["p50"]
     pct = f" ({d / abs(bs['p50']):+.1%})" if bs["p50"] else ""
     print(f"FOCUS {focus_id}")
     print(f"  基线: P10={bs['p10']:.2f} P50={bs['p50']:.2f} P90={bs['p90']:.2f}")
     print(f"  情景: P10={ss['p10']:.2f} P50={ss['p50']:.2f} P90={ss['p90']:.2f}")
-    print(f"  P50 变化: {d:+.2f}{pct}")
+    print(f"  P50 变化: {d:+.2f}{pct} {display_unit(node)}")
 
     print("\n下游受影响节点（P50 对比）:")
     for nid in scen.nodes:
@@ -82,7 +85,10 @@ def _render_diff(args, focus_id, overrides, mutes, meta):
             continue
         b, s = base.stats.get(nid), scen.stats.get(nid)
         if b and s and abs(s["p50"] - b["p50"]) > 1e-9:
-            print(f"  {nid}: {b['p50']:.3f} → {s['p50']:.3f} ({s['p50'] - b['p50']:+.3f})")
+            changed = scen.nodes[nid]
+            bp50 = display_number(changed, b["p50"])
+            sp50 = display_number(changed, s["p50"])
+            print(f"  {nid}: {bp50:.3f} → {sp50:.3f} ({sp50 - bp50:+.3f}) {display_unit(changed)}")
 
     if overrides:
         print(f"\n✎ 覆盖 {len(overrides)} 项:")
@@ -144,7 +150,7 @@ def cmd_trace(args):
         return
     src = graph.sources.get(node.source_id, {})
     print(f"节点     : ({node.metric}) [{node.id}]")
-    print(f"证据类型 : {node.evidence_type}")
+    print(f"证据类型 : {evidence_type_label(node.evidence_type)}")
     print(f"原文引用 : {node.quote or '(无)'}")
     print(f"数据源   : {src.get('source_name', node.source_id)}  [{node.source_id}]")
     print(f"发布方   : {src.get('publisher', '(未标注)')}")

@@ -1,19 +1,21 @@
 {
   "source_id": "kbl_trendforce_ai_demand_2026",
-  "source_name": "TrendForce 2026 AI server shipment outlook",
+  "source_name": "TrendForce 2026 年 AI 服务器出货展望",
   "publisher": "TrendForce",
   "as_of": "2026-01-20",
   "source_url": "https://www.trendforce.com/presscenter/news/20260120-12887.html",
   "retrieved_at": "2026-09-03",
-  "note": "Single-source demand assumption. The factor range is AI-proposed and was confirmed by the collaborator in this conversation.",
+  "note": "单一来源的需求假设。该系数区间由 AI 提出，并已获本次对话中的协作者确认。",
   "nodes": [
     {
       "id": "kbl.h2.ai_demand_factor",
-      "metric": "H2_volume_AI_demand_factor_assumption",
+      "metric": "下半年 AI 需求销量系数假设",
       "unit": "factor",
+      "display_unit": "倍",
+      "display_scale": 1,
       "evidence_type": "assumption",
       "distribution": {"type": "triangular", "low": 1.00, "mode": 1.03, "high": 1.06, "domain": [1, null]},
-      "quote": "Positive AI-demand thesis: TrendForce forecast 2026 AI server shipments to grow by more than 28%. Source: TrendForce, 2026-01-20. The factor range is an AI-proposed assumption confirmed by the collaborator in this conversation."
+      "quote": "AI 需求的正向论点：TrendForce 预测 2026 年 AI 服务器出货量增长超过 28%。来源：TrendForce，2026-01-20。该系数区间由 AI 提出，并已获本次对话中的协作者确认。"
     }
   ]
 }

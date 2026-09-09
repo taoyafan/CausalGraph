@@ -42,11 +42,13 @@ data/
 
 | 节点类型 | 存储位置 | 关键字段 |
 |---|---|---|
-| DataNode（原子数据） | `data/sources/*.json` | `id` `metric` `unit` `evidence_type` `distribution` `quote` `as_of` |
-| OperatorNode（算子） | `data/operators/*.json` | `id` `operator` `inputs` `output_metric` `unit` `op_confidence` `params` |
+| DataNode（原子数据） | `data/sources/*.json` | `id` `metric` `unit` `evidence_type` `distribution` `quote` `as_of`，可选 `display_unit` `display_scale` |
+| OperatorNode（算子） | `data/operators/*.json` | `id` `operator` `inputs` `output_metric` `unit` `params`，可选 `display_unit` `display_scale` |
 
 - 分布用 dict：`{"type": "triangular", "low", "mode", "high", "domain":[lo,hi]}` 等 4 类。
 - `evidence_type` 决定置信度：加载求值时经 `confidence.py` 查表得 C，再对分布按 1/C 展宽。改表即全局重算。
+- `display_unit` / `display_scale` 只控制展示，默认分别为 `unit` / `1`。统计值、分布文字、直方图坐标与
+  公式内联数据按 `内部值 / display_scale` 显示；采样、计算、domain、情景覆盖与缓存值始终保持内部量纲。
 
 ## 4. 节点如何链接（边）
 

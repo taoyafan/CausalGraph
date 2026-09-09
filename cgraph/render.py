@@ -10,19 +10,26 @@
 Point(C=1) 数据节点与 C_op=1 算子组成、零不确定性的分支，折叠为一行。
 """
 
-from .distributions import describe
 from .confidence import confidence_for
 from .operators import formula_of
 from .model import DataNode
+from .display import (
+    data_value, describe_distribution, display_number, display_stats,
+    display_unit, evidence_type_label, operator_label,
+)
 
 
-def _fmt_stats(s):
+def _fmt_stats(node, s):
+    s = display_stats(node, s)
     return f"P10={s['p10']:.2f} P50={s['p50']:.2f} P90={s['p90']:.2f}"
 
 
 def _header(graph, focus_id):
     s = graph.stats[focus_id]
-    print(f"FOCUS = {focus_id}  ->  {_fmt_stats(s)}  (mean={s['mean']:.2f})")
+    node = graph.nodes[focus_id]
+    mean = display_number(node, s["mean"])
+    print(f"FOCUS = {focus_id}  ->  {_fmt_stats(node, s)}  "
+          f"(mean={mean:.2f}) {display_unit(node)}")
 
 
 # ---------------------------------------------------------------- 子树工具
@@ -71,15 +78,17 @@ def data_label(graph, nid):
     c = confidence_for(n.evidence_type)
     # 情景覆盖：显示临时值并带 ✎ 标记（不与基线混淆）
     ov = graph.overrides.get(nid)
-    dist_desc = describe(ov["distribution"]) if ov else describe(n.distribution)
+    dist_desc = describe_distribution(n, ov["distribution"] if ov else n.distribution)
     tag = " ✎临时" if ov else ""
-    return (f"({n.metric}) ~ {dist_desc} "
-            f"C={c:.2f}[{n.evidence_type}] src={n.source_id}{tag}  id={nid}")
+    return (f"({n.metric}) ~ {dist_desc} {display_unit(n)} "
+            f"C={c:.2f}[{evidence_type_label(n.evidence_type)}] "
+            f"src={n.source_id}{tag}  id={nid}")
 
 
 def op_label(graph, nid):
     n = graph.nodes[nid]
-    label = f"[{n.operator}] ({n.output_metric}) {_fmt_stats(graph.stats[nid])} {n.unit}  id={nid}"
+    label = (f"[{operator_label(n.operator)}] ({n.output_metric}) "
+             f"{_fmt_stats(n, graph.stats[nid])} {display_unit(n)}  id={nid}")
     if nid in graph.alerts:
         label += f"  ⚠ {graph.alerts[nid]}"
     return label
@@ -151,21 +160,6 @@ def render_tree(graph, focus_id):
 
 # ---------------------------------------------------------------- formula
 
-def _data_value(n):
-    """数据节点的紧凑值（不带置信区间），用于公式视图。"""
-    d = n.distribution
-    t = d["type"]
-    if t == "point":
-        return f"{d['value']:g}"
-    if t == "uniform":
-        return f"U({d['low']:g}~{d['high']:g})"
-    if t == "triangular":
-        return f"Tri({d['low']:g}/{d['mode']:g}/{d['high']:g})"
-    if t == "normal":
-        return f"N({d['mu']:g}±{d['sigma']:g})"
-    return describe(d)
-
-
 def _slot_label(graph, nid, seen=None):
     """输入插槽显示名；共享数据节点第二次出现只印名(↖)以省 token。"""
     node = graph.nodes[nid]
@@ -176,8 +170,8 @@ def _slot_label(graph, nid, seen=None):
         if seen is not None:
             seen.add(nid)
         ov = graph.overrides.get(nid)
-        val = _data_value(type("_Ov", (), {"distribution": ov["distribution"]})) if ov else _data_value(node)
-        return f"{node.metric}[{val}]{q}" + ("✎" if ov else "")
+        val = data_value(node, ov["distribution"] if ov else None)
+        return f"{node.metric}[{val} {display_unit(node)}]{q}" + ("✎" if ov else "")
     return node.output_metric
 
 
@@ -198,7 +192,7 @@ def render_formula(graph, focus_id):
             ov = graph.overrides.get(nid)
             d = ov["distribution"] if ov else node.distribution
             t = "✎" if ov else ""
-            print(pad + f"{node.metric}[{_data_value(type('_Ov', (), {'distribution': d}))}]{q}{t}")
+            print(pad + f"{node.metric}[{data_value(node, d)} {display_unit(node)}]{q}{t}")
             return
         if nid in done:
             print(pad + f"{node.output_metric} ↺（上文已展开）")
@@ -216,7 +210,9 @@ def render_formula(graph, focus_id):
     if graph.overrides:
         print(f"\n✎ 临时覆盖 {len(graph.overrides)} 项:")
         for oid, ov in graph.overrides.items():
-            print(f"  - {oid} ~ {describe(ov['distribution'])}  {ov.get('reason', '')}")
+            node = graph.nodes[oid]
+            print(f"  - {oid} ~ {describe_distribution(node, ov['distribution'])} "
+                  f"{display_unit(node)}  {ov.get('reason', '')}")
 
     # 假设分布已在正文首次内联(带 ? 标记)，不再列重复清单；计数/最低 C/告警看下方汇总行。
     _summary_line(graph, focus_id)

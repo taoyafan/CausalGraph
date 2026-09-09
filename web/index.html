@@ -134,11 +134,12 @@ function sparkAxis(hist, unit) {
 
 function summaryCard(root) {
   const c = el("div", "summary");
+  const unit = root.display_unit || root.unit || "";
   c.innerHTML = `<div class="lbl">${root.label}</div>
-    <div class="p50">${fmt(root.stats.p50)}<span>${root.unit || ""}</span></div>
-    <div class="range">区间 P10–P90: ${fmt(root.stats.p10)} ~ ${fmt(root.stats.p90)} · 均值 ${fmt(root.stats.mean)}</div>`;
-  c.appendChild(spark(root.hist, root.unit));
-  c.appendChild(sparkAxis(root.hist, root.unit));
+    <div class="p50">${fmt(root.stats.p50)}<span>${unit}</span></div>
+    <div class="range">区间 P10–P90: ${fmt(root.stats.p10)} ~ ${fmt(root.stats.p90)}${unit} · 均值 ${fmt(root.stats.mean)}${unit}</div>`;
+  c.appendChild(spark(root.hist, unit));
+  c.appendChild(sparkAxis(root.hist, unit));
   return c;
 }
 
@@ -154,20 +155,21 @@ function nodeView(n, depth) {
   const meta = el("div", "meta");
   if (n.kind === "operator") {
     bar.style.background = "var(--op)";      // 算子=计算节点,紫色条,不表达置信度
-    meta.innerHTML = `<span class="chip op">${n.operator}</span>`;
+    meta.innerHTML = `<span class="chip op">${n.operator_label || n.operator}</span>`;
   } else {
     bar.style.background = confColor(n.confidence);   // 数据节点:条色=证据置信度
     meta.innerHTML = `<span class="chip">${n.dist || "data"}</span>`;
     const badge = el("span", "badge");
     badge.style.background = confColor(n.confidence);
-    badge.textContent = n.evidence_type + " · " + confLabel(n.confidence);
+    badge.textContent = (n.evidence_type_label || n.evidence_type) + " · " + confLabel(n.confidence);
     meta.appendChild(badge);
   }
   title.innerHTML = `<b>${n.label}</b>`;
   title.appendChild(meta);
 
   const stat = el("div", "stat");
-  stat.innerHTML = `<b>${fmt(n.stats.p50)}</b><small>${fmt(n.stats.p10)}~${fmt(n.stats.p90)}</small>`;
+  const unit = n.display_unit || n.unit || "";
+  stat.innerHTML = `<b>${fmt(n.stats.p50)}${unit}</b><small>${fmt(n.stats.p10)}~${fmt(n.stats.p90)}${unit}</small>`;
 
   row.append(bar, caret, title, stat);
   card.appendChild(row);
@@ -182,7 +184,7 @@ function nodeView(n, depth) {
     if (n.as_of) detail.innerHTML += `<div class="kv">数据时点: ${n.as_of}</div>`;
     if (s.url) detail.innerHTML += `<div class="kv"><a href="${s.url}" target="_blank" rel="noopener">原始出处 ↗</a></div>`;
   } else {
-    detail.innerHTML += `<div class="kv">算子: ${n.operator}</div>`;
+    detail.innerHTML += `<div class="kv">算子: ${n.operator_label || n.operator}</div>`;
   }
   card.appendChild(detail);
   wrap.appendChild(card);
