@@ -9,6 +9,7 @@
     --bg: #f2f4f8; --card: #ffffff; --ink: #1f2733; --sub: #6b7684;
     --line: #e6e9f0; --accent: #3b6ef5; --accent-soft: #eaf0ff;
     --hi: #17a673; --mid: #e6961e; --lo: #e0524d; --op: #7b5bd6;
+    --assume: #e08a1e;
     --shadow: 0 1px 3px rgba(20,30,60,.08), 0 6px 20px rgba(20,30,60,.05);
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -65,7 +66,7 @@
     background: var(--accent-soft); color: var(--accent); font-weight: 600;
   }
   .chip.op { background: #f0ecff; color: var(--op); }
-  .badge { font-size: 10.5px; padding: 1px 6px; border-radius: 6px; font-weight: 700; color: #fff; }
+  .badge { font-size: 10.5px; padding: 1px 6px; border-radius: 6px; font-weight: 700; color: #fff; background: var(--assume); }
   .stat { text-align: right; }
   .stat b { font-size: 14px; }
   .stat small { display: block; color: var(--sub); font-size: 10.5px; }
@@ -74,7 +75,13 @@
   .quote { background: #f7f8fb; border-left: 3px solid var(--line); border-radius: 8px;
            padding: 8px 10px; margin: 8px 0 4px; color: var(--ink); font-size: 12px; }
   .detail a { color: var(--accent); text-decoration: none; word-break: break-all; }
-  .kids { margin-left: 14px; border-left: 1px dashed var(--line); padding-left: 8px; margin-top: 6px; }
+  .kids { margin-left: 14px; border-left: 2px solid var(--rail, var(--line)); padding-left: 12px; margin-top: 6px; }
+  .kids > .node { position: relative; }
+  .kids > .node::before {
+    content: ""; position: absolute; left: -12px; top: 22px; width: 12px; height: 2px;
+    background: var(--rail, var(--line)); border-radius: 2px;
+  }
+  .kids .card { box-shadow: 0 1px 2px rgba(20,30,60,.05); }
   .alert { color: var(--lo); font-weight: 600; }
   .loading, .err { text-align: center; color: var(--sub); padding: 40px 0; }
   .err { color: var(--lo); }
@@ -97,6 +104,16 @@ const el = (t, c) => { const e = document.createElement(t); if (c) e.className =
 
 function confColor(c) { return c >= 0.8 ? "var(--hi)" : c >= 0.4 ? "var(--mid)" : "var(--lo)"; }
 function confLabel(c) { return c >= 0.8 ? "高" : c >= 0.4 ? "中" : "低"; }
+
+// 数据节点证据类型角标: 短标签 + 区分色
+const EVIDENCE_BADGE = {
+  audited:          { text: "财报", color: "#17a673" },
+  analyst_estimate: { text: "预测", color: "#3b82c4" },
+  assumption:       { text: "假设", color: "var(--assume)" },
+};
+// 层级导轨色: 三原色(红绿蓝)循环, 卡片左侧颜色条与所挂导轨同色
+const RAIL = ["#2563eb", "#dc2626", "#16a34a"];
+function railColor(depth) { return RAIL[depth % RAIL.length]; }
 
 function spark(hist, unit) {
   const box = el("div", "spark");
@@ -153,15 +170,15 @@ function nodeView(n, depth) {
   caret.textContent = "▶";
   const title = el("div", "title");
   const meta = el("div", "meta");
+  bar.style.background = railColor(depth);  // 条色=本节点所在层级色(与左侧导轨同色)
   if (n.kind === "operator") {
-    bar.style.background = "var(--op)";      // 算子=计算节点,紫色条,不表达置信度
     meta.innerHTML = `<span class="chip op">${n.operator_label || n.operator}</span>`;
   } else {
-    bar.style.background = confColor(n.confidence);   // 数据节点:条色=证据置信度
     meta.innerHTML = `<span class="chip">${n.dist || "data"}</span>`;
+    const ev = EVIDENCE_BADGE[n.evidence_type] || { text: n.evidence_type_label || n.evidence_type, color: "#6b7684" };
     const badge = el("span", "badge");
-    badge.style.background = confColor(n.confidence);
-    badge.textContent = (n.evidence_type_label || n.evidence_type) + " · " + confLabel(n.confidence);
+    badge.style.background = ev.color;
+    badge.textContent = ev.text;
     meta.appendChild(badge);
   }
   title.innerHTML = `<b>${n.label}</b>`;
@@ -192,6 +209,7 @@ function nodeView(n, depth) {
   let kids = null;
   if (n.children && n.children.length) {
     kids = el("div", "kids");
+    kids.style.setProperty("--rail", railColor(depth + 1));
     kids.style.display = "none";
     n.children.forEach(ch => kids.appendChild(nodeView(ch, depth + 1)));
     wrap.appendChild(kids);
