@@ -1,6 +1,6 @@
 {
   "subgraph": "kbl_forecast_fy2026",
-  "note": "建滔积层板 2026 年预测图。覆铜板（CCL）及铜箔的大规模扩产自 2027 年开始，因此 2026 年销量假设保持克制。核心归母利润目标不含下半年公允价值变动；报表归母利润目标包含该变动。共识净利润的对应口径不明确，因此利润与共识之差的输出保留该口径限定。",
+  "note": "建滔积层板 2026 年预测图。覆铜板（CCL）及铜箔的大规模扩产自 2027 年开始，因此 2026 年销量假设保持克制。核心归母利润目标不含下半年公允价值变动；报表归母利润目标包含该变动。",
   "operators": [
     {"id": "kbl.h2.volume_factor", "operator": "product", "inputs": ["kbl.h2.company_supply_support_factor", "kbl.h2.ai_demand_factor", "kbl.h2.consumer_drag_factor"], "output_metric": "下半年销量系数", "unit": "factor", "display_unit": "倍", "display_scale": 1},
     {"id": "kbl.h2.unit_cost_factor", "operator": "product", "inputs": ["kbl.h2.raw_material_inflation_factor", "kbl.h2.vertical_integration_mitigation_factor"], "output_metric": "下半年单位成本系数", "unit": "factor", "display_unit": "倍", "display_scale": 1},
@@ -24,9 +24,6 @@
     {"id": "kbl.h2.reported_net", "operator": "subtract", "inputs": ["kbl.h2.reported_pbt", "kbl.h2.reported_tax"], "output_metric": "2026年下半年报表净利润", "unit": "HKD", "display_unit": "亿港元", "display_scale": 100000000},
     {"id": "kbl.h2.reported_attributable", "operator": "subtract", "inputs": ["kbl.h2.reported_net", "kbl.h1.nci_profit"], "output_metric": "2026年下半年报表归母利润", "unit": "HKD", "display_unit": "亿港元", "display_scale": 100000000},
     {"id": "kbl.fy2026.reported_attributable_profit", "operator": "sum", "inputs": ["kbl.h1.attributable_profit", "kbl.h2.reported_attributable"], "output_metric": "2026财年报表归母利润（含下半年公允价值变动）", "unit": "HKD", "display_unit": "亿港元", "display_scale": 100000000},
-    {"id": "kbl.fy2026.revenue", "operator": "sum", "inputs": ["kbl.h1.revenue", "kbl.h2.revenue"], "output_metric": "2026财年收入", "unit": "HKD", "display_unit": "亿港元", "display_scale": 100000000},
-    {"id": "kbl.fy2026.core_profit_vs_consensus", "operator": "subtract", "inputs": ["kbl.fy2026.core_attributable_profit", "kbl.consensus.fy2026.net_income"], "output_metric": "2026财年核心归母利润与共识净利润之差（共识口径不明）", "unit": "HKD", "display_unit": "亿港元", "display_scale": 100000000},
-    {"id": "kbl.fy2026.reported_profit_vs_consensus", "operator": "subtract", "inputs": ["kbl.fy2026.reported_attributable_profit", "kbl.consensus.fy2026.net_income"], "output_metric": "2026财年报表归母利润与共识净利润之差（共识口径不明）", "unit": "HKD", "display_unit": "亿港元", "display_scale": 100000000},
-    {"id": "kbl.fy2026.revenue_vs_consensus", "operator": "subtract", "inputs": ["kbl.fy2026.revenue", "kbl.consensus.fy2026.revenue"], "output_metric": "2026财年收入与共识之差", "unit": "HKD", "display_unit": "亿港元", "display_scale": 100000000}
+    {"id": "kbl.fy2026.revenue", "operator": "sum", "inputs": ["kbl.h1.revenue", "kbl.h2.revenue"], "output_metric": "2026财年收入", "unit": "HKD", "display_unit": "亿港元", "display_scale": 100000000}
   ]
 }
