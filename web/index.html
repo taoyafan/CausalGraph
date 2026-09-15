@@ -81,6 +81,10 @@
   .stat { text-align: right; }
   .stat b { font-size: 14px; }
   .stat small { display: block; color: var(--sub); font-size: 10.5px; }
+  .pin { flex: none; border: 1px solid var(--line); background: #fff; color: var(--sub);
+         font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 7px; cursor: pointer;
+         white-space: nowrap; transition: background .1s, color .1s, border-color .1s; }
+  .pin:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
   .detail { padding: 0 12px 12px 26px; font-size: 12.5px; color: var(--sub); }
   .detail .kv { margin: 2px 0; }
   .quote { background: #f7f8fb; border-left: 3px solid var(--line); border-radius: 8px;
@@ -202,6 +206,19 @@ function nodeView(n, depth) {
   stat.innerHTML = `<b>${fmt(n.stats.p50)}${unit}</b><small>${fmt(n.stats.p10)}~${fmt(n.stats.p90)}${unit}</small>`;
 
   row.append(bar, caret, title, stat);
+  // 置顶: 把该节点提为顶部主视图(等价于在下拉框选它), 免去从长列表里找。根节点(depth 0)本身已在顶部, 不加。
+  if (depth >= 1 && n.id) {
+    const pin = el("button", "pin");
+    pin.type = "button";
+    pin.textContent = "置顶";
+    pin.title = "以此节点作为顶部主视图";
+    pin.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const np = document.getElementById("nodePicker"); if (np) np.value = n.id;
+      loadFocus(n.id);
+    });
+    row.appendChild(pin);
+  }
   card.appendChild(row);
 
   const detail = el("div", "detail");
