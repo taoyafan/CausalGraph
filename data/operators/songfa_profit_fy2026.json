@@ -22,7 +22,6 @@
       "inputs": ["songfa.profit.fy2026.bottomup", "songfa.consensus.fy2026e"],
       "output_metric": "归母净利润_2026E(融合:自下而上+券商一致预期)",
       "unit": "亿元",
-      "panel": true,
       "note": "最终融合:自下而上路径(H1实际+H2外推)与13家券商一致预期(songfa.consensus.fy2026e,三角69.73/80.31/93.51)等权mixture;分歧过大时引擎自动触发Method Conflict告警。原单锚东吴72亿已并入一致预期。"
     },
     {
