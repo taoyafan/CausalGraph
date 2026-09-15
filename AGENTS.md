@@ -60,7 +60,8 @@
 
 - **Web/展示上的公司名必须用中文**：在 `cgraph/webexport.py` 的 `GROUP_LABELS`
   里为每个公司 id 前缀登记中文简称（如 `"songfa": "松发股份"`），网页分组标题一律显示中文，
-  不得裸露拼音/英文前缀。新增一家公司建模时必须同步补 `GROUP_LABELS`（改动后需重启 serve）。
+  不得裸露拼音/英文前缀。新增一家公司建模时必须同步补 `GROUP_LABELS`（改动后需重新运行
+  `python -m cgraph.cli export` 重新生成 `web/export.js`）。
 - **底层节点 id 前缀不限**（可用拼音如 `songfa.*`），只要 `GROUP_LABELS` 映射到中文即可。
 
 ## 数据诚实性原则

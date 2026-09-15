@@ -112,10 +112,21 @@ def cmd_check(args):
         sys.exit(1)
 
 
-def cmd_serve(args):
-    """启动本地网页服务，在浏览器里交互展示因果图。"""
-    from .webserver import serve
-    serve(args.sources, args.operators, args.host, args.port, args.samples, args.seed)
+def cmd_export(args):
+    """把全图求值结果导出为静态 JS(web/export.js)，前端直读、无需后端。"""
+    import random
+    from .webexport import list_focusable, build_focus
+    random.seed(args.seed)
+    graph = load_world(args.sources, args.operators, args.samples)
+    nodes = list_focusable(graph)
+    focus = {n["id"]: build_focus(graph, n["id"]) for n in nodes}
+    web_dir = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "web"))
+    out = args.out or os.path.join(web_dir, "export.js")
+    payload = _json.dumps({"nodes": nodes, "focus": focus}, ensure_ascii=False)
+    with open(out, "w", encoding="utf-8") as f:
+        f.write("window.CG_EXPORT = " + payload + ";\n")
+    print(f"已导出 {len(nodes)} 个节点 -> {out}")
+    print("直接用浏览器打开 web/index.html 即可（无需后端）。")
 
 
 def cmd_scenario_action(args):
@@ -200,14 +211,13 @@ def main(argv=None):
     c.add_argument("--operators", default=default_operators, help="算子子图目录")
     c.set_defaults(func=cmd_check)
 
-    s = sub.add_parser("serve", help="启动本地网页（浏览器交互展示因果图）")
-    s.add_argument("--host", default="127.0.0.1", help="监听地址")
-    s.add_argument("--port", type=int, default=8000, help="端口")
-    s.add_argument("--sources", default=default_sources, help="数据源目录")
-    s.add_argument("--operators", default=default_operators, help="算子子图目录")
-    s.add_argument("--samples", type=int, default=20000, help="蒙特卡洛样本数")
-    s.add_argument("--seed", type=int, default=42, help="随机种子（可复现）")
-    s.set_defaults(func=cmd_serve)
+    e = sub.add_parser("export", help="导出静态 JS(web/export.js)，前端直读、无需后端")
+    e.add_argument("--out", default=None, help="输出文件(默认 web/export.js)")
+    e.add_argument("--sources", default=default_sources, help="数据源目录")
+    e.add_argument("--operators", default=default_operators, help="算子子图目录")
+    e.add_argument("--samples", type=int, default=20000, help="蒙特卡洛样本数")
+    e.add_argument("--seed", type=int, default=42, help="随机种子（可复现）")
+    e.set_defaults(func=cmd_export)
 
     sc = sub.add_parser("scenario", help="情景文件管理（list/show/remove；创建=直接写 JSON）")
     sc.add_argument("action", choices=["list", "show", "remove"], help="list=列出全部 show=查看内容 remove=删除(自动恢复原值)")
