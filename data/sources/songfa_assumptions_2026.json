@@ -1,0 +1,19 @@
+{
+  "source_id": "songfa_assumptions_2026",
+  "source_name": "松发股份 2026 H2 外推——我方假设(非公司/非券商)",
+  "publisher": "CausalGraph 协作者假设",
+  "as_of": "2026-09-15",
+  "source_url": "https://basic.10jqka.com.cn/603268/finance.html",
+  "retrieved_at": "2026-09-15",
+  "note": "松发股份(恒力重工造船)H2外推假设。造船按履约进度(POC)确认收入,H2为交付旺季。含1个原子assumption锚(H2环比H1归母系数),同向证据归一锚;自下而上路径与东吴券商路径由mixture在下游融合暴露分歧(见data/operators/songfa_profit_fy2026.json)。",
+  "nodes": [
+    {
+      "id": "songfa.momentum.h2_factor",
+      "metric": "归母净利_2026H2环比H1系数_订单交付加速托底锚_假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "distribution": {"type": "triangular", "low": 0.90, "mode": 1.08, "high": 1.30, "domain": [0, null]},
+      "quote": "单锚(订单交付加速托底,同向证据):合同负债120.37亿(+124.84%,预收船款,代理已签约待交付订单)、合同资产139.46亿(+34.36%,公司注'船舶开工数量增加、履约进度提高')、固定资产184.13亿(+22.22%)且集团三期产能即将投产、造船H2为交付旺季——多条同向证据支撑H2归母维持并略高于H1;上界1.30(产能爬坡+交付集中兑现),下界0.90(高基数下交付节奏若后移的小幅回落),众数1.08。仅一个方向性论点,同向多证据归一锚。来源:松发股份2026半年报F10指标变动说明/东吴证券研报2026-06-02。"
+    }
+  ]
+}

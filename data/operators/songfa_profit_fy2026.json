@@ -1,0 +1,35 @@
+{
+  "subgraph": "songfa_profit_fy2026",
+  "note": "松发股份(603268.SH,恒力重工造船)2026全年归母净利润 + 同比。结构=H1实际(36.09,audited硬锚)+H2外推,最后与东吴券商预测融合。自下而上路径:H2归母=H1×H2环比系数(assumption,songfa.momentum.h2_factor);全年_bottomup=H1+H2。最终结论songfa.profit.fy2026=mixture(自下而上, 东吴2026E 72亿)等权融合,视角分歧大时引擎自动触发Method Conflict。同比songfa.profit.fy2026.yoy=growth(全年结论, 2025全年26.55)。算子皆纯数学,主观性集中在单一assumption锚。",
+  "operators": [
+    {
+      "id": "songfa.profit.2026_h2",
+      "operator": "product",
+      "inputs": ["songfa.profit.h1_2026", "songfa.momentum.h2_factor"],
+      "output_metric": "归母净利润_2026H2(=H1×H2环比系数)",
+      "unit": "亿元"
+    },
+    {
+      "id": "songfa.profit.fy2026.bottomup",
+      "operator": "sum",
+      "inputs": ["songfa.profit.h1_2026", "songfa.profit.2026_h2"],
+      "output_metric": "归母净利润_2026全年(自下而上:H1实际+H2外推)",
+      "unit": "亿元"
+    },
+    {
+      "id": "songfa.profit.fy2026",
+      "operator": "mixture",
+      "inputs": ["songfa.profit.fy2026.bottomup", "songfa.broker.dongwu.fy2026e"],
+      "output_metric": "归母净利润_2026全年(融合:自下而上+东吴券商)",
+      "unit": "亿元",
+      "note": "最终融合:自下而上路径与东吴证券2026E(72亿)等权mixture;分歧过大时引擎自动触发Method Conflict告警。"
+    },
+    {
+      "id": "songfa.profit.fy2026.yoy",
+      "operator": "growth",
+      "inputs": ["songfa.profit.fy2026", "songfa.profit.fy2025"],
+      "output_metric": "归母净利润_2026全年同比增速(相对2025实际)",
+      "unit": "比率"
+    }
+  ]
+}
