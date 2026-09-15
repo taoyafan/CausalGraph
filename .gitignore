@@ -9,3 +9,7 @@ venv/
 .DS_Store
 .idea/
 *.log
+
+# 测试禁止入库(本项目约定)
+tests/
+test_*.py
