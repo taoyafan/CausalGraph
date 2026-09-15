@@ -46,6 +46,16 @@
   .spark i:hover { background: #fff; }
   .spark-axis { display: flex; justify-content: space-between; font-size: 11px; opacity: .85; margin-top: 4px; }
   .spark-axis span:nth-child(2) { opacity: .7; }
+  .panel { margin-bottom: 16px; }
+  .pgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .pcard { background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+           padding: 10px 12px; box-shadow: var(--shadow); cursor: pointer; transition: transform .1s; }
+  .pcard:active { transform: scale(.985); }
+  .pcard.on { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft), var(--shadow); }
+  .pcard .pl { font-size: 11.5px; color: var(--sub); font-weight: 600; line-height: 1.35; }
+  .pcard .pv { font-size: 21px; font-weight: 800; margin: 3px 0 1px; }
+  .pcard .pv span { font-size: 12px; font-weight: 600; color: var(--sub); margin-left: 3px; }
+  .pcard .pr { font-size: 11px; color: var(--sub); }
   .sec-title { font-size: 12px; color: var(--sub); font-weight: 600; margin: 4px 2px 8px; letter-spacing: .5px; }
   .node { margin: 0 0 8px; }
   .card {
@@ -109,6 +119,7 @@ function confLabel(c) { return c >= 0.8 ? "高" : c >= 0.4 ? "中" : "低"; }
 // 数据节点证据类型角标: 短标签 + 区分色
 const EVIDENCE_BADGE = {
   audited:          { text: "财报", color: "#17a673" },
+  market_observed:  { text: "行情", color: "#0e7490" },
   analyst_estimate: { text: "预测", color: "#3b82c4" },
   assumption:       { text: "假设", color: "var(--assume)" },
 };
@@ -241,20 +252,57 @@ function buildTree(g, id) {
   return Object.assign({}, flat, { children });
 }
 
-async function loadFocus(node) {
+// 估值看板: 把选中公司里 panel=true 的指标并列成卡片, 点卡片钻取其贡献树。
+function renderPanel(group) {
+  const g = window.CG_EXPORT.graph || {};
+  const members = ALL_NODES.filter(n => n.group === group && n.panel)
+    .sort((a, b) => a.label < b.label ? -1 : a.label > b.label ? 1 : 0);
+  const box = el("div", "panel");
+  if (!members.length) return box;
+  const t = el("div", "sec-title"); t.textContent = "看板（点卡片看溯源）";
+  const grid = el("div", "pgrid");
+  members.forEach(m => {
+    const node = g[m.id]; if (!node || !node.stats) return;
+    const u = node.display_unit || "";
+    const card = el("div", "pcard");
+    card.dataset.id = m.id;
+    card.innerHTML = `<div class="pl">${m.label}</div>
+      <div class="pv">${fmt(node.stats.p50)}<span>${u}</span></div>
+      <div class="pr">P10–P90 ${fmt(node.stats.p10)}~${fmt(node.stats.p90)}${u}</div>`;
+    card.addEventListener("click", () => {
+      const np = document.getElementById("nodePicker"); np.value = m.id; loadFocus(m.id);
+    });
+    grid.appendChild(card);
+  });
+  box.append(t, grid);
+  return box;
+}
+
+// 选定公司: 顶部看板 + 下方钻取详情(detail)。
+function showGroup(group, node) {
   const main = document.getElementById("main");
-  main.innerHTML = `<div class="loading">求值中…</div>`;
+  main.innerHTML = "";
+  main.appendChild(renderPanel(group));
+  const detail = el("div"); detail.id = "detail";
+  main.appendChild(detail);
+  loadFocus(node);
+}
+
+async function loadFocus(node) {
+  const host = document.getElementById("detail") || document.getElementById("main");
+  host.innerHTML = `<div class="loading">求值中…</div>`;
   try {
     const g = window.CG_EXPORT && window.CG_EXPORT.graph;
-    if (!g || !g[node]) { main.innerHTML = `<div class="err">无此节点的导出数据: ${node}</div>`; return; }
+    if (!g || !g[node]) { host.innerHTML = `<div class="err">无此节点的导出数据: ${node}</div>`; return; }
     const tree = buildTree(g, node);
-    main.innerHTML = "";
-    main.appendChild(summaryCard(tree));
+    host.innerHTML = "";
+    host.appendChild(summaryCard(tree));
     const t = el("div", "sec-title"); t.textContent = "贡献分解（点卡片展开溯源）";
-    main.appendChild(t);
-    main.appendChild(nodeView(tree, 0));
+    host.appendChild(t);
+    host.appendChild(nodeView(tree, 0));
+    document.querySelectorAll(".pcard").forEach(c => c.classList.toggle("on", c.dataset.id === node));
   } catch (e) {
-    main.innerHTML = `<div class="err">加载失败: ${e}</div>`;
+    host.innerHTML = `<div class="err">加载失败: ${e}</div>`;
   }
 }
 
@@ -290,10 +338,10 @@ async function init() {
     graphGroups(ALL_NODES).forEach(g => {
       const o = el("option"); o.value = g.key; o.textContent = g.label; gp.appendChild(o);
     });
-    gp.addEventListener("change", () => { fillNodePicker(gp.value); loadFocus(np.value); });
+    gp.addEventListener("change", () => { fillNodePicker(gp.value); showGroup(gp.value, document.getElementById("nodePicker").value); });
     np.addEventListener("change", () => loadFocus(np.value));
     fillNodePicker(gp.value);
-    loadFocus(np.value);
+    showGroup(gp.value, np.value);
   } catch (e) {
     document.getElementById("main").innerHTML = `<div class="err">加载失败: ${e}</div>`;
   }

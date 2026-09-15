@@ -1,0 +1,67 @@
+{
+  "subgraph": "songfa_valuation_multiyear",
+  "note": "松发股份(603268.SH,恒力重工造船)多年盈利 + 前瞻PE。27/28归母直接采用13家券商一致预期(songfa.consensus.fy2027e/2028e,三角分布),用affine(a=0,b=1)恒等映射把一致预期提升为可展示/可被PE引用的算子节点(a/b为结构恒等常数,无主观性,即'直接采用一致预期')——因27/28无实际数、一致预期是当前最佳证据,不再叠加主观增速外推。前瞻PE=总市值(songfa.market.cap,1987亿,行情观测)÷各年归母净利,分母是分布故PE自动为分布。panel=true的6个节点(归母26/27/28E + 前瞻PE 26/27/28E)构成'估值看板'并列展示。同比27/28各一个growth节点。所有算子皆纯数学。",
+  "operators": [
+    {
+      "id": "songfa.profit.fy2027",
+      "operator": "affine",
+      "inputs": ["songfa.consensus.fy2027e"],
+      "params": {"a": 0.0, "b": 1.0},
+      "output_metric": "归母净利润_2027E(券商一致预期)",
+      "unit": "亿元",
+      "panel": true,
+      "note": "27年无实际数,直接采用13家券商一致预期(三角124.57/152.40/190.58)。affine(a=0,b=1)=恒等映射,仅为把一致预期数据节点提升为可展示/可被PE与同比引用的算子节点。"
+    },
+    {
+      "id": "songfa.profit.fy2028",
+      "operator": "affine",
+      "inputs": ["songfa.consensus.fy2028e"],
+      "params": {"a": 0.0, "b": 1.0},
+      "output_metric": "归母净利润_2028E(券商一致预期)",
+      "unit": "亿元",
+      "panel": true,
+      "note": "28年无实际数,直接采用12家券商一致预期(三角164.08/210.26/270.33)。affine(a=0,b=1)=恒等映射。"
+    },
+    {
+      "id": "songfa.profit.fy2027.yoy",
+      "operator": "growth",
+      "inputs": ["songfa.profit.fy2027", "songfa.profit.fy2026"],
+      "output_metric": "归母净利润_2027E同比增速(相对2026E)",
+      "unit": "比率"
+    },
+    {
+      "id": "songfa.profit.fy2028.yoy",
+      "operator": "growth",
+      "inputs": ["songfa.profit.fy2028", "songfa.profit.fy2027"],
+      "output_metric": "归母净利润_2028E同比增速(相对2027E)",
+      "unit": "比率"
+    },
+    {
+      "id": "songfa.pe.2026",
+      "operator": "divide",
+      "inputs": ["songfa.market.cap", "songfa.profit.fy2026"],
+      "output_metric": "前瞻PE_2026E(总市值÷2026E归母)",
+      "unit": "倍",
+      "panel": true,
+      "note": "前瞻PE=当前总市值1987亿÷2026E归母净利分布。交叉核对:一致预期动态PE 2026E≈25.63。"
+    },
+    {
+      "id": "songfa.pe.2027",
+      "operator": "divide",
+      "inputs": ["songfa.market.cap", "songfa.profit.fy2027"],
+      "output_metric": "前瞻PE_2027E(总市值÷2027E归母)",
+      "unit": "倍",
+      "panel": true,
+      "note": "前瞻PE=当前总市值1987亿÷2027E归母净利分布。交叉核对:一致预期动态PE 2027E≈13.39。"
+    },
+    {
+      "id": "songfa.pe.2028",
+      "operator": "divide",
+      "inputs": ["songfa.market.cap", "songfa.profit.fy2028"],
+      "output_metric": "前瞻PE_2028E(总市值÷2028E归母)",
+      "unit": "倍",
+      "panel": true,
+      "note": "前瞻PE=当前总市值1987亿÷2028E归母净利分布。交叉核对:一致预期动态PE 2028E≈9.78。"
+    }
+  ]
+}

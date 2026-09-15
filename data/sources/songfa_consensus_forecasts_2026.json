@@ -1,0 +1,38 @@
+{
+  "source_id": "songfa_ths_consensus_2026",
+  "source_name": "松发股份 2026E/2027E/2028E 归母净利润 券商一致预期(同花顺F10)",
+  "publisher": "同花顺 F10 盈利预测(多家券商一致预期)",
+  "as_of": "2026-09-15",
+  "source_url": "https://basic.10jqka.com.cn/603268/worth.html",
+  "retrieved_at": "2026-09-15",
+  "note": "松发股份(恒力重工造船口径)券商一致预期。同花顺F10盈利预测页(as_of 2026-09-15)标注6个月内13家机构覆盖:2026E(13家)/2027E(13家)/2028E(12家)。以各年'最低/均值/最高'作三角分布low/mode/high如实承载分析师分歧(均值近似众数);evidence_type=analyst_estimate。逐家明细(同页):东吴71.84/124.57/164.08、广发81.83/160.16/201.46、浙商82.99/168.37/258.61、国联民生80.36/159.79/201.11、西部80.12/146.32/192.82、华源69.73/160.28/259.20、国盛77.22/129.63/178.52(2026/2027/2028E,亿元)。此源取代原单家东吴节点(东吴已含于本一致预期内)。",
+  "nodes": [
+    {
+      "id": "songfa.consensus.fy2026e",
+      "metric": "归母净利润_2026E_券商一致预期",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-09-15",
+      "distribution": {"type": "triangular", "low": 69.73, "mode": 80.31, "high": 93.51, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(as_of 2026-09-15,6个月内13家机构):2026E归母净利润 最低69.73/均值80.31/最高93.51亿元,对应EPS 6.84/8.02/9.18元。以最低/均值/最高作三角分布承载13家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/603268/worth.html 。"
+    },
+    {
+      "id": "songfa.consensus.fy2027e",
+      "metric": "归母净利润_2027E_券商一致预期",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-09-15",
+      "distribution": {"type": "triangular", "low": 124.57, "mode": 152.40, "high": 190.58, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(as_of 2026-09-15,6个月内13家机构):2027E归母净利润 最低124.57/均值152.40/最高190.58亿元,对应EPS 12.72/15.22/18.71元。以最低/均值/最高作三角分布承载13家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/603268/worth.html 。"
+    },
+    {
+      "id": "songfa.consensus.fy2028e",
+      "metric": "归母净利润_2028E_券商一致预期",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-09-15",
+      "distribution": {"type": "triangular", "low": 164.08, "mode": 210.26, "high": 270.33, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(as_of 2026-09-15,6个月内12家机构):2028E归母净利润 最低164.08/均值210.26/最高270.33亿元,对应EPS 16.90/20.94/26.54元。以最低/均值/最高作三角分布承载12家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/603268/worth.html 。"
+    }
+  ]
+}

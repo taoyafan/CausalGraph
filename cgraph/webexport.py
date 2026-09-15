@@ -124,6 +124,7 @@ def list_focusable(graph):
                 "group": key,
                 "group_label": GROUP_LABELS.get(key, key),
                 "is_headline": headline.get(c) == nid,
+                "panel": getattr(node, "panel", False),
             })
     items.sort(key=lambda x: (x["group_label"], not x["is_headline"], -anc[x["id"]], x["label"]))
     return items

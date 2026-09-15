@@ -15,6 +15,7 @@ OPERATOR_LABELS = {
 
 EVIDENCE_TYPE_LABELS = {
     "audited": "已审计",
+    "market_observed": "行情",
     "analyst_estimate": "分析师估计",
     "assumption": "假设",
 }

@@ -1,0 +1,20 @@
+{
+  "source_id": "songfa_market_2026",
+  "source_name": "松发股份(603268.SH) 行情快照——总市值",
+  "publisher": "东方财富 行情",
+  "as_of": "2026-09-15",
+  "source_url": "https://quote.eastmoney.com/sh603268.html",
+  "retrieved_at": "2026-09-15",
+  "note": "松发股份A股行情快照,用作前瞻PE的分子(总市值)。东方财富行情页2026-09-15 14:34:57:最新价195.08元、总股本10.19亿股(2026-07增发后口径)、总市值约1987亿元。市场观测硬事实(market_observed,C=1.0),前瞻PE的不确定性来自分母(各年归母净利分布)。同日同花顺F10另一时刻快照总市值约1992亿(盘中价差),此处取东方财富一源以守单一来源铁律。",
+  "nodes": [
+    {
+      "id": "songfa.market.cap",
+      "metric": "A股总市值_2026-09-15",
+      "unit": "亿元",
+      "evidence_type": "market_observed",
+      "as_of": "2026-09-15",
+      "distribution": {"type": "point", "value": 1987.0, "domain": [0, null]},
+      "quote": "东方财富行情页(2026-09-15 14:34:57):最新价195.08元、总股本10.19亿股、总市值约1987亿元、流通市值454.9亿元、动态PE 27.53。用作前瞻PE(总市值÷各年归母净利)的分子。来源:东方财富 https://quote.eastmoney.com/sh603268.html 。"
+    }
+  ]
+}

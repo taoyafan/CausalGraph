@@ -6,6 +6,7 @@ AI 只负责给每个数据节点标注 evidence_type，具体 C 值由本表查
 
 CONFIDENCE_TABLE = {
     "audited": 1.0,           # 审计报表 / 已发生事实
+    "market_observed": 1.0,   # 市场行情观测(收盘价/总市值等硬事实)
     "guidance": 0.8,          # 公司官方指引
     "analyst_estimate": 0.6,  # 卖方分析师测算
     "extrapolation": 0.45,    # 历史趋势外推
