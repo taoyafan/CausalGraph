@@ -129,7 +129,8 @@ def list_focusable(graph):
     return items
 
 
-def _build_node(graph, node_id):
+def _node_self(graph, node_id):
+    """单个节点的自身载荷(不含下游 children/inputs)。数据节点带出处/证据, 算子带算子信息。"""
     node = graph.nodes[node_id]
     stats = graph.stats.get(node_id, {})
     samples = graph.samples.get(node_id, [])
@@ -158,7 +159,6 @@ def _build_node(graph, node_id):
                 "publisher": src.get("publisher"),
                 "url": src.get("source_url"),
             },
-            "children": [],
         })
     else:
         common.update({
@@ -167,9 +167,36 @@ def _build_node(graph, node_id):
             "operator": node.operator,
             "operator_label": operator_label(node.operator),
             "alert": graph.alerts.get(node_id),
-            "children": [_build_node(graph, c) for c in node.inputs],
         })
     return common
+
+
+def _build_node(graph, node_id):
+    d = _node_self(graph, node_id)
+    node = graph.nodes[node_id]
+    d["children"] = [_build_node(graph, c) for c in node.inputs] if isinstance(node, OperatorNode) else []
+    return d
+
+
+def build_graph(graph):
+    """求值全部算子节点并把整张 DAG 导成扁平 map: {id: 节点载荷}。
+
+    每个节点只存一次(算子带 inputs 的 id 列表, 前端按需还原贡献树), 彻底消除把
+    DAG 摊成 N 棵嵌套树带来的序列化重复。engine 的 _eval 有缓存, 同一 graph 上
+    每节点只采样一次, 故各节点 stats/hist 唯一、与从哪个 focus 触发无关。
+    """
+    for nid, node in graph.nodes.items():
+        if isinstance(node, OperatorNode):
+            graph.evaluate(nid)
+    out = {}
+    for nid in graph.samples:  # 只导已求值(从某个算子可达)的节点
+        d = _node_self(graph, nid)
+        node = graph.nodes[nid]
+        if isinstance(node, OperatorNode):
+            d["inputs"] = list(node.inputs)
+        out[nid] = d
+    return out
+
 
 
 def build_focus(graph, focus_id):

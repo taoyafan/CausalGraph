@@ -232,12 +232,22 @@ function nodeView(n, depth) {
   return wrap;
 }
 
+// 从扁平 DAG map 还原以 id 为根的贡献树: 每次展开克隆节点并按 inputs 递归挂 children。
+// DAG 里被多父共享的上游会在不同路径下各展开一份(渲染需要), 但源数据只存一份。
+function buildTree(g, id) {
+  const flat = g[id];
+  if (!flat) return null;
+  const children = (flat.inputs || []).map(c => buildTree(g, c)).filter(Boolean);
+  return Object.assign({}, flat, { children });
+}
+
 async function loadFocus(node) {
   const main = document.getElementById("main");
   main.innerHTML = `<div class="loading">求值中…</div>`;
   try {
-    const tree = window.CG_EXPORT && window.CG_EXPORT.focus[node];
-    if (!tree) { main.innerHTML = `<div class="err">无此节点的导出数据: ${node}</div>`; return; }
+    const g = window.CG_EXPORT && window.CG_EXPORT.graph;
+    if (!g || !g[node]) { main.innerHTML = `<div class="err">无此节点的导出数据: ${node}</div>`; return; }
+    const tree = buildTree(g, node);
     main.innerHTML = "";
     main.appendChild(summaryCard(tree));
     const t = el("div", "sec-title"); t.textContent = "贡献分解（点卡片展开溯源）";

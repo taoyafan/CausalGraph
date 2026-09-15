@@ -115,17 +115,17 @@ def cmd_check(args):
 def cmd_export(args):
     """把全图求值结果导出为静态 JS(web/export.js)，前端直读、无需后端。"""
     import random
-    from .webexport import list_focusable, build_focus
+    from .webexport import list_focusable, build_graph
     random.seed(args.seed)
     graph = load_world(args.sources, args.operators, args.samples)
     nodes = list_focusable(graph)
-    focus = {n["id"]: build_focus(graph, n["id"]) for n in nodes}
+    gmap = build_graph(graph)  # 扁平 DAG: 每节点只存一次, 前端按 inputs 还原贡献树
     web_dir = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "web"))
     out = args.out or os.path.join(web_dir, "export.js")
-    payload = _json.dumps({"nodes": nodes, "focus": focus}, ensure_ascii=False)
+    payload = _json.dumps({"nodes": nodes, "graph": gmap}, ensure_ascii=False)
     with open(out, "w", encoding="utf-8") as f:
         f.write("window.CG_EXPORT = " + payload + ";\n")
-    print(f"已导出 {len(nodes)} 个节点 -> {out}")
+    print(f"已导出 {len(gmap)} 个节点(其中 {len(nodes)} 个可 focus) -> {out}")
     print("直接用浏览器打开 web/index.html 即可（无需后端）。")
 
 
