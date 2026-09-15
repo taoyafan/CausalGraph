@@ -1,0 +1,65 @@
+{
+  "subgraph": "capchem_valuation_multiyear",
+  "note": "新宙邦(300037.SZ)多年盈利 + 前瞻PE。27/28归母直接采用券商一致预期(capchem.consensus.fy2027e/2028e,三角分布),用affine(a=0,b=1)恒等映射提升为可展示/可被PE引用的算子节点(结构恒等常数,无主观性)。前瞻PE=总市值(capchem.market.cap,550亿,行情观测)÷各年归母净利,分母是分布故PE自动为分布。panel=true的3个PE节点(26/27/28E)构成'估值看板'。所有算子皆纯数学。",
+  "operators": [
+    {
+      "id": "capchem.profit.fy2027",
+      "operator": "affine",
+      "inputs": ["capchem.consensus.fy2027e"],
+      "params": {"a": 0.0, "b": 1.0},
+      "output_metric": "归母净利润_2027E(券商一致预期)",
+      "unit": "亿元",
+      "note": "27年直接采用22家券商一致预期(三角18.59/27.07/30.97)。affine(a=0,b=1)=恒等映射,仅为把一致预期数据节点提升为可展示/可被PE与同比引用的算子节点。"
+    },
+    {
+      "id": "capchem.profit.fy2028",
+      "operator": "affine",
+      "inputs": ["capchem.consensus.fy2028e"],
+      "params": {"a": 0.0, "b": 1.0},
+      "output_metric": "归母净利润_2028E(券商一致预期)",
+      "unit": "亿元",
+      "note": "28年直接采用22家券商一致预期(三角22.96/32.74/38.19)。affine(a=0,b=1)=恒等映射。"
+    },
+    {
+      "id": "capchem.profit.fy2027.yoy",
+      "operator": "growth",
+      "inputs": ["capchem.profit.fy2027", "capchem.profit.fy2026"],
+      "output_metric": "归母净利润_2027E同比增速(相对2026E)",
+      "unit": "比率"
+    },
+    {
+      "id": "capchem.profit.fy2028.yoy",
+      "operator": "growth",
+      "inputs": ["capchem.profit.fy2028", "capchem.profit.fy2027"],
+      "output_metric": "归母净利润_2028E同比增速(相对2027E)",
+      "unit": "比率"
+    },
+    {
+      "id": "capchem.pe.2026",
+      "operator": "divide",
+      "inputs": ["capchem.market.cap", "capchem.profit.fy2026"],
+      "output_metric": "前瞻PE_2026E(总市值÷2026E归母)",
+      "unit": "倍",
+      "panel": true,
+      "note": "前瞻PE=当前总市值550亿÷2026E归母净利分布(融合结论)。"
+    },
+    {
+      "id": "capchem.pe.2027",
+      "operator": "divide",
+      "inputs": ["capchem.market.cap", "capchem.profit.fy2027"],
+      "output_metric": "前瞻PE_2027E(总市值÷2027E归母)",
+      "unit": "倍",
+      "panel": true,
+      "note": "前瞻PE=当前总市值550亿÷2027E归母净利分布。"
+    },
+    {
+      "id": "capchem.pe.2028",
+      "operator": "divide",
+      "inputs": ["capchem.market.cap", "capchem.profit.fy2028"],
+      "output_metric": "前瞻PE_2028E(总市值÷2028E归母)",
+      "unit": "倍",
+      "panel": true,
+      "note": "前瞻PE=当前总市值550亿÷2028E归母净利分布。"
+    }
+  ]
+}

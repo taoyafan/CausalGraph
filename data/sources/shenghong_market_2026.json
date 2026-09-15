@@ -1,0 +1,20 @@
+{
+  "source_id": "shenghong_market_2026",
+  "source_name": "胜宏科技(300476.SZ) 行情快照——总市值",
+  "publisher": "东方财富 行情",
+  "as_of": "2026-09-15",
+  "source_url": "https://quote.eastmoney.com/sz300476.html",
+  "retrieved_at": "2026-09-15",
+  "note": "胜宏科技A股行情快照,用作前瞻PE的分子(总市值)。东方财富行情页2026-09-15 15:15:00:最新价226.06元、总市值约2222亿元。市场观测硬事实(market_observed,C=1.0),前瞻PE的不确定性来自分母(各年归母净利分布)。",
+  "nodes": [
+    {
+      "id": "shenghong.market.cap",
+      "metric": "A股总市值_2026-09-15",
+      "unit": "亿元",
+      "evidence_type": "market_observed",
+      "as_of": "2026-09-15",
+      "distribution": {"type": "point", "value": 2222.0, "domain": [0, null]},
+      "quote": "东方财富行情页(2026-09-15 15:15:00):最新价226.06元(昨收225.00,+0.47%)、总市值约2222亿元。用作前瞻PE(总市值÷各年归母净利)的分子。来源:东方财富 https://quote.eastmoney.com/sz300476.html 。"
+    }
+  ]
+}

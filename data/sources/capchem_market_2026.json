@@ -1,0 +1,20 @@
+{
+  "source_id": "capchem_market_2026",
+  "source_name": "新宙邦(300037.SZ) 行情快照——总市值",
+  "publisher": "东方财富 行情",
+  "as_of": "2026-09-15",
+  "source_url": "https://quote.eastmoney.com/sz300037.html",
+  "retrieved_at": "2026-09-15",
+  "note": "新宙邦A股行情快照,用作前瞻PE的分子(总市值)。东方财富行情页2026-09-15 15:15:00:最新价72.95元、总市值约550亿元。市场观测硬事实(market_observed,C=1.0),前瞻PE的不确定性来自分母(各年归母净利分布)。",
+  "nodes": [
+    {
+      "id": "capchem.market.cap",
+      "metric": "A股总市值_2026-09-15",
+      "unit": "亿元",
+      "evidence_type": "market_observed",
+      "as_of": "2026-09-15",
+      "distribution": {"type": "point", "value": 550.0, "domain": [0, null]},
+      "quote": "东方财富行情页(2026-09-15 15:15:00):最新价72.95元(昨收73.02,-0.10%)、总市值约550亿元。用作前瞻PE(总市值÷各年归母净利)的分子。来源:东方财富 https://quote.eastmoney.com/sz300037.html 。"
+    }
+  ]
+}
