@@ -48,6 +48,7 @@ class Graph:
         self.samples = {}   # id -> List[float]
         self.stats = {}     # id -> percentiles dict
         self.alerts = {}    # id -> alert message
+        self.centrals = {}  # id -> 锚点中心值(见 distributions.central)，无解析锚点则不写入
 
     def _eval(self, node_id, stack):
         if node_id in self.samples:
@@ -66,6 +67,7 @@ class Graph:
             d = override["distribution"] if override else node.distribution
             c = confidence_for(node.evidence_type)
             xs = dist.sample(d, c, self.n_samples)
+            self.centrals[node_id] = dist.central(d)
         elif isinstance(node, OperatorNode):
             # 情景屏蔽：从输入中过滤被屏蔽节点（断边），按剩余输入计算
             inputs = [i for i in node.inputs if i not in self.mutes]
@@ -78,12 +80,27 @@ class Graph:
             xs, meta = fn(vals, node.params)
             if meta.get("alert"):
                 self.alerts[node_id] = meta["alert"]
+            central = self._propagate_central(node, inputs)
+            if central is not None:
+                self.centrals[node_id] = central
         else:
             raise TypeError(f"未知节点类型: {node}")
 
         self.samples[node_id] = xs
         self.stats[node_id] = percentiles(xs)
         return xs
+
+    def _propagate_central(self, node, input_ids):
+        """仅 affine(单输入) 恒等/线性传递能解析传播锚点；其余算子(sum/divide/mixture...)
+        锚点无解析定义，headline 退化用 P50——这是"仅纯数学线性传递"的算子边界，不是遗漏。"""
+        if node.operator != "affine" or len(input_ids) != 1:
+            return None
+        c = self.centrals.get(input_ids[0])
+        if c is None:
+            return None
+        a = node.params.get("a", 0.0)
+        b = node.params.get("b", 1.0)
+        return a + b * c
 
     def evaluate(self, focus_id):
         self._eval(focus_id, [])

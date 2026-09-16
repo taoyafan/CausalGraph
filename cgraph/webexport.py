@@ -9,7 +9,7 @@ from .confidence import confidence_for
 from .operators import formula_of
 from .model import DataNode, OperatorNode
 from .display import (
-    data_value, describe_distribution, display_stats,
+    data_value, describe_distribution, display_number, display_stats,
     display_unit, evidence_type_label, operator_label,
 )
 
@@ -135,10 +135,13 @@ def _node_self(graph, node_id):
     node = graph.nodes[node_id]
     stats = graph.stats.get(node_id, {})
     samples = graph.samples.get(node_id, [])
+    central = graph.centrals.get(node_id)
     common = {
         "id": node_id,
         "kind": node.kind,
         "stats": display_stats(node, stats, digits=4),
+        # 锚点值(mode/mu/value/中点)：未展宽、未采样，不受置信度影响；无解析锚点(如 sum/divide/mixture)则为 None，前端回退用 P50。
+        "central": (display_number(node, central) if central is not None else None),
         "hist": _histogram(samples, scale=node.display_scale) if samples else None,
         "display_unit": display_unit(node),
         "display_scale": node.display_scale,

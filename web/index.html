@@ -169,9 +169,11 @@ function sparkAxis(hist, unit) {
 function summaryCard(root) {
   const c = el("div", "summary");
   const unit = root.display_unit || root.unit || "";
+  // 有锚点值(mode/mu/中点)则用它当 headline——不受置信度展宽/抽样影响，天然与披露值一致；无锚点(sum/divide/mixture 等)才退化用 P50。
+  const headline = (root.central ?? root.stats.p50);
   c.innerHTML = `<div class="lbl">${root.label}</div>
-    <div class="p50">${fmt(root.stats.p50)}<span>${unit}</span></div>
-    <div class="range">区间 P10–P90: ${fmt(root.stats.p10)} ~ ${fmt(root.stats.p90)}${unit} · 均值 ${fmt(root.stats.mean)}${unit}</div>`;
+    <div class="p50">${fmt(headline)}<span>${unit}</span></div>
+    <div class="range">区间 P10–P90: ${fmt(root.stats.p10)} ~ ${fmt(root.stats.p90)}${unit} · P50 ${fmt(root.stats.p50)}${unit} · 均值 ${fmt(root.stats.mean)}${unit}</div>`;
   c.appendChild(spark(root.hist, unit));
   c.appendChild(sparkAxis(root.hist, unit));
   return c;
@@ -203,7 +205,8 @@ function nodeView(n, depth) {
 
   const stat = el("div", "stat");
   const unit = n.display_unit || n.unit || "";
-  stat.innerHTML = `<b>${fmt(n.stats.p50)}${unit}</b><small>${fmt(n.stats.p10)}~${fmt(n.stats.p90)}${unit}</small>`;
+  const headline = (n.central ?? n.stats.p50);
+  stat.innerHTML = `<b>${fmt(headline)}${unit}</b><small>${fmt(n.stats.p10)}~${fmt(n.stats.p90)}${unit}</small>`;
 
   row.append(bar, caret, title, stat);
   // 置顶: 把该节点提为顶部主视图(等价于在下拉框选它), 免去从长列表里找。根节点(depth 0)本身已在顶部, 不加。
@@ -282,10 +285,11 @@ function renderPanel(group) {
   members.forEach(m => {
     const node = g[m.id]; if (!node || !node.stats) return;
     const u = node.display_unit || "";
+    const headline = (node.central ?? node.stats.p50);
     const seg = el("div", "pseg");
     seg.dataset.id = m.id;
     seg.innerHTML = `<div class="pl">${m.label.split("(")[0].replace(/_/g, " ")}</div>
-      <div class="pv">${fmt(node.stats.p50)}<span>${u}</span></div>`;
+      <div class="pv">${fmt(headline)}<span>${u}</span></div>`;
     seg.addEventListener("click", () => {
       const np = document.getElementById("nodePicker"); np.value = m.id; loadFocus(m.id);
     });
