@@ -14,7 +14,7 @@
       "display_unit": "倍",
       "display_scale": 1,
       "evidence_type": "assumption",
-      "distribution": {"type": "normal", "mu": 0.99, "sigma": 0.004082, "domain": [0, 1]},
+      "distribution": {"type": "split_normal", "mu": 0.99, "sigma_low": 0.005, "sigma_high": 0.005, "domain": [0, 1]},
       "quote": "消费需求的负向论点：IDC 预测 2026 年全球智能手机出货量下降 13.9%。来源：IDC 页面，检索于 2026-09-03。该系数区间由 AI 提出，并已获本次对话中的协作者确认。"
     }
   ]

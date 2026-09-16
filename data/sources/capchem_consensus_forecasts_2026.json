@@ -5,7 +5,7 @@
   "as_of": "2026-09-15",
   "source_url": "https://basic.10jqka.com.cn/300037/worth.html",
   "retrieved_at": "2026-09-15",
-  "note": "新宙邦券商一致预期(同花顺F10盈利预测页,as_of 2026-09-15,6个月内覆盖)。以各年均值作正态分布中心μ、σ由最低~最高分歧幅度定如实承载分析师分歧;evidence_type=analyst_estimate。仅建27/28两年(2026全年已由自下而上+券商融合节点 capchem.profit.fy2026 承载)。",
+  "note": "新宙邦券商一致预期(同花顺F10盈利预测页,as_of 2026-09-15,6个月内覆盖)。以各年均值作非对称正态(split_normal)中心μ(中值=众数=μ、展宽不漂),下/上侧σ由最低/最高分歧幅度分别定,如实承载分析师分歧;evidence_type=analyst_estimate。仅建27/28两年(2026全年已由自下而上+券商融合节点 capchem.profit.fy2026 承载)。",
   "nodes": [
     {
       "id": "capchem.consensus.fy2027e",
@@ -13,8 +13,8 @@
       "unit": "亿元",
       "evidence_type": "analyst_estimate",
       "as_of": "2026-09-15",
-      "distribution": {"type": "normal", "mu": 27.07, "sigma": 2.584, "domain": [0, null]},
-      "quote": "同花顺F10盈利预测(as_of 2026-09-15,6个月内22家机构):2027E归母净利润 最低18.59/均值27.07/最高30.97亿元。以均值作正态分布中心μ、σ由最低~最高分歧幅度定,承载22家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/300037/worth.html 。"
+      "distribution": {"type": "split_normal", "mu": 27.07, "sigma_low": 4.24, "sigma_high": 1.95, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(as_of 2026-09-15,6个月内22家机构):2027E归母净利润 最低18.59/均值27.07/最高30.97亿元。以均值作非对称正态中心μ(中值/众数=μ),下/上侧σ由最低/最高分歧幅度分别定,承载22家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/300037/worth.html 。"
     },
     {
       "id": "capchem.consensus.fy2028e",
@@ -22,8 +22,8 @@
       "unit": "亿元",
       "evidence_type": "analyst_estimate",
       "as_of": "2026-09-15",
-      "distribution": {"type": "normal", "mu": 32.74, "sigma": 3.15, "domain": [0, null]},
-      "quote": "同花顺F10盈利预测(as_of 2026-09-15,6个月内22家机构):2028E归母净利润 最低22.96/均值32.74/最高38.19亿元。以均值作正态分布中心μ、σ由最低~最高分歧幅度定,承载22家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/300037/worth.html 。"
+      "distribution": {"type": "split_normal", "mu": 32.74, "sigma_low": 4.89, "sigma_high": 2.725, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(as_of 2026-09-15,6个月内22家机构):2028E归母净利润 最低22.96/均值32.74/最高38.19亿元。以均值作非对称正态中心μ(中值/众数=μ),下/上侧σ由最低/最高分歧幅度分别定,承载22家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/300037/worth.html 。"
     }
   ]
 }

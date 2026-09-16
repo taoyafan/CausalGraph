@@ -57,7 +57,7 @@
       "metric": "固定资产周转率_前瞻调整系数_2026假设",
       "unit": "比率",
       "evidence_type": "assumption",
-      "distribution": {"type": "normal", "mu": 0.92, "sigma": 0.04515, "domain": [0, null]},
+      "distribution": {"type": "split_normal", "mu": 0.92, "sigma_low": 0.045, "sigma_high": 0.065, "domain": [0, null]},
       "quote": "假设:2026H2固定资产周转率相对历史校准基准(图内 shenghong.fa_turnover.calibrated,由2025H2与2026H1两期半年度周转率mixture算出)的调整系数。中枢0.92(<1:近两期营收/固定资产周转率持续下行,因资本开支前置、产能领先营收投放;JPM亦提示部分PCB项目量产略迟→利用率承压,H2或延续);下探0.83(利用率进一步走低);上探1.05(Rubin大规模放量填满新产能、周转回升)。本法为供给侧独立视角,因产能前置且未计入H2在建工程进一步转固,估计偏保守、可视为偏下限。"
     }
   ]

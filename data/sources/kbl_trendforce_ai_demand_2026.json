@@ -14,7 +14,7 @@
       "display_unit": "倍",
       "display_scale": 1,
       "evidence_type": "assumption",
-      "distribution": {"type": "normal", "mu": 1.03, "sigma": 0.01225, "domain": [1, null]},
+      "distribution": {"type": "split_normal", "mu": 1.03, "sigma_low": 0.015, "sigma_high": 0.015, "domain": [1, null]},
       "quote": "AI 需求的正向论点：TrendForce 预测 2026 年 AI 服务器出货量增长超过 28%。来源：TrendForce，2026-01-20。该系数区间由 AI 提出，并已获本次对话中的协作者确认。"
     }
   ]

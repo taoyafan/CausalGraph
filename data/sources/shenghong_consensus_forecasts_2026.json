@@ -5,7 +5,7 @@
   "as_of": "2026-09-15",
   "source_url": "https://basic.10jqka.com.cn/300476/worth.html",
   "retrieved_at": "2026-09-15",
-  "note": "胜宏科技券商一致预期(同花顺F10盈利预测页,as_of 2026-09-15,6个月内覆盖)。以各年均值作正态分布中心μ、σ由最低~最高分歧幅度定如实承载分析师分歧;evidence_type=analyst_estimate。仅建27/28两年(2026全年已由独立法+券商融合节点 shenghong.profit.fy2026 承载)。",
+  "note": "胜宏科技券商一致预期(同花顺F10盈利预测页,as_of 2026-09-15,6个月内覆盖)。以各年均值作非对称正态(split_normal)中心μ(中值=众数=μ、展宽不漂),下/上侧σ由最低/最高分歧幅度分别定,如实承载分析师分歧;evidence_type=analyst_estimate。仅建27/28两年(2026全年已由独立法+券商融合节点 shenghong.profit.fy2026 承载)。",
   "nodes": [
     {
       "id": "shenghong.consensus.fy2027e",
@@ -13,8 +13,8 @@
       "unit": "亿元",
       "evidence_type": "analyst_estimate",
       "as_of": "2026-09-15",
-      "distribution": {"type": "normal", "mu": 144.65, "sigma": 15.43, "domain": [0, null]},
-      "quote": "同花顺F10盈利预测(as_of 2026-09-15,6个月内19家机构):2027E归母净利润 最低99.04/均值144.65/最高174.07亿元。以均值作正态分布中心μ、σ由最低~最高分歧幅度定,承载19家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/300476/worth.html 。"
+      "distribution": {"type": "split_normal", "mu": 144.65, "sigma_low": 22.81, "sigma_high": 14.71, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(as_of 2026-09-15,6个月内19家机构):2027E归母净利润 最低99.04/均值144.65/最高174.07亿元。以均值作非对称正态中心μ(中值/众数=μ),下/上侧σ由最低/最高分歧幅度分别定,承载19家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/300476/worth.html 。"
     },
     {
       "id": "shenghong.consensus.fy2028e",
@@ -22,8 +22,8 @@
       "unit": "亿元",
       "evidence_type": "analyst_estimate",
       "as_of": "2026-09-15",
-      "distribution": {"type": "normal", "mu": 219.42, "sigma": 23.41, "domain": [0, null]},
-      "quote": "同花顺F10盈利预测(as_of 2026-09-15,6个月内18家机构):2028E归母净利润 最低144.49/均值219.42/最高257.16亿元。以均值作正态分布中心μ、σ由最低~最高分歧幅度定,承载18家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/300476/worth.html 。"
+      "distribution": {"type": "split_normal", "mu": 219.42, "sigma_low": 37.47, "sigma_high": 18.87, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(as_of 2026-09-15,6个月内18家机构):2028E归母净利润 最低144.49/均值219.42/最高257.16亿元。以均值作非对称正态中心μ(中值/众数=μ),下/上侧σ由最低/最高分歧幅度分别定,承载18家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/300476/worth.html 。"
     }
   ]
 }

@@ -25,6 +25,7 @@ _DISTRIBUTION_LABELS = {
     "uniform": "均匀",
     "triangular": "三角",
     "normal": "正态",
+    "split_normal": "非对称正态",
 }
 
 
@@ -71,6 +72,8 @@ def describe_distribution(node, dist):
         return f"{distribution_label(t)}({number('low')}/{number('mode')}/{number('high')})"
     if t == "normal":
         return f"{distribution_label(t)}({number('mu')},{number('sigma')})"
+    if t == "split_normal":
+        return f"{distribution_label(t)}({number('mu')},-{number('sigma_low')}/+{number('sigma_high')})"
     return distribution_label(t)
 
 
@@ -87,4 +90,6 @@ def data_value(node, dist=None):
         return f"{distribution_label(t)}({number('low')}/{number('mode')}/{number('high')})"
     if t == "normal":
         return f"{distribution_label(t)}({number('mu')}±{number('sigma')})"
+    if t == "split_normal":
+        return f"{distribution_label(t)}({number('mu')}-{number('sigma_low')}/+{number('sigma_high')})"
     return describe_distribution(node, dist)

@@ -14,7 +14,7 @@
       "display_unit": "倍",
       "display_scale": 1,
       "evidence_type": "assumption",
-      "distribution": {"type": "normal", "mu": 1.17, "sigma": 0.02461, "domain": [1, null]},
+      "distribution": {"type": "split_normal", "mu": 1.17, "sigma_low": 0.035, "sigma_high": 0.025, "domain": [1, null]},
       "quote": "成本上升论点：TrendForce 报道 E-glass 玻璃布涨价 30%，FLD2 涨价 15%。来源：TrendForce 新闻，2026-06-30。该系数区间由 AI 提出，并已获本次对话中的协作者确认。"
     }
   ]
