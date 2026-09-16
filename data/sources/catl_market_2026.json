@@ -1,0 +1,20 @@
+{
+  "source_id": "catl_market_2026",
+  "source_name": "宁德时代(300750.SZ) 行情快照——总市值",
+  "publisher": "东方财富 行情",
+  "as_of": "2026-09-16",
+  "source_url": "https://quote.eastmoney.com/sz300750.html",
+  "retrieved_at": "2026-09-16",
+  "note": "宁德时代A股行情快照,用作前瞻PE的分子(总市值)。东方财富行情页2026-09-16 11:30(盘中,非收盘价):最新价304.31元、总股本46.27亿股、总市值约14080亿元(1.408万亿)。市场观测硬事实(market_observed,C=1.0),前瞻PE的不确定性来自分母(各年归母净利分布)。口径提示:此为盘中价,收盘后数值会有小幅变动。",
+  "nodes": [
+    {
+      "id": "catl.market.cap",
+      "metric": "A股总市值_2026-09-16",
+      "unit": "亿元",
+      "evidence_type": "market_observed",
+      "as_of": "2026-09-16",
+      "distribution": {"type": "point", "value": 14080.0, "domain": [0, null]},
+      "quote": "东方财富行情页(2026-09-16 11:30,盘中非收盘):最新价304.31元(昨收316.36,-3.81%)、总股本46.27亿股、总市值约14080亿元。用作前瞻PE(总市值÷各年归母净利)的分子。来源:东方财富 https://quote.eastmoney.com/sz300750.html 。"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "source_id": "catl_ths_consensus_2026",
+  "source_name": "宁德时代 2026E/2027E/2028E 归母净利润 券商一致预期(同花顺F10)",
+  "publisher": "同花顺 F10 盈利预测(多家券商一致预期)",
+  "as_of": "2026-09-16",
+  "source_url": "https://basic.10jqka.com.cn/300750/worth.html",
+  "retrieved_at": "2026-09-16",
+  "note": "宁德时代券商一致预期(同花顺F10盈利预测页,as_of 2026-09-16,6个月内覆盖)。以各年'最低/均值/最高'作三角分布low/mode/high如实承载分析师分歧(均值近似众数);evidence_type=analyst_estimate。三年均直接采用一致预期(宁德时代未建自下而上模型)。逐家明细(同页业绩预测详表,2026/2027/2028E亿元):兴业937.75/1151.03/1370.56、国海921.53/1187.03/1427.93、天风959.20/1185.79/1403.90、国信963.51/1200.89/1408.87、平安979.91/1218.89/1463.99、山西984.67/1225.64/1490.27等。",
+  "nodes": [
+    {
+      "id": "catl.consensus.fy2026e",
+      "metric": "归母净利润_2026E_券商一致预期",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-09-16",
+      "distribution": {"type": "triangular", "low": 909.03, "mode": 959.06, "high": 1024.25, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(as_of 2026-09-16,6个月内38家机构):2026E归母净利润 最低909.03/均值959.06/最高1024.25亿元。以最低/均值/最高作三角分布承载38家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/300750/worth.html 。"
+    },
+    {
+      "id": "catl.consensus.fy2027e",
+      "metric": "归母净利润_2027E_券商一致预期",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-09-16",
+      "distribution": {"type": "triangular", "low": 1080.82, "mode": 1194.78, "high": 1387.32, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(as_of 2026-09-16,6个月内38家机构):2027E归母净利润 最低1080.82/均值1194.78/最高1387.32亿元。以最低/均值/最高作三角分布承载38家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/300750/worth.html 。"
+    },
+    {
+      "id": "catl.consensus.fy2028e",
+      "metric": "归母净利润_2028E_券商一致预期",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-09-16",
+      "distribution": {"type": "triangular", "low": 1296.92, "mode": 1433.19, "high": 1678.17, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(as_of 2026-09-16,6个月内37家机构):2028E归母净利润 最低1296.92/均值1433.19/最高1678.17亿元。以最低/均值/最高作三角分布承载37家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/300750/worth.html 。"
+    }
+  ]
+}
