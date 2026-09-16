@@ -75,7 +75,7 @@
       "metric": "前瞻存货成本比率_调整系数_2026假设",
       "unit": "比率",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 0.92, "mode": 1.00, "high": 1.14, "domain": [0, null]},
+      "distribution": {"type": "normal", "mu": 1.0, "sigma": 0.04546, "domain": [0, null]},
       "quote": "假设:前瞻比率相对历史校准基准(图内 shenghong.inv_cogs_ratio.calibrated,由两次半年度审计数据算出)的调整系数。中枢1.0=沿用历史;上探1.14(Rubin预防性超额囤货→比率升→隐含H2营业成本降→利润偏低,为主要下行风险);下探0.92(爬坡期存货周转更快→比率降→利润偏高)。带宽反映样本仅2个半年+2026为爬坡年的不确定。"
     },
     {
@@ -83,7 +83,7 @@
       "metric": "毛利率_2026H2_假设",
       "unit": "比率",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 0.32, "mode": 0.335, "high": 0.35, "domain": [0, 1]},
+      "distribution": {"type": "normal", "mu": 0.335, "sigma": 0.006124, "domain": [0, 1]},
       "quote": "假设:2026H2毛利率。锚:2026H1毛利率33.22%(audited,同比-3.00pct,因员工上半年+30%培训储备及新厂折旧拖累)。管理层指引:营收上台阶后毛利率有望向上。故 mode=33.5%(略高于H1),下探32%(压力延续),上探35%(规模效应显现)。用于将H2营业成本反算为H2营收。"
     },
     {
@@ -91,7 +91,7 @@
       "metric": "H2归母净利率_环比调整系数_2026假设",
       "unit": "比率",
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 0.96, "mode": 1.02, "high": 1.08, "domain": [0, null]},
+      "distribution": {"type": "normal", "mu": 1.02, "sigma": 0.02449, "domain": [0, null]},
       "quote": "假设:2026H2归母净利率相对H1实际净利率(图内 shenghong.net_margin.h1_2026,由归母÷营收算出)的环比调整系数。依据:管理层调研纪要指引毛利率向上+费用率随营收规模摊薄→H2净利率略高于H1。中枢1.02、带宽0.96–1.08。"
     }
   ]

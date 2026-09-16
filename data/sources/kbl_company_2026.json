@@ -104,7 +104,7 @@
       "display_unit": "倍",
       "display_scale": 1,
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 1.00, "mode": 1.04, "high": 1.06, "domain": [1, null]},
+      "distribution": {"type": "normal", "mu": 1.04, "sigma": 0.01247, "domain": [1, null]},
       "quote": "供给支撑的正向论点：公司披露生产接近满负荷，上半年月均出货量超过 1,000 万张；韶关 7 万吨玻璃纱产能于 6 月底投产，9,500 万米玻璃布产能预计第三季度全面投产。来源：建滔积层板 2026 年中期公告，发布于 2026-08-24。该系数区间由 AI 提出，并已获本次对话中的协作者确认；覆铜板（CCL）及铜箔的大规模扩产自 2027 年开始，因此 2026 年销量假设保持克制。"
     },
     {
@@ -114,7 +114,7 @@
       "display_unit": "倍",
       "display_scale": 1,
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 1.08, "mode": 1.18, "high": 1.30, "domain": [1, null]},
+      "distribution": {"type": "normal", "mu": 1.18, "sigma": 0.04497, "domain": [1, null]},
       "quote": "提价的正向论点：公司披露上半年多次提价、第二季度提价加速，并称下半年价格继续飙升，但未披露平均售价或涨幅百分比。来源：建滔积层板 2026 年中期公告，发布于 2026-08-24。该系数区间由 AI 提出，并已获本次对话中的协作者确认。7 月利润约 11 亿港元，但会计口径不明，仅作背景信息，绝不作为公式输入。"
     },
     {
@@ -124,7 +124,7 @@
       "display_unit": "倍",
       "display_scale": 1,
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 0.96, "mode": 0.97, "high": 1.00, "domain": [0, 1]},
+      "distribution": {"type": "normal", "mu": 0.97, "sigma": 0.008498, "domain": [0, 1]},
       "quote": "成本缓释论点：公司披露，在同行玻璃纤维布短缺期间，垂直整合使其维持接近满负荷生产和交付。来源：建滔积层板 2026 年中期公告，发布于 2026-08-24。该系数区间由 AI 提出，并已获本次对话中的协作者确认。"
     },
     {
@@ -134,7 +134,7 @@
       "display_unit": "倍",
       "display_scale": 1,
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 0.95, "mode": 1.00, "high": 1.05, "domain": [0.95, 1.05]},
+      "distribution": {"type": "normal", "mu": 1.0, "sigma": 0.02041, "domain": [0.95, 1.05]},
       "quote": "该窄幅调整系数由 AI 提出，并由协作者于 2026-09-15 确认，用于估计影响较小的会计项目，不是公司指引；实际上半年毛利转税前经营利润转换基准由图内算子计算，不在本引用文字中计算。"
     },
     {
@@ -144,7 +144,7 @@
       "display_unit": "倍",
       "display_scale": 1,
       "evidence_type": "assumption",
-      "distribution": {"type": "triangular", "low": 1.00, "mode": 1.20, "high": 1.50, "domain": [1, null]},
+      "distribution": {"type": "normal", "mu": 1.2, "sigma": 0.1027, "domain": [1, null]},
       "quote": "融资成本上升论点：公司披露，2026 年 6 月 30 日的净负债率约为 30%，而 2025 年 12 月 31 日约为 16%。来源：建滔积层板 2026 年中期公告，发布于 2026-08-24。该系数区间由 AI 提出，并已获本次对话中的协作者确认。"
     }
   ]

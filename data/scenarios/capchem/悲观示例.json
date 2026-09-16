@@ -3,11 +3,11 @@
   "created_by": "user",
   "overrides": {
     "seg.battery.volume_growth_h2_nonelec_ceiling": {
-      "distribution": {"type": "triangular", "low": -0.15, "mode": -0.05, "high": 0.03},
+      "distribution": {"type": "normal", "mu": -0.05, "sigma": 0.03682},
       "reason": "悲观：存量需求走弱/渠道去库，环比转负"
     },
     "seg.battery.volume_growth_h2_nonelec_newline": {
-      "distribution": {"type": "triangular", "low": -0.10, "mode": 0.0, "high": 0.06},
+      "distribution": {"type": "normal", "mu": 0.0, "sigma": 0.033},
       "reason": "悲观：VC/FEC 新线投产爬坡放缓、增量有限"
     }
   },

@@ -1,8 +1,12 @@
 """概率分布采样 + 置信度展宽。
 
-支持 4 种固定分布：point / uniform / triangular / normal（README §2.2）。
-分布用 dict 表示，例如 {"type": "triangular", "low": 3, "mode": 4.5, "high": 6.5}。
+支持 3 种固定分布：point / uniform / normal（README §2.2）。
+分布用 dict 表示，例如 {"type": "normal", "mu": 4.5, "sigma": 0.7}。
 可选字段 "domain": [lo, hi]（任一端可为 null）对采样结果做物理域截断（README §2.3）。
+
+三角分布（triangular）已禁用：非对称三角分布的均值/中值会在展宽时偏离众数，
+导致对外展示的代表值与信息来源中心值不一致。改用 normal（均值=中值=众数=μ，
+展宽不变）以保证展示中值稳定等于来源中心值。
 
 展宽规则（confidence-model.md §2）：置信度 C∈(0,1]，C 越低分布越宽。
 """
@@ -31,8 +35,10 @@ def sample(dist, c, n):
         lo, hi = _widen_bounds(dist["low"], mid, dist["high"], c)
         xs = [random.uniform(lo, hi) for _ in range(n)]
     elif t == "triangular":
-        lo, hi = _widen_bounds(dist["low"], dist["mode"], dist["high"], c)
-        xs = [random.triangular(lo, hi, dist["mode"]) for _ in range(n)]
+        raise ValueError(
+            "三角分布(triangular)已禁用：请改用 normal(mu=众数, sigma=三角标准差)，"
+            "以保证展示均值/中值=来源中心值。"
+        )
     elif t == "normal":
         sigma = dist["sigma"] / c
         xs = [random.normalvariate(dist["mu"], sigma) for _ in range(n)]
@@ -56,8 +62,6 @@ def describe(dist):
         return f"Point({dist['value']})"
     if t == "uniform":
         return f"Uniform({dist['low']},{dist['high']})"
-    if t == "triangular":
-        return f"Tri({dist['low']}/{dist['mode']}/{dist['high']})"
     if t == "normal":
         return f"Normal({dist['mu']},{dist['sigma']})"
     return t
