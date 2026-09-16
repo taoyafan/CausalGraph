@@ -49,24 +49,6 @@ def sample(dist, c, n):
     return xs
 
 
-def central(dist):
-    """分布的作者定义中心值(mode/mu/value/中点)——未展宽、未采样，与置信度 C 无关。
-
-    用于 headline 展示: 直接来自披露/假设数据本身的锚点值，不受置信度展宽或
-    蒙特卡洛抽样影响，因此低置信度只会让 P10-P90 区间变宽，不会改这个数字。
-    """
-    t = dist["type"]
-    if t == "point":
-        return dist["value"]
-    if t == "uniform":
-        return (dist["low"] + dist["high"]) / 2
-    if t == "triangular":
-        return dist["mode"]
-    if t == "normal":
-        return dist["mu"]
-    raise ValueError(f"未知分布类型: {t}")
-
-
 def describe(dist):
     """分布的紧凑文字表示，用于字符树渲染。"""
     t = dist["type"]

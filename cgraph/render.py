@@ -27,15 +27,9 @@ def _fmt_stats(node, s):
 def _header(graph, focus_id):
     s = graph.stats[focus_id]
     node = graph.nodes[focus_id]
-    central = graph.centrals.get(focus_id)
-    if central is not None:
-        anchor = display_number(node, central)
-        anchor_s = f"(锚点值={anchor:.2f}，不受置信度展宽影响)"
-    else:
-        mean = display_number(node, s["mean"])
-        anchor_s = f"(mean={mean:.2f})"
+    mean = display_number(node, s["mean"])
     print(f"FOCUS = {focus_id}  ->  {_fmt_stats(node, s)}  "
-          f"{anchor_s} {display_unit(node)}")
+          f"(mean={mean:.2f}) {display_unit(node)}")
 
 
 # ---------------------------------------------------------------- 子树工具
