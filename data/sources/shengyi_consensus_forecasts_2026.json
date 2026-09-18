@@ -1,0 +1,38 @@
+{
+  "source_id": "shengyi_ths_consensus_2026",
+  "source_name": "生益科技 2026E/2027E/2028E 归母净利润 券商一致预期(同花顺F10)",
+  "publisher": "同花顺 F10 盈利预测(多家券商一致预期)",
+  "as_of": "2026-09-18",
+  "source_url": "https://basic.10jqka.com.cn/600183/worth.html",
+  "retrieved_at": "2026-09-18",
+  "note": "生益科技券商一致预期(同花顺F10盈利预测页,as_of 2026-09-18)。2026H1归母净利32.87亿同比+130.42%,CCL/PCB在AI客户放量好于预期(华泰证券2026-09-07上修预测)。以各年均值作非对称正态(split_normal)中心μ(中值=众数=μ、展宽不漂),下/上侧σ由最低/最高分歧幅度分别定,如实承载分析师分歧;evidence_type=analyst_estimate。三年均直接采用一致预期(未建自下而上模型)。注:2027/2028年区间极宽——华创证券(熊翊宇,2026-08-24)预测170.34/229.63亿显著高于同业(多在100-160/107-180区间),属明显偏高异常值,已通过上侧σ如实承载该向上分歧。逐家明细(同页,2026/2027/2028E亿元):华泰79.47/121.99/179.65、银河70.04/101.88/127.94、华安60.14/82.68/106.72、东莞71.48/105.54/153.89、华创85.01/170.34/229.63、招银72.23/115.39/159.20等。",
+  "nodes": [
+    {
+      "id": "shengyi.consensus.fy2026e",
+      "metric": "归母净利润_2026E_券商一致预期",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-09-18",
+      "distribution": {"type": "split_normal", "mu": 65.80, "sigma_low": 15.05, "sigma_high": 9.605, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(as_of 2026-09-18,6个月内19家机构):2026E归母净利润 最低35.71/均值65.80/最高85.01亿元。以均值作非对称正态中心μ(中值/众数=μ),下/上侧σ由最低/最高分歧幅度分别定,承载19家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/600183/worth.html 。"
+    },
+    {
+      "id": "shengyi.consensus.fy2027e",
+      "metric": "归母净利润_2027E_券商一致预期",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-09-18",
+      "distribution": {"type": "split_normal", "mu": 100.11, "sigma_low": 26.01, "sigma_high": 35.12, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(as_of 2026-09-18,6个月内19家机构):2027E归母净利润 最低48.10/均值100.11/最高170.34亿元(区间极宽,华创偏高)。以均值作非对称正态中心μ(中值/众数=μ),下/上侧σ由最低/最高分歧幅度分别定,承载19家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/600183/worth.html 。"
+    },
+    {
+      "id": "shengyi.consensus.fy2028e",
+      "metric": "归母净利润_2028E_券商一致预期",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-09-18",
+      "distribution": {"type": "split_normal", "mu": 140.92, "sigma_low": 21.08, "sigma_high": 44.36, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(as_of 2026-09-18,6个月内17家机构):2028E归母净利润 最低98.77/均值140.92/最高229.63亿元(区间极宽,华创偏高)。以均值作非对称正态中心μ(中值/众数=μ),下/上侧σ由最低/最高分歧幅度分别定,承载17家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/600183/worth.html 。"
+    }
+  ]
+}

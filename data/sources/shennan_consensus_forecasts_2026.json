@@ -1,0 +1,38 @@
+{
+  "source_id": "shennan_ths_consensus_2026",
+  "source_name": "深南电路 2026E/2027E/2028E 归母净利润 券商一致预期(同花顺F10)",
+  "publisher": "同花顺 F10 盈利预测(多家券商一致预期)",
+  "as_of": "2026-09-18",
+  "source_url": "https://basic.10jqka.com.cn/002916/worth.html",
+  "retrieved_at": "2026-09-18",
+  "note": "深南电路券商一致预期(同花顺F10盈利预测页,as_of 2026-09-18)。2026H1归母净利22.51亿同比+65.55%,二季度业绩超预期(招银国际2026-08-27),PCB与封装基板加速放量。以各年均值作非对称正态(split_normal)中心μ(中值=众数=μ、展宽不漂),下/上侧σ由最低/最高分歧幅度分别定,如实承载分析师分歧;evidence_type=analyst_estimate。三年均直接采用一致预期(未建自下而上模型)。逐家明细(同页,2026/2027/2028E亿元):华创64.78/100.30/149.70、太平洋59.14/91.94/127.40、国盛60.28/100.60/143.04、招商63.03/93.87/139.71、开源65.45/105.71/148.55等。",
+  "nodes": [
+    {
+      "id": "shennan.consensus.fy2026e",
+      "metric": "归母净利润_2026E_券商一致预期",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-09-18",
+      "distribution": {"type": "split_normal", "mu": 58.11, "sigma_low": 3.21, "sigma_high": 3.67, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(as_of 2026-09-18,6个月内22家机构):2026E归母净利润 最低51.69/均值58.11/最高65.45亿元。以均值作非对称正态中心μ(中值/众数=μ),下/上侧σ由最低/最高分歧幅度分别定,承载22家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/002916/worth.html 。"
+    },
+    {
+      "id": "shennan.consensus.fy2027e",
+      "metric": "归母净利润_2027E_券商一致预期",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-09-18",
+      "distribution": {"type": "split_normal", "mu": 85.41, "sigma_low": 9.48, "sigma_high": 10.15, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(as_of 2026-09-18,6个月内22家机构):2027E归母净利润 最低66.45/均值85.41/最高105.71亿元。以均值作非对称正态中心μ(中值/众数=μ),下/上侧σ由最低/最高分歧幅度分别定,承载22家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/002916/worth.html 。"
+    },
+    {
+      "id": "shennan.consensus.fy2028e",
+      "metric": "归母净利润_2028E_券商一致预期",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-09-18",
+      "distribution": {"type": "split_normal", "mu": 116.73, "sigma_low": 18.76, "sigma_high": 16.49, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(as_of 2026-09-18,6个月内21家机构):2028E归母净利润 最低79.21/均值116.73/最高149.70亿元。以均值作非对称正态中心μ(中值/众数=μ),下/上侧σ由最低/最高分歧幅度分别定,承载21家分歧。来源:同花顺F10 https://basic.10jqka.com.cn/002916/worth.html 。"
+    }
+  ]
+}

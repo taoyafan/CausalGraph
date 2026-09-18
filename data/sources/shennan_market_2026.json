@@ -1,0 +1,20 @@
+{
+  "source_id": "shennan_market_2026",
+  "source_name": "深南电路(002916.SZ) 行情快照——总市值",
+  "publisher": "东方财富 行情",
+  "as_of": "2026-09-18",
+  "source_url": "https://quote.eastmoney.com/sz002916.html",
+  "retrieved_at": "2026-09-18",
+  "note": "深南电路A股行情快照,用作前瞻PE的分子(总市值)。东方财富行情页2026-09-18 13:03(盘中,非收盘价):最新价386.26元、总股本6.812亿股、总市值约2636亿元。市场观测硬事实(market_observed,C=1.0),前瞻PE的不确定性来自分母(各年归母净利分布)。口径提示:此为盘中价,收盘后数值会有小幅变动。",
+  "nodes": [
+    {
+      "id": "shennan.market.cap",
+      "metric": "A股总市值_2026-09-18",
+      "unit": "亿元",
+      "evidence_type": "market_observed",
+      "as_of": "2026-09-18",
+      "distribution": {"type": "point", "value": 2636.0, "domain": [0, null]},
+      "quote": "东方财富行情页(2026-09-18 13:03,盘中非收盘):最新价386.26元、总股本6.812亿股、总市值约2636亿元。用作前瞻PE(总市值÷各年归母净利)的分子。来源:东方财富 https://quote.eastmoney.com/sz002916.html 。"
+    }
+  ]
+}
