@@ -1,0 +1,20 @@
+{
+  "source_id": "guanghe_market_2026",
+  "source_name": "广合科技(001389.SZ) 行情快照——总市值",
+  "publisher": "东方财富 行情",
+  "as_of": "2026-09-18",
+  "source_url": "https://quote.eastmoney.com/sz001389.html",
+  "retrieved_at": "2026-09-18",
+  "note": "广合科技A股行情快照,用作前瞻PE的分子(总市值)。东方财富行情页2026-09-18(盘中,非收盘价):最新价169.72元、总股本4.727亿股、总市值约802.7亿元(价×股本169.72×4.727≈802.3亿,与页面披露802.7亿一致)。市场观测硬事实(market_observed,C=1.0),前瞻PE的不确定性来自分母(各年归母净利分布)。口径提示:此为盘中价,收盘后数值会有小幅变动。",
+  "nodes": [
+    {
+      "id": "guanghe.market.cap",
+      "metric": "A股总市值_2026-09-18",
+      "unit": "亿元",
+      "evidence_type": "market_observed",
+      "as_of": "2026-09-18",
+      "distribution": {"type": "point", "value": 802.7, "domain": [0, null]},
+      "quote": "东方财富行情页(2026-09-18,盘中非收盘):最新价169.72元、总股本4.727亿股、总市值约802.7亿元。用作前瞻PE(总市值÷各年归母净利)的分子。来源:东方财富 https://quote.eastmoney.com/sz001389.html 。"
+    }
+  ]
+}
