@@ -48,6 +48,7 @@ class Graph:
         self.samples = {}   # id -> List[float]
         self.stats = {}     # id -> percentiles dict
         self.alerts = {}    # id -> alert message
+        self.macro_instances = []   # 模板实例统计（仅 focus --level 4 debug 显示，不参与求值）
 
     def _eval(self, node_id, stack):
         if node_id in self.samples:

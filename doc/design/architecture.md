@@ -17,6 +17,8 @@ cgraph/                  引擎（Python 包，零第三方依赖）
 data/
   sources/*.json         数据源，每文件一个独立源，产出若干 DataNode
   operators/*.json       算子子图，每文件一簇 OperatorNode（inputs = 对任意上游节点 id 的引用 = 边）
+  templates/*.json       子图模板定义（带形参占位；不参与求值，见 §4.2）
+  instances/*.json       模板实例绑定（加载时展开为普通算子节点，见 §4.2）
 ```
 
 > **全局单图**：没有“每个 use case 一个图文件”。所有 source + operator 节点属于**同一张全局图**，
@@ -63,6 +65,21 @@ data/
 - **拆分纯为可读性**，与求值无关：引擎把所有子图合并成一张图。按分析主题/标的/期次聚类（如 `capchem_2026.json`）。
 - **跨子图连接**：新算子的 `inputs` 直接写目标节点的全局 id，无需改动被引用的子图——这就是“子图随时被新节点连起来”的机制。
 - **命名**：节点 id 用点分层次（如 `capchem.profit.fy2026`、`broker.kaiyuan.fy2026`），保证全局唯一且自解释。
+
+### 4.2 子图模板与实例化（data/templates + data/instances）
+
+同一套结构只写一次，各公司写一行绑定；这是**存储期的语法糖**，不是新图机制：
+
+- 模板 `data/templates/<名>.json`：`template`（模板名）、`params`（形参说明，仅供人读）、`operators[]`（节点模板）。
+  节点模板支持三种占位机制：
+  - `{name}` / `{name[key]}`：字符串占位，替换为实例 bind 里的值（`[key]` 里可写循环变量，如 `{profit_source[year]}`）；
+  - `repeat: {"var","in","skip_first"}`：按期次列表循环，循环内可用 `{var}` 与 `{prev_var}`（上一期），`skip_first` 用于首期没有同比这类场合；
+  - `when`：占位解析为空则该轮不生成节点。
+  另有约定占位 `{profit_ref[year]}`：该年若被本模板 affine 提升过 → 用提升后的 `{company}.profit.fy{year}`，否则用 bind 给的外部利润节点（如自下而上融合出来的 `profit.fy2026`）。
+- 实例 `data/instances/<名>.json`：`template` + `instances[]`，每条含 `name`、`bind`（形参 → 真实节点 id）、可选 `note`。
+- 展开在 `loader.load_instances()` 于**加载时内存中**完成，展开出的节点与手写节点同表做 id 冲突检查（冲突即报错），之后引擎/CLI/前端完全不知道"宏"存在。
+- 展开来源记在节点 `macro` 字段（模板名、实例名、绑定实参、来源文件），**只在 `focus --level 4` 显示**，不进入任何默认输出。
+- 约定：结构同构、只差绑定的链条必须走模板，禁止手抄；加一家公司 = 加一条 bind。
 
 ## 5. 求值引擎
 

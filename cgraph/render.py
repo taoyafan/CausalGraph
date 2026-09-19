@@ -216,3 +216,57 @@ def render_formula(graph, focus_id):
 
     # 假设分布已在正文首次内联(带 ? 标记)，不再列重复清单；计数/最低 C/告警看下方汇总行。
     _summary_line(graph, focus_id)
+
+
+# ---------------------------------------------------------------- level 4 (debug)
+
+def render_debug(graph, focus_id):
+    """debug 档：公式视图 + 每行附模板展开来源，末尾附模板实例统计。
+
+    展开来源只在这一档显示——默认各档（0~3）与"宏"概念无关，阅读的就是展开后的原结构。
+    """
+    _header(graph, focus_id)
+    done, seen_data = set(), set()
+
+    def macro_tag(nid):
+        m = getattr(graph.nodes[nid], "macro", None)
+        if not m:
+            return ""
+        b = " ".join(f"{k}={v}" for k, v in (m.get("bind") or {}).items())
+        return f"   ⟨宏展开: 模板 {m.get('template')} ← 实例 {m.get('instance')}" + (f"  {b}" if b else "") + "⟩"
+
+    def rec(nid, depth):
+        node = graph.nodes[nid]
+        pad = "  " * depth
+        if isinstance(node, DataNode):
+            q = "?" if node.evidence_type == "assumption" else ""
+            if nid in seen_data:
+                print(pad + f"{node.metric}↖{q}")
+                return
+            seen_data.add(nid)
+            ov = graph.overrides.get(nid)
+            d = ov["distribution"] if ov else node.distribution
+            t = "✎" if ov else ""
+            print(pad + f"{node.metric}[{data_value(node, d)} {display_unit(node)}]{q}{t}")
+            return
+        if nid in done:
+            print(pad + f"{node.output_metric} ↺（上文已展开）")
+            return
+        done.add(nid)
+        live = [i for i in node.inputs if i not in graph.mutes]
+        parts = [_slot_label(graph, i, seen_data) for i in live]
+        print(pad + f"{node.output_metric} = {formula_of(node.operator, parts, node.params)}" + macro_tag(nid))
+        for i in live:
+            if not isinstance(graph.nodes[i], DataNode):
+                rec(i, depth + 1)
+
+    rec(focus_id, 0)
+
+    insts = getattr(graph, "macro_instances", []) or []
+    if insts:
+        print(f"\n模板展开来源（磁盘只存模板 + 绑定，展开结果不入库）：{len(insts)} 个实例")
+        for it in insts:
+            print(f"  - 模板 {it['template']} ← 实例 {it['instance']}  "
+                  f"({it['file']}，本次展开 {it['nodes']} 个算子节点)")
+
+    _summary_line(graph, focus_id)

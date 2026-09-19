@@ -1,0 +1,89 @@
+{
+  "template": "forward_pe_multiyear",
+  "note": "多年盈利 + 同比 + 前瞻 PE 的全部实例绑定（模板见 data/templates/forward_pe_multiyear.json）。加一家公司 = 加一条 instances 绑定；改口径 = 改模板一处。",
+  "instances": [
+    {
+      "name": "capchem",
+      "note": "新宙邦(300037.SZ)：27/28 归母用券商一致预期提升；26 沿用自下而上与券商法融合出来的 capchem.profit.fy2026。",
+      "bind": {
+        "company": "capchem",
+        "years": ["2026", "2027", "2028"],
+        "market_cap": "capchem.market.cap",
+        "profit_source": {"2027": "capchem.consensus.fy2027e", "2028": "capchem.consensus.fy2028e"},
+        "profit_ref": {"2026": "capchem.profit.fy2026"}
+      }
+    },
+    {
+      "name": "catl",
+      "note": "宁德时代(300750.SZ)：26/27/28 归母均直接采用券商一致预期（未建自下而上模型）。",
+      "bind": {
+        "company": "catl",
+        "years": ["2026", "2027", "2028"],
+        "market_cap": "catl.market.cap",
+        "profit_source": {"2026": "catl.consensus.fy2026e", "2027": "catl.consensus.fy2027e", "2028": "catl.consensus.fy2028e"}
+      }
+    },
+    {
+      "name": "guanghe",
+      "note": "广合科技(001389.SZ)：26/27/28 归母均直接采用券商一致预期。",
+      "bind": {
+        "company": "guanghe",
+        "years": ["2026", "2027", "2028"],
+        "market_cap": "guanghe.market.cap",
+        "profit_source": {"2026": "guanghe.consensus.fy2026e", "2027": "guanghe.consensus.fy2027e", "2028": "guanghe.consensus.fy2028e"}
+      }
+    },
+    {
+      "name": "hudian",
+      "note": "沪电股份(002463.SZ)：26/27/28 归母均直接采用券商一致预期。",
+      "bind": {
+        "company": "hudian",
+        "years": ["2026", "2027", "2028"],
+        "market_cap": "hudian.market.cap",
+        "profit_source": {"2026": "hudian.consensus.fy2026e", "2027": "hudian.consensus.fy2027e", "2028": "hudian.consensus.fy2028e"}
+      }
+    },
+    {
+      "name": "shenghong",
+      "note": "胜宏科技(300476.SZ)：27/28 归母用券商一致预期提升；26 沿用三路融合出来的 shenghong.profit.fy2026。",
+      "bind": {
+        "company": "shenghong",
+        "years": ["2026", "2027", "2028"],
+        "market_cap": "shenghong.market.cap",
+        "profit_source": {"2027": "shenghong.consensus.fy2027e", "2028": "shenghong.consensus.fy2028e"},
+        "profit_ref": {"2026": "shenghong.profit.fy2026"}
+      }
+    },
+    {
+      "name": "shengyi",
+      "note": "生益科技(600183.SH)：26/27/28 归母均直接采用券商一致预期。",
+      "bind": {
+        "company": "shengyi",
+        "years": ["2026", "2027", "2028"],
+        "market_cap": "shengyi.market.cap",
+        "profit_source": {"2026": "shengyi.consensus.fy2026e", "2027": "shengyi.consensus.fy2027e", "2028": "shengyi.consensus.fy2028e"}
+      }
+    },
+    {
+      "name": "shennan",
+      "note": "深南电路(002916.SZ)：26/27/28 归母均直接采用券商一致预期。",
+      "bind": {
+        "company": "shennan",
+        "years": ["2026", "2027", "2028"],
+        "market_cap": "shennan.market.cap",
+        "profit_source": {"2026": "shennan.consensus.fy2026e", "2027": "shennan.consensus.fy2027e", "2028": "shennan.consensus.fy2028e"}
+      }
+    },
+    {
+      "name": "songfa",
+      "note": "松发股份(603268.SH,恒力重工造船)：27/28 归母用券商一致预期提升；26 沿用自有利润链的 songfa.profit.fy2026。",
+      "bind": {
+        "company": "songfa",
+        "years": ["2026", "2027", "2028"],
+        "market_cap": "songfa.market.cap",
+        "profit_source": {"2027": "songfa.consensus.fy2027e", "2028": "songfa.consensus.fy2028e"},
+        "profit_ref": {"2026": "songfa.profit.fy2026"}
+      }
+    }
+  ]
+}

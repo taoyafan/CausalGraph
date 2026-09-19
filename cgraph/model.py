@@ -61,6 +61,7 @@ class OperatorNode:
     display_unit: Optional[str] = None
     display_scale: float = 1.0
     panel: bool = False   # 是否作为公司"看板"并列展示的指标(纯展示标记, 不影响求值)
+    macro: Optional[dict] = None  # 模板展开来源（仅 focus --level 4 debug 显示，不参与求值）
 
     def __post_init__(self):
         if self.display_unit is None:
@@ -83,4 +84,5 @@ class OperatorNode:
             display_unit=d.get("display_unit"),
             display_scale=d.get("display_scale", 1),
             panel=d.get("panel", False),
+            macro=d.get("_macro"),
         )

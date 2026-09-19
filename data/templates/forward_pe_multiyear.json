@@ -1,0 +1,40 @@
+{
+  "template": "forward_pe_multiyear",
+  "note": "标准链：多年盈利（券商一致预期 affine 提升）+ 同比 + 前瞻 PE。加一家公司 = 在 data/instances/ 里加一条绑定，不再手抄这 7~8 个算子。affine(a=0,b=1) 是恒等映射，仅为把一致预期数据节点提升为可展示/可被 PE 与同比引用的算子节点，无主观性。",
+  "params": {
+    "company": "公司节点命名前缀（同时作 id 前缀）",
+    "years": "期次列表，如 [\"2026\",\"2027\",\"2028\"]",
+    "market_cap": "总市值节点 id",
+    "profit_source": "需 affine 提升为 {company}.profit.fy{year} 的年份 -> 一致预期节点 id（可缺省）",
+    "profit_ref": "不提升的年份 -> 外部利润节点 id（可缺省），如自下而上融合出来的 profit.fy2026"
+  },
+  "operators": [
+    {
+      "repeat": {"var": "year", "in": "years"},
+      "when": "profit_source[year]",
+      "id": "{company}.profit.fy{year}",
+      "operator": "affine",
+      "inputs": ["{profit_source[year]}"],
+      "params": {"a": 0.0, "b": 1.0},
+      "output_metric": "归母净利润_{year}E(券商一致预期)",
+      "unit": "亿元"
+    },
+    {
+      "repeat": {"var": "year", "in": "years", "skip_first": true},
+      "id": "{company}.profit.fy{year}.yoy",
+      "operator": "growth",
+      "inputs": ["{profit_ref[year]}", "{profit_ref[prev_year]}"],
+      "output_metric": "归母净利润_{year}E同比增速(相对{prev_year}E)",
+      "unit": "比率"
+    },
+    {
+      "repeat": {"var": "year", "in": "years"},
+      "id": "{company}.pe.{year}",
+      "operator": "divide",
+      "inputs": ["{market_cap}", "{profit_ref[year]}"],
+      "output_metric": "前瞻PE_{year}E(总市值÷{year}E归母)",
+      "unit": "倍",
+      "panel": true
+    }
+  ]
+}

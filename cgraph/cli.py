@@ -13,7 +13,7 @@ import argparse
 import os
 import sys
 
-from .render import render_level0, render_level1, render_tree, render_formula
+from .render import render_level0, render_level1, render_tree, render_formula, render_debug
 from .loader import load_world
 from .check import check_world
 from .model import DataNode
@@ -46,6 +46,8 @@ def cmd_focus(args):
         render_level1(graph, focus_id)
     elif args.level == 2:
         render_tree(graph, focus_id)
+    elif args.level == 4:
+        render_debug(graph, focus_id)
     else:
         render_formula(graph, focus_id)
 
@@ -188,8 +190,8 @@ def main(argv=None):
 
     p = sub.add_parser("focus", help="以某节点为 focus 在全局图上求值并渲染字符树")
     p.add_argument("node", help="focus 节点 id")
-    p.add_argument("--level", type=int, default=3, choices=[0, 1, 2, 3],
-                   help="输出等级: 0=一行摘要 1=一层上游 2=全树 3=公式视图(默认)")
+    p.add_argument("--level", type=int, default=3, choices=[0, 1, 2, 3, 4],
+                   help="输出等级: 0=一行摘要 1=一层上游 2=全树 3=公式视图(默认) 4=debug(公式+模板展开来源)")
     p.add_argument("--scenario", default=None,
                    help="情景文件（相对 data/scenarios/，如 capchem/悲观）；缺省=纯基线")
     p.add_argument("--diff", action="store_true",
