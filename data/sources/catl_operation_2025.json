@@ -1,0 +1,81 @@
+{
+  "source_id": "catl_operation_2025",
+  "source_name": "宁德时代 2025 年锂电池经营数据（销量/产量/产能/利用率/均价/分部毛利率）",
+  "publisher": "宁德时代年报（联合资信跟踪评级报告转引）",
+  "as_of": "2025-12-31",
+  "retrieved_at": "2026-09-19",
+  "source_url": "https://www.chinamoney.com.cn/dqs/cm-s-notice-query/fileDownLoad.do?contentId=3327729&priority=0&mode=save",
+  "note": "销量/产量/产能/毛利率为年报披露值；平均售价为评级报告口径（板块收入÷板块销量）。官方未披露单位成本。",
+  "nodes": [
+    {
+      "id": "catl.shipment_2025",
+      "metric": "宁德时代锂电池销量_2025",
+      "unit": "GWh",
+      "evidence_type": "audited",
+      "as_of": "2025-12-31",
+      "source_url": "https://www.chinamoney.com.cn/dqs/cm-s-notice-query/fileDownLoad.do?contentId=3327729&priority=0&mode=save",
+      "distribution": {"type": "point", "value": 661, "domain": [0, null]},
+      "quote": "2025 年锂电池销量 661GWh（同比 +39.16%），其中动力 541GWh、储能 121GWh。"
+    },
+    {
+      "id": "catl.production_2025",
+      "metric": "宁德时代锂电池产量_2025",
+      "unit": "GWh",
+      "evidence_type": "audited",
+      "as_of": "2025-12-31",
+      "source_url": "https://www.chinamoney.com.cn/dqs/cm-s-notice-query/fileDownLoad.do?contentId=3327729&priority=0&mode=save",
+      "distribution": {"type": "point", "value": 748, "domain": [0, null]},
+      "quote": "2025 年产量 748GWh。"
+    },
+    {
+      "id": "catl.capacity_2025",
+      "metric": "宁德时代锂电池产能_2025",
+      "unit": "GWh",
+      "evidence_type": "audited",
+      "as_of": "2025-12-31",
+      "source_url": "https://www.chinamoney.com.cn/dqs/cm-s-notice-query/fileDownLoad.do?contentId=3327729&priority=0&mode=save",
+      "distribution": {"type": "point", "value": 772, "domain": [0, null]},
+      "quote": "2025 年产能 772GWh。"
+    },
+    {
+      "id": "catl.utilization_2025",
+      "metric": "宁德时代产能利用率_2025",
+      "unit": "%",
+      "evidence_type": "audited",
+      "as_of": "2025-12-31",
+      "source_url": "https://www.chinamoney.com.cn/dqs/cm-s-notice-query/fileDownLoad.do?contentId=3327729&priority=0&mode=save",
+      "distribution": {"type": "point", "value": 96.89, "domain": [0, null]},
+      "quote": "2025 年产能利用率 96.89%。"
+    },
+    {
+      "id": "catl.price.battery_avg_2025",
+      "metric": "宁德时代电池系统销售均价_2025",
+      "unit": "元/Wh",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2025-12-31",
+      "source_url": "https://www.chinamoney.com.cn/dqs/cm-s-notice-query/fileDownLoad.do?contentId=3327729&priority=0&mode=save",
+      "distribution": {"type": "point", "value": 0.57, "domain": [0, null]},
+      "quote": "2025 年电池系统销售均价 0.57 元/Wh（动力 0.59、储能 0.52）。来源：联合资信。口径：板块收入÷板块销量。"
+    },
+    {
+      "id": "catl.gross_margin.power_2025",
+      "metric": "宁德时代动力电池毛利率_2025",
+      "unit": "%",
+      "evidence_type": "audited",
+      "as_of": "2025-12-31",
+      "source_url": "https://www.chinamoney.com.cn/dqs/cm-s-notice-query/fileDownLoad.do?contentId=3327729&priority=0&mode=save",
+      "distribution": {"type": "point", "value": 23.84, "domain": [0, null]},
+      "quote": "2025 年动力电池分部毛利率 23.84%。"
+    },
+    {
+      "id": "catl.gross_margin.ess_2025",
+      "metric": "宁德时代储能电池毛利率_2025",
+      "unit": "%",
+      "evidence_type": "audited",
+      "as_of": "2025-12-31",
+      "source_url": "https://www.chinamoney.com.cn/dqs/cm-s-notice-query/fileDownLoad.do?contentId=3327729&priority=0&mode=save",
+      "distribution": {"type": "point", "value": 26.71, "domain": [0, null]},
+      "quote": "2025 年储能电池分部毛利率 26.71%。"
+    }
+  ]
+}

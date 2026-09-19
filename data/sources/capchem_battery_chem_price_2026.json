@@ -1,0 +1,30 @@
+{
+  "source_id": "capchem_battery_chem_price_2026",
+  "source_name": "新宙邦电池化学品平均售价（2025 全年 / 2026H1）",
+  "publisher": "新宙邦 H 股招股书（媒体解读）/ 新宙邦半年报（媒体转引）",
+  "as_of": "2026-06-30",
+  "retrieved_at": "2026-09-19",
+  "note": "均价为电池化学品分部口径（含溶剂/添加剂等全线产品），非纯电解液均价；来源为招股书与半年报的媒体转引，未直接取得原文件。",
+  "nodes": [
+    {
+      "id": "capchem.battery_chem.avg_price_2025",
+      "metric": "新宙邦电池化学品平均售价_2025",
+      "unit": "元/吨",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2025-12-31",
+      "source_url": "https://www.sohu.com/a/1069029285_122014422",
+      "distribution": {"type": "point", "value": 12613, "domain": [0, null]},
+      "quote": "新宙邦电池化学品板块平均售价 2025 年全年 12,613 元/吨。来源：新宙邦 H 股招股书解读（媒体转引）。"
+    },
+    {
+      "id": "capchem.battery_chem.avg_price_h1_2026",
+      "metric": "新宙邦电池化学品平均售价_2026H1",
+      "unit": "元/吨",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-06-30",
+      "source_url": "https://www.sohu.com/a/1069029285_122014422",
+      "distribution": {"type": "point", "value": 17302, "domain": [0, null]},
+      "quote": "新宙邦电池化学品板块平均售价 2026H1 达 17,302 元/吨（+36.3%），销量同比 +49.8%。来源：新宙邦 H 股招股书解读（媒体转引）。"
+    }
+  ]
+}

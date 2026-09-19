@@ -253,6 +253,241 @@
       "unit": "比率",
       "output_metric": "六氟现货价/2026预测中枢",
       "note": "分子为 2026-09 多源融合现货价、分母为 2026-06 券商预测中枢；时点不同，仅作分歧展示，不作结论"
+    },
+    {
+      "id": "ind.liPF6.li2co3_dosage",
+      "operator": "mixture",
+      "inputs": ["ind.liPF6.li2co3_dosage.cs", "ind.liPF6.li2co3_dosage.yanjiu"],
+      "output_metric": "六氟碳酸锂单耗(两源等权融合)",
+      "unit": "吨/吨"
+    },
+    {
+      "id": "ind.liPF6.ahf_dosage",
+      "operator": "mixture",
+      "inputs": ["ind.liPF6.ahf_dosage.yanjiu", "ind.liPF6.ahf_dosage.ph"],
+      "output_metric": "六氟无水氟化氢单耗(两源等权融合)",
+      "unit": "吨/吨"
+    },
+    {
+      "id": "ind.liPF6.cost.li2co3",
+      "operator": "product",
+      "inputs": ["ind.li2co3.price", "ind.liPF6.li2co3_dosage"],
+      "output_metric": "六氟成本中碳酸锂贡献",
+      "unit": "元/吨",
+      "note": "= 碳酸锂价 × 碳酸锂单耗"
+    },
+    {
+      "id": "ind.liPF6.cost.ahf",
+      "operator": "product",
+      "inputs": ["ind.ahf.price", "ind.liPF6.ahf_dosage"],
+      "output_metric": "六氟成本中无水氟化氢贡献",
+      "unit": "元/吨",
+      "note": "= AHF 价 × AHF 单耗"
+    },
+    {
+      "id": "ind.liPF6.cost.materials_implied",
+      "operator": "sum",
+      "inputs": ["ind.liPF6.cost.li2co3", "ind.liPF6.cost.ahf"],
+      "output_metric": "六氟两大原料成本合计(碳酸锂+AHF)",
+      "unit": "元/吨",
+      "note": "未含五氯化磷（缺价格节点）；与行业综合成本(7.1~7.3 万元/吨)对比看量级"
+    },
+    {
+      "id": "ind.liPF6.price.vs_cost",
+      "operator": "divide",
+      "inputs": ["ind.liPF6.price", "ind.liPF6.cost.industry_2026"],
+      "output_metric": "六氟现货价/行业综合成本",
+      "unit": "比率",
+      "note": "分子为 2026-09 多源融合现货价、分母为 2026-06 行业综合成本；时点不同，仅作量级对比"
+    },
+    {
+      "id": "ind.battery.electrolyte_cost_per_gwh",
+      "operator": "product",
+      "inputs": ["ind.electrolyte.dosage_1gwh.electrolyte", "ind.electrolyte.price.ncm"],
+      "output_metric": "每GWh电池的电解液成本",
+      "unit": "元/GWh",
+      "note": "= 1000 吨电解液/GWh × 三元电解液均价"
+    },
+    {
+      "id": "ind.battery.cost_share.electrolyte_mix_ratio",
+      "operator": "affine",
+      "inputs": ["ind.battery.cost_share.electrolyte_mix"],
+      "params": {"a": 0.0, "b": 0.01},
+      "output_metric": "电解液占电池成本比(比率化)",
+      "unit": "比率",
+      "note": "% → 比率的结构性单位换算"
+    },
+    {
+      "id": "ind.battery.cost_implied_per_gwh",
+      "operator": "divide",
+      "inputs": ["ind.battery.electrolyte_cost_per_gwh", "ind.battery.cost_share.electrolyte_mix_ratio"],
+      "output_metric": "由电解液成本与占比反推的电池单位成本",
+      "unit": "元/GWh",
+      "note": "隐含『电解液占电池成本比可外推』，仅作量级参考"
+    },
+    {
+      "id": "ind.battery.cost_implied_per_wh",
+      "operator": "affine",
+      "inputs": ["ind.battery.cost_implied_per_gwh"],
+      "params": {"a": 0.0, "b": 1e-9},
+      "output_metric": "反推电池单位成本(元/Wh)",
+      "unit": "元/Wh",
+      "note": "GWh → Wh 的结构性单位换算"
+    },
+    {
+      "id": "ind.battery.implied_cost_vs_price",
+      "operator": "divide",
+      "inputs": ["ind.battery.cost_implied_per_wh", "catl.price.battery_avg_2025"],
+      "output_metric": "反推单位成本/宁德销售均价",
+      "unit": "比率",
+      "note": "成本口径与售价口径不可直接比较，仅作量级展示"
+    },
+    {
+      "id": "capchem.battery_chem.avg_price_vs_ind",
+      "operator": "divide",
+      "inputs": ["capchem.battery_chem.avg_price_h1_2026", "ind.electrolyte.price.ncm"],
+      "output_metric": "新宙邦电池化学品均价/环节电解液均价",
+      "unit": "比率",
+      "note": "分子为公司电池化学品分部均价（含溶剂/添加剂等全线产品）、分母为环节电解液均价，口径不同"
+    },
+    {
+      "id": "catl.utilization_check_2025",
+      "operator": "divide",
+      "inputs": ["catl.production_2025", "catl.capacity_2025"],
+      "unit": "比率",
+      "output_metric": "产能利用率校验_2025(产量/产能)",
+      "note": "= 748/772；与披露值 96.89% 交叉核对"
+    },
+    {
+      "id": "catl.shipment_vs_production_2025",
+      "operator": "divide",
+      "inputs": ["catl.shipment_2025", "catl.production_2025"],
+      "unit": "比率",
+      "output_metric": "销量/产量_2025(产销率)",
+      "note": "= 661/748"
+    },
+    {
+      "id": "catl.margin.spread_power_ess_2025",
+      "operator": "subtract",
+      "inputs": ["catl.gross_margin.power_2025", "catl.gross_margin.ess_2025"],
+      "unit": "%",
+      "output_metric": "动力与储能毛利率差_2025",
+      "note": "动力毛利率减储能毛利率；负值表示储能毛利率更高"
+    },
+    {
+      "id": "capchem.battery_chem.avg_price_growth_h1_2026",
+      "operator": "divide",
+      "inputs": ["capchem.battery_chem.avg_price_h1_2026", "capchem.battery_chem.avg_price_2025"],
+      "unit": "比率",
+      "output_metric": "电池化学品均价_2026H1/2025",
+      "note": "时点不同（半年 vs 全年），仅作方向参考"
+    },
+    {
+      "id": "ind.liPF6.cost.materials_vs_industry",
+      "operator": "divide",
+      "inputs": ["ind.liPF6.cost.materials_implied", "ind.liPF6.cost.industry_2026"],
+      "unit": "比率",
+      "output_metric": "六氟原料成本合计/行业综合成本",
+      "note": "分子只含碳酸锂与 AHF（未含五氯化磷与费用），比值应小于 1"
+    },
+    {
+      "id": "ind.liPF6.utilization_vs_supply_demand",
+      "operator": "divide",
+      "inputs": ["ind.liPF6.capacity_utilization_2025", "ind.liPF6.supply_demand_ratio_fy2026"],
+      "unit": "比率",
+      "output_metric": "开工率_2025/供需比_2026",
+      "note": "年份口径不同，仅作量级参考"
+    },
+    {
+      "id": "ind.electrolyte.market_size_h1_2026",
+      "operator": "product",
+      "inputs": ["ind.electrolyte.shipment.global_h1_2026", "ind.electrolyte.price.ncm"],
+      "unit": "万元",
+      "output_metric": "全球电解液市场规模隐含值_2026H1",
+      "note": "= 出货(万吨) × 均价(元/吨)，数值单位为万元"
+    },
+    {
+      "id": "ind.electrolyte.market_size_100m_h1_2026",
+      "operator": "affine",
+      "inputs": ["ind.electrolyte.market_size_h1_2026"],
+      "params": {"a": 0.0, "b": 0.0001},
+      "unit": "亿元",
+      "output_metric": "全球电解液市场规模隐含值_2026H1(亿元)",
+      "note": "万元 → 亿元的结构性单位换算 a=0,b=1e-4"
+    },
+    {
+      "id": "ind.electrolyte.cost_share.solute_vs_non_solute",
+      "operator": "divide",
+      "inputs": ["ind.electrolyte.cost_share.solute", "ind.electrolyte.cost_share.non_solute"],
+      "unit": "比率",
+      "output_metric": "锂盐成本占比/非锂盐占比",
+      "note": "同源（民生 2022）两个占比相除"
+    },
+    {
+      "id": "ind.liPF6.demand.cn_vs_global",
+      "operator": "divide",
+      "inputs": ["ind.liPF6.demand.cn_2026", "ind.liPF6.demand.fy2026"],
+      "unit": "比率",
+      "output_metric": "中国需求/全球需求_2026E",
+      "note": "分子智研中国口径、分母中信建投全球口径；口径不同，仅作份额量级参考"
+    },
+    {
+      "id": "capchem.battery_chem.shipment_vs_output",
+      "operator": "divide",
+      "inputs": ["capchem.battery_chem.shipment_h1_2026", "capchem.battery_chem.output_2025"],
+      "unit": "比率",
+      "output_metric": "2026H1出货/2025产量",
+      "note": "时段不一致（半年出货 vs 全年产量），仅作结构参考"
+    },
+    {
+      "id": "capchem.battery_chem.electrolyte_rev_h1_2026",
+      "operator": "product",
+      "inputs": ["capchem.battery_chem.shipment_h1_2026", "ind.electrolyte.price.ncm"],
+      "unit": "万元",
+      "output_metric": "新宙邦电解液隐含收入_2026H1",
+      "note": "= 电解液出货(万吨) × 环节电解液均价(元/吨)，数值单位为万元；两者均为电解液口径"
+    },
+    {
+      "id": "capchem.battery_chem.electrolyte_rev_100m_h1_2026",
+      "operator": "affine",
+      "inputs": ["capchem.battery_chem.electrolyte_rev_h1_2026"],
+      "params": {"a": 0.0, "b": 0.0001},
+      "unit": "亿元",
+      "output_metric": "新宙邦电解液隐含收入_2026H1(亿元)",
+      "note": "万元 → 亿元的结构性单位换算"
+    },
+    {
+      "id": "catl.unit_margin_2025",
+      "operator": "subtract",
+      "inputs": ["catl.price.battery_avg_2025", "ind.battery.cost_implied_per_wh"],
+      "unit": "元/Wh",
+      "output_metric": "宁德单位毛利_2025(均价−反推成本)",
+      "note": "反推成本为混口径，仅作量级参考；负值说明占比锚偏低或价口径不一致"
+    },
+    {
+      "id": "catl.profit_per_gwh_fy2026",
+      "operator": "divide",
+      "inputs": ["catl.profit.fy2026", "catl.shipment_2025"],
+      "unit": "亿元/GWh",
+      "output_metric": "单GWh归母净利_2026E",
+      "note": "分子为 2026E 券商一致预期、分母为 2025 实际销量；跨期，仅作量级参考"
+    },
+    {
+      "id": "catl.utilization_2025_ratio",
+      "operator": "affine",
+      "inputs": ["catl.utilization_2025"],
+      "params": {"a": 0.0, "b": 0.01},
+      "unit": "比率",
+      "output_metric": "宁德产能利用率_2025(比率化)",
+      "note": "% → 比率的结构性单位换算（b=0.01），无主观性"
+    },
+    {
+      "id": "catl.utilization_gap_2025",
+      "operator": "subtract",
+      "inputs": ["catl.utilization_2025_ratio", "catl.utilization_check_2025"],
+      "unit": "比率",
+      "output_metric": "披露利用率与校验利用率之差_2025",
+      "note": "披露值 96.89% 与产量/产能(748/772) 之差，应接近 0；两个输入同口径同年"
     }
   ]
 }

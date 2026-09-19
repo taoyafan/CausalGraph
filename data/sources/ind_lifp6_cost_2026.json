@@ -1,0 +1,70 @@
+{
+  "source_id": "ind_lifp6_cost_2026",
+  "source_name": "六氟磷酸锂成本侧节点集（单耗 / 综合成本 / AHF 基准价，多来源）",
+  "publisher": "中银证券 / 观研天下 / 普华有策 / ChemNet / 生意社",
+  "as_of": "2026-09-02",
+  "retrieved_at": "2026-09-19",
+  "note": "本文件为六氟磷酸锂成本侧多来源节点集：碳酸锂单耗（中银证券 2020、观研天下 2023 两口径）、无水氟化氢单耗（观研天下 2023、普华有策 2026 两口径）、行业综合生产成本（ChemNet 2026-06）与 AHF 基准价（生意社 2026-09）；各节点自带 source_url 与 as_of，来源与口径不同、未在节点内合并，等权融合由下游 mixture/product/sum 算子完成。",
+  "nodes": [
+    {
+      "id": "ind.liPF6.li2co3_dosage.cs",
+      "metric": "六氟磷酸锂碳酸锂单耗(氟化氢溶剂法)",
+      "unit": "吨/吨",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2020-09-16",
+      "source_url": "http://pdf.dfcfw.com/pdf/H3_AP202009161413299918_1.pdf",
+      "distribution": {"type": "point", "value": 0.26},
+      "quote": "氟化氢溶剂法国内先进产能制备 1 吨六氟磷酸锂所需碳酸锂单耗 0.26 吨（同口径另需 2.4 吨无水氟化氢）。来源：中银证券《六氟磷酸锂行业深度报告》（2020-09-16）。"
+    },
+    {
+      "id": "ind.liPF6.li2co3_dosage.yanjiu",
+      "metric": "六氟磷酸锂碳酸锂单耗(成本测算口径)",
+      "unit": "吨/吨",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2023-05-31",
+      "source_url": "https://m.chinabaogao.com/detail/636339.html",
+      "distribution": {"type": "point", "value": 0.28},
+      "quote": "六氟磷酸锂单吨原材料用量：碳酸锂 0.28 吨、五氯化磷 1.68 吨、无水氟化氢 1.48 吨。来源：观研天下（2023-05）。"
+    },
+    {
+      "id": "ind.liPF6.ahf_dosage.yanjiu",
+      "metric": "六氟磷酸锂无水氟化氢单耗(2023口径)",
+      "unit": "吨/吨",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2023-05-31",
+      "source_url": "https://m.chinabaogao.com/detail/636339.html",
+      "distribution": {"type": "point", "value": 1.48},
+      "quote": "六氟磷酸锂单吨无水氟化氢用量 1.48 吨。来源：观研天下（2023-05）。"
+    },
+    {
+      "id": "ind.liPF6.ahf_dosage.ph",
+      "metric": "六氟磷酸锂无水氟化氢单耗(2026口径)",
+      "unit": "吨/吨",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-05-18",
+      "source_url": "https://finance.sina.com.cn/roll/2026-05-18/doc-inhyiewm2892787.shtml",
+      "distribution": {"type": "uniform", "low": 1.8, "high": 2.2, "domain": [0, null]},
+      "quote": "六氟磷酸锂单吨耗无水氢氟酸（AHF）约 1.8—2.2 吨。来源：普华有策（新浪财经转载，2026-05-18）。"
+    },
+    {
+      "id": "ind.liPF6.cost.industry_2026",
+      "metric": "六氟磷酸锂行业综合生产成本",
+      "unit": "元/吨",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-06-18",
+      "source_url": "https://news.chemnet.com/toutiao/detail-70208.html",
+      "distribution": {"type": "uniform", "low": 71000, "high": 73000, "domain": [0, null]},
+      "quote": "六氟磷酸锂综合生产成本约 7.1 万—7.3 万元/吨。来源：ChemNet 化工头条（2026-06-18）。"
+    },
+    {
+      "id": "ind.ahf.price",
+      "metric": "无水氟化氢基准价",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-09-02",
+      "source_url": "https://www.100ppi.com/news/detail-20260902-6155364.html",
+      "distribution": {"type": "point", "value": 16600, "domain": [0, null]},
+      "quote": "生意社氢氟酸（无水氟化氢）基准价 16,600 元/吨。来源：生意社（2026-09-02）。"
+    }
+  ]
+}
