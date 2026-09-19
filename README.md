@@ -15,6 +15,7 @@
 - [设计哲学（Design Philosophy）](#设计哲学design-philosophy)
 - [1. 核心需求（System Intent）](#1-核心需求system-intent)
 - [2. 架构总纲（CausalGraph 架构）](#2-架构总纲causalgraph-架构)
+  - [2.10 产业链结构层（锂电首条链）](#210-产业链结构层锂电首条链)
 - [3. 设计文档索引](#3-设计文档索引)
 
 ---
@@ -97,6 +98,11 @@
 - 在既有图上**临时覆盖**某节点分布或**屏蔽**某条线路，看预测如何变化；临时态只存在 `data/scenarios/`，删文件即全部恢复，被覆盖节点带 ✎ 标记、被屏蔽节点不显示。
 - 细节见 [overlay-scenario.md](doc/design/overlay-scenario.md)。
 
+### 2.10 产业链结构层（锂电首条链）
+
+- 以**产业环节**为骨架（碳酸锂 → 六氟磷酸锂 → 电解液 → 电池），把公司挂到对应环节上；同一指标的多来源各建独立数据节点、由 `mixture` 等权融合；事件与传导复用同一张全局图。
+- 落地细节（骨架、成本传导链、期间口径纪律、多源融合约定、已知局限）见 [industry-lithium.md](doc/design/industry-lithium.md)。
+
 ---
 
 ## 3. 设计文档索引
@@ -110,4 +116,5 @@
 | [profit-forecast-methods.md](doc/design/profit-forecast-methods.md) | 从财报外推未来利润的三类信号与融合范式 |
 | [overlay-scenario.md](doc/design/overlay-scenario.md) | 情景演绎：覆盖/屏蔽、情景文件、`--diff` |
 | [agent-teams.md](doc/design/agent-teams.md) | Agent 团队角色提示词、问题→解决方案手册、跨 harness 适配 |
+| [industry-lithium.md](doc/design/industry-lithium.md) | 产业链结构层：锂电首条链的骨架、成本传导链与多源融合约定 |
 | [mobile-display.md](doc/design/mobile-display.md) | 移动端卡片式显示设计 |
