@@ -235,6 +235,22 @@
       "display_scale": 0.0001,
       "output_metric": "单位电池需求的六氟磷酸锂单耗_2026",
       "note": "六氟需求预测/全球锂电需求预测；两个输入的年份口径均为 2026 年"
+    },
+    {
+      "id": "ind.liPF6.cn_supply_demand_ratio_2026.zy",
+      "operator": "divide",
+      "inputs": ["ind.liPF6.output.cn_2026", "ind.liPF6.demand.cn_2026"],
+      "unit": "比率",
+      "output_metric": "中国六氟产量/需求量比_2026E(智研口径)",
+      "note": "同源同为中国口径；比值>1 反映中国产量覆盖全球需求（含出口），不能读作中国自用过剩"
+    },
+    {
+      "id": "ind.liPF6.price.vs_forecast_center",
+      "operator": "divide",
+      "inputs": ["ind.liPF6.price", "ind.liPF6.price.center_fy2026"],
+      "unit": "比率",
+      "output_metric": "六氟现货价/2026预测中枢",
+      "note": "分子为 2026-09 多源融合现货价、分母为 2026-06 券商预测中枢；时点不同，仅作分歧展示，不作结论"
     }
   ]
 }

@@ -1,0 +1,31 @@
+{
+  "source_id": "ind_lifp6_demand_2026",
+  "source_name": "六氟磷酸锂需求/产量预测（智研咨询，中国口径）",
+  "publisher": "智研咨询",
+  "as_of": "2026-03-14",
+  "retrieved_at": "2026-09-19",
+  "source_url": "https://www.chyxx.com/industry/1255314.html",
+  "note": "两个节点均为中国口径（需求量/产量），与中信建投的全球口径（40.4 万吨需求）不可直接对照，不得混合。",
+  "nodes": [
+    {
+      "id": "ind.liPF6.demand.cn_2026",
+      "metric": "中国六氟磷酸锂需求量_2026E",
+      "unit": "万吨",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-03-14",
+      "source_url": "https://www.chyxx.com/industry/1255314.html",
+      "distribution": {"type": "point", "value": 31.44},
+      "quote": "预计 2026 年我国六氟磷酸锂需求量将达 31.44 万吨，市场规模将达 698.57 亿元。来源：智研咨询（2026-03-14）。"
+    },
+    {
+      "id": "ind.liPF6.output.cn_2026",
+      "metric": "中国六氟磷酸锂产量_2026E",
+      "unit": "万吨",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-03-14",
+      "source_url": "https://www.chyxx.com/industry/1255314.html",
+      "distribution": {"type": "point", "value": 38.52},
+      "quote": "预计 2026 年我国六氟磷酸锂产能将达 115.22 万吨，产量将增长到 38.52 万吨。来源：智研咨询（2026-03-14）。"
+    }
+  ]
+}

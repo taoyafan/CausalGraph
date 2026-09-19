@@ -1,0 +1,21 @@
+{
+  "source_id": "ind_lifp6_forecast_price_2026",
+  "source_name": "六氟磷酸锂 2026 年价格中枢预测（协会转载）",
+  "publisher": "中国电池工业协会（转载，原刊『电池中国』）",
+  "as_of": "2026-06-10",
+  "retrieved_at": "2026-09-19",
+  "source_url": "http://www.chinabattery.org/detail/1056959.html",
+  "note": "券商预测口径，非实测值。",
+  "nodes": [
+    {
+      "id": "ind.liPF6.price.center_fy2026",
+      "metric": "2026年六氟价格中枢预测",
+      "unit": "元/吨",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-06-10",
+      "source_url": "http://www.chinabattery.org/detail/1056959.html",
+      "distribution": {"type": "uniform", "low": 170000, "high": 190000, "domain": [0, null]},
+      "quote": "预计 2026 年全年六氟磷酸锂整体处于紧平衡，全年总需求约 40.4 万吨、对应行业有效产能约 41.4 万吨；2026 年第四季度将面临约 0.7 万吨缺口；2026 年六氟磷酸锂价格中枢或将上移至 17 万-19 万元/吨。来源：中国电池工业协会转载（原刊『电池中国』，2026-06-10）。"
+    }
+  ]
+}
