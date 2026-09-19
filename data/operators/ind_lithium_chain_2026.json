@@ -202,7 +202,7 @@
       "inputs": ["capchem.liPF6.capacity_2026", "ind.liPF6.capacity.cn_2025"],
       "output_metric": "新宙邦六氟产能占全国比值",
       "unit": "比率",
-      "note": "口径差异说明：分子为新宙邦（江西石磊）2026 年名义产能（万吨，2026 年口径），分母为 2025 年全国产能（万吨/年，2025 年口径），年份口径不完全一致，该比值仅作量级参考。"
+      "note": "口径差异说明：分子为新宙邦（江西石磊）2026 年名义产能（万吨，2026 年口径），分母为 2025 年全国产能（万吨/年，2025 年口径），年份口径不完全一致，该比值仅作量级参考；分子为 2026 年名义产能、分母为 2025 年全国产能，年份与单位口径均不一致"
     },
     {
       "id": "catl.capchem_vs_yongtai_contract",
@@ -274,7 +274,7 @@
       "inputs": ["ind.li2co3.price", "ind.liPF6.li2co3_dosage"],
       "output_metric": "六氟成本中碳酸锂贡献",
       "unit": "元/吨",
-      "note": "= 碳酸锂价 × 碳酸锂单耗"
+      "note": "= 碳酸锂价 × 碳酸锂单耗；分子价格取 2026-09、单耗取 2020/2023/2026 口径，属跨 vintage 组合，仅作量级参考"
     },
     {
       "id": "ind.liPF6.cost.ahf",
@@ -282,7 +282,7 @@
       "inputs": ["ind.ahf.price", "ind.liPF6.ahf_dosage"],
       "output_metric": "六氟成本中无水氟化氢贡献",
       "unit": "元/吨",
-      "note": "= AHF 价 × AHF 单耗"
+      "note": "= AHF 价 × AHF 单耗；分子价格取 2026-09、单耗取 2020/2023/2026 口径，属跨 vintage 组合，仅作量级参考"
     },
     {
       "id": "ind.liPF6.cost.materials_implied",
@@ -290,7 +290,7 @@
       "inputs": ["ind.liPF6.cost.li2co3", "ind.liPF6.cost.ahf"],
       "output_metric": "六氟两大原料成本合计(碳酸锂+AHF)",
       "unit": "元/吨",
-      "note": "未含五氯化磷（缺价格节点）；与行业综合成本(7.1~7.3 万元/吨)对比看量级"
+      "note": "未含五氯化磷（缺价格节点）；与行业综合成本(7.1~7.3 万元/吨)对比看量级；分子价格取 2026-09、单耗取 2020/2023/2026 口径，属跨 vintage 组合，仅作量级参考"
     },
     {
       "id": "ind.liPF6.price.vs_cost",
@@ -323,7 +323,7 @@
       "inputs": ["ind.battery.electrolyte_cost_per_gwh", "ind.battery.cost_share.electrolyte_mix_ratio"],
       "output_metric": "由电解液成本与占比反推的电池单位成本",
       "unit": "元/GWh",
-      "note": "隐含『电解液占电池成本比可外推』，仅作量级参考"
+      "note": "由电解液成本与占比反推；P50 落在 5% 支路——等权 mixture 含点源（民生 2021 年 5%），中位数向点源坍塌；8% 锚支路对应约 0.40 元/Wh，5% 支路约 0.65 元/Wh"
     },
     {
       "id": "ind.battery.cost_implied_per_wh",
@@ -375,12 +375,12 @@
       "note": "动力毛利率减储能毛利率；负值表示储能毛利率更高"
     },
     {
-      "id": "capchem.battery_chem.avg_price_growth_h1_2026",
+      "id": "capchem.battery_chem.avg_price_ratio_h1_2026",
       "operator": "divide",
       "inputs": ["capchem.battery_chem.avg_price_h1_2026", "capchem.battery_chem.avg_price_2025"],
       "unit": "比率",
       "output_metric": "电池化学品均价_2026H1/2025",
-      "note": "时点不同（半年 vs 全年），仅作方向参考"
+      "note": "时点不同（半年 vs 全年），仅作方向参考；比值口径：2026H1 均价 ÷ 2025 全年均价，与披露的同比 +36.3% 不是同一口径"
     },
     {
       "id": "ind.liPF6.cost.materials_vs_industry",
@@ -388,7 +388,7 @@
       "inputs": ["ind.liPF6.cost.materials_implied", "ind.liPF6.cost.industry_2026"],
       "unit": "比率",
       "output_metric": "六氟原料成本合计/行业综合成本",
-      "note": "分子只含碳酸锂与 AHF（未含五氯化磷与费用），比值应小于 1"
+      "note": "分子只含碳酸锂与 AHF（未含五氯化磷与制造费用）；名义上应小于 1，但两输入上尾未协调（P90 达 1.00），上尾越界不作解读"
     },
     {
       "id": "ind.liPF6.utilization_vs_supply_demand",
@@ -437,7 +437,7 @@
       "inputs": ["capchem.battery_chem.shipment_h1_2026", "capchem.battery_chem.output_2025"],
       "unit": "比率",
       "output_metric": "2026H1出货/2025产量",
-      "note": "时段不一致（半年出货 vs 全年产量），仅作结构参考"
+      "note": "分子为电解液出货口径（2026H1，20.9 万吨）、分母为电池化学品产量口径（2025 年，52.93 万吨/年）；口径与时段均不一致，仅作结构参考"
     },
     {
       "id": "capchem.battery_chem.electrolyte_rev_h1_2026",
@@ -462,7 +462,7 @@
       "inputs": ["catl.price.battery_avg_2025", "ind.battery.cost_implied_per_wh"],
       "unit": "元/Wh",
       "output_metric": "宁德单位毛利_2025(均价−反推成本)",
-      "note": "反推成本为混口径，仅作量级参考；负值说明占比锚偏低或价口径不一致"
+      "note": "= 宁德均价 − 电解液反推成本；反推成本为混口径，且 P50 落在 5% 支路（mixture 中位数坍塌），仅作量级参考"
     },
     {
       "id": "catl.profit_per_gwh_fy2026",
@@ -488,6 +488,31 @@
       "unit": "比率",
       "output_metric": "披露利用率与校验利用率之差_2025",
       "note": "披露值 96.89% 与产量/产能(748/772) 之差，应接近 0；两个输入同口径同年"
+    },
+    {
+      "id": "catl.margin.power_net_ratio",
+      "operator": "affine",
+      "inputs": ["catl.gross_margin.power_2025"],
+      "params": {"a": 1.0, "b": -0.01},
+      "unit": "比率",
+      "output_metric": "动力毛利率余量(1−毛利率)",
+      "note": "本库 affine = a + b·x，故 1−毛利率(比率) ⇔ a=1、b=−0.01"
+    },
+    {
+      "id": "catl.cost.power_implied_per_wh",
+      "operator": "product",
+      "inputs": ["catl.price.battery_avg_2025", "catl.margin.power_net_ratio"],
+      "unit": "元/Wh",
+      "output_metric": "由动力毛利率反推的单位成本_2025",
+      "note": "= 均价 × (1−动力毛利率)；与电解液链反推成本互为校验（两者口径不同：系统均价 vs 电芯材料）"
+    },
+    {
+      "id": "ind.battery.cost_implied_vs_gross_implied",
+      "operator": "divide",
+      "inputs": ["ind.battery.cost_implied_per_wh", "catl.cost.power_implied_per_wh"],
+      "unit": "比率",
+      "output_metric": "电解液反推成本/毛利反推成本",
+      "note": ">1 表示电解液链反推偏高；仅作校验，不作结论"
     }
   ]
 }
