@@ -45,7 +45,7 @@
     {
       "id": "ind.liPF6.output.cn_2025",
       "metric": "中国六氟磷酸锂产量_2025",
-      "unit": "万吨",
+      "unit": "万吨/年",
       "evidence_type": "analyst_estimate",
       "as_of": "2025-12-31",
       "source_url": "https://news.chemnet.com/toutiao/detail-56020.html",
@@ -83,7 +83,7 @@
       "quote": "2026 年六氟磷酸锂有效产能约 41.4 万吨（中信建投预测）。"
     },
     {
-      "id": "ind.liPF6.gap.fy2026",
+      "id": "ind.liPF6.gap.q4_2026",
       "metric": "六氟磷酸锂供需缺口预测_2026Q4",
       "unit": "万吨",
       "evidence_type": "analyst_estimate",

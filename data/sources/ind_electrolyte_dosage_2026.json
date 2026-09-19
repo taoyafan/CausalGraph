@@ -1,11 +1,16 @@
 {
   "source_id": "ind_electrolyte_dosage_2026",
-  "source_name": "电解液单吨六氟用量（研报口径）",
-  "publisher": "中信证券",
-  "as_of": "2020-09-16",
+  "source_name": "电解液单吨六氟用量（多来源，含 1GWh 口径）",
+  "publisher": "中信证券 / OFweek锂电网 / 每日经济新闻 / 证券时报",
+  "as_of": "2026-03-19",
   "retrieved_at": "2026-09-19",
-  "source_url": "http://pdf.dfcfw.com/pdf/H3_AP202009161413299918_1.pdf",
-  "note": "本文件含两组节点，均不预做合并，由下游算子融合：① 单吨电解液六氟用量的三个来源——中信证券《六氟磷酸锂行业深度报告》（2020-09-16）约 0.13 吨/吨、OFweek 锂电网（2021-06）约 0.12 吨/吨、天赐材料投资者互动（每日经济新闻转载，2026-03-19）1GWh 配方口径（1000 吨电解液对应 125 吨六氟，单吨用量由 divide 算子 ind.electrolyte.liPF6_dosage_1gwh 反推，不在数据节点内预先计算），三者由 mixture 算子 ind.electrolyte.liPF6_dosage 等权融合，用于把六氟价格传导到电解液成本；② 六氟占电解液成本比的第二来源（证券时报 2025-11-13 口径 40%~50%），与民生证券 2022 口径的溶质占比 50% 由 mixture 算子 ind.electrolyte.liPF6_cost_share 等权融合。",
+  "sources": [
+    {"report": "中信证券《六氟磷酸锂行业深度报告》", "source_url": "http://pdf.dfcfw.com/pdf/H3_AP202009161413299918_1.pdf", "as_of": "2020-09-16", "published": "2020-09-16"},
+    {"report": "OFweek锂电网《新宙邦vs天赐材料》", "source_url": "https://libattery.ofweek.com/2021-06/ART-36002-8500-30504822_2.html", "as_of": "2021-06-30", "published": "2021-06"},
+    {"report": "每日经济新闻（天赐材料投资者互动）", "source_url": "https://wap.eastmoney.com/a/202603193677429026.html", "as_of": "2026-03-19", "published": "2026-03-19"},
+    {"report": "证券时报（和讯转载）", "source_url": "https://m.hexun.com/stock/2025-11-13/222281400.html", "as_of": "2025-11-13", "published": "2025-11-13"}
+  ],
+  "note": "本文件含 4 个独立来源的 5 个节点：中信证券(2020-09-16)、OFweek(2021-06)、每日经济新闻·天赐材料投资者互动(2026-03-19，2 个节点)、证券时报(2025-11-13，六氟占电解液成本比)；各节点自带 source_url 与 as_of。",
   "nodes": [
     {
       "id": "ind.electrolyte.liPF6_dosage.cs",

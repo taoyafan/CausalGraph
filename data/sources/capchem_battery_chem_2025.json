@@ -14,7 +14,7 @@
     {
       "id": "capchem.battery_chem.capacity_2025",
       "metric": "新宙邦电池化学品产能_2025",
-      "unit": "万吨",
+      "unit": "万吨/年",
       "evidence_type": "audited",
       "as_of": "2025-12-31",
       "source_url": "https://www.stcn.com/article/detail/3947695.html",
@@ -24,7 +24,7 @@
     {
       "id": "capchem.battery_chem.output_2025",
       "metric": "新宙邦电池化学品产量_2025",
-      "unit": "万吨",
+      "unit": "万吨/年",
       "evidence_type": "audited",
       "as_of": "2025-12-31",
       "source_url": "https://www.stcn.com/article/detail/3947695.html",

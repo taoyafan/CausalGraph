@@ -28,7 +28,8 @@
       "operator": "subtract",
       "inputs": ["ind.electrolyte.price.ncm", "ind.electrolyte.price.lfp.trendforce"],
       "output_metric": "三元与铁锂电解液价差",
-      "unit": "元/吨"
+      "unit": "元/吨",
+      "note": "ncm 为 TrendForce 2026-09-07 与隆众 2026-09-18 两源融合、lfp 取 TrendForce 2026-09-07；分子含更新时点，仅作量级参考"
     },
     {
       "id": "ind.liPF6.capacity_utilization_2025",
@@ -57,7 +58,7 @@
     {
       "id": "ind.liPF6.q4_demand_implied",
       "operator": "divide",
-      "inputs": ["ind.liPF6.gap.fy2026", "ind.liPF6.gap_ratio_q4_2026"],
+      "inputs": ["ind.liPF6.gap.q4_2026", "ind.liPF6.gap_ratio_q4_2026"],
       "unit": "万吨",
       "output_metric": "由Q4缺口与缺口率反推的Q4需求",
       "note": "= Q4 单季缺口 ÷ Q4 缺口率；两者同为 2026Q4 口径，分母为分布故结果为分布"
@@ -116,7 +117,7 @@
       "inputs": ["ind.liPF6.price", "ind.electrolyte.liPF6_dosage"],
       "output_metric": "单吨电解液中六氟(锂盐)成本贡献",
       "unit": "元/吨",
-      "note": "= 六氟价 × 单吨电解液六氟用量(0.13 吨/吨，中信证券口径)。原先的『×锂盐成本占比 50%』等价于暗设『1 吨六氟/吨电解液』，已废弃。"
+      "note": "= 六氟价 × 单吨电解液六氟用量（三源等权融合：0.13 中信证券 / 0.12 OFweek / 1GWh 口径反推）；旧『×锂盐成本占比』等价于暗设 1 吨六氟/吨电解液，已废弃。"
     },
     {
       "id": "ind.electrolyte.cost_implied",
@@ -124,7 +125,7 @@
       "inputs": ["ind.electrolyte.liPF6_cost", "ind.electrolyte.liPF6_cost_share"],
       "unit": "元/吨",
       "output_metric": "由锂盐成本与锂盐占成本比反推的电解液成本",
-      "note": "= 单吨六氟成本贡献 ÷ 锂盐占电解液成本比(50%)；隐含『锂盐以外成本结构延续 2022 年研报口径』，仅作量级参考"
+      "note": "= 锂盐成本贡献 ÷ 锂盐占电解液成本比（民生 2022 口径 50% 与证券时报 2025 口径 40%~50% 等权融合）；隐含『锂盐以外成本结构延续研报口径』，仅作量级参考。"
     },
     {
       "id": "ind.electrolyte.gross_spread",
@@ -132,14 +133,15 @@
       "inputs": ["ind.electrolyte.price.ncm", "ind.electrolyte.cost_implied"],
       "unit": "元/吨",
       "output_metric": "三元电解液售价与隐含成本之差",
-      "note": "分子为市场报价(2026-09-07)、成本为反推值，仅作量级参考"
+      "note": "分子为三元电解液多源融合报价（TrendForce 2026-09-07 与隆众 2026-09-18）、分母为混期反推成本，仅作量级参考。"
     },
     {
       "id": "ind.electrolyte.gross_margin_implied",
       "operator": "divide",
       "inputs": ["ind.electrolyte.gross_spread", "ind.electrolyte.price.ncm"],
       "unit": "比率",
-      "output_metric": "三元电解液隐含毛利率(售价与隐含成本之差÷售价)"
+      "output_metric": "三元电解液隐含毛利率(售价与隐含成本之差÷售价)",
+      "note": "基于混期（2020/2021/2022/2025/2026）反推的隐含成本，仅作量级参考；2026-09 实测 P50≈11%、均值≈8%、P10<0。"
     },
     {
       "id": "ind.electrolyte.cost_share.non_solute",
@@ -170,7 +172,7 @@
       "inputs": ["ind.battery.cost_share.cathode", "ind.battery.cost_share.anode", "ind.battery.cost_share.separator", "ind.battery.cost_share.electrolyte_mix"],
       "output_metric": "电池成本中四大材料合计占比",
       "unit": "%",
-      "note": "正极 45%、负极 10%、隔膜 10% 为 2021 研报口径；电解液 8% 为 2026-09-19 协作确认的假设锚（正态 8±1.25）。相加隐含『2021 年材料成本结构延续到 2026 年』，仅作结构量级参考。电解液一项为两来源融合值"
+      "note": "正极 45%、负极 10%、隔膜 10% 为 2021 研报口径；电解液为两来源融合（协作假设锚 众数 8%、σ=1.5 与 民生 2021 约 5%）。相加隐含『2021 年材料成本结构延续到 2026 年』，仅作结构量级参考。电解液一项为两来源融合值"
     },
     {
       "id": "capchem.battery_chem.utilization_2025",
@@ -224,7 +226,7 @@
       "inputs": ["ind.liPF6.utilization.cn_2025_ratio", "ind.liPF6.capacity_utilization_2025"],
       "unit": "比率",
       "output_metric": "六氟开工率_2025(统计口径与产能口径融合)",
-      "note": "两口径交叉：统计机构口径与产量/产能口径，均为 2025 年。统计口径先经 ind.liPF6.utilization.cn_2025_ratio（affine b=0.01）转写为比率，避免 % 与比率混用的量纲冲突。"
+      "note": "两口径交叉（统计机构口径 63.0% 与产量/产能口径）；两者同源于 ChemNet，属口径交叉而非独立多来源"
     },
     {
       "id": "ind.battery.liPF6_intensity_fy2026",
