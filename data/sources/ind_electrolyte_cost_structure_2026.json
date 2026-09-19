@@ -1,0 +1,41 @@
+{
+  "source_id": "ind_electrolyte_cost_structure_2026",
+  "source_name": "电解液成本构成（溶质/溶剂/添加剂占比，民生证券研报口径）",
+  "publisher": "民生证券",
+  "as_of": "2022-06-15",
+  "retrieved_at": "2026-09-19",
+  "source_url": "https://pdf.dfcfw.com/pdf/H3_AP202206151572341878_1.pdf",
+  "note": "民生证券 2022-06-15 研报口径的电解液成本构成：溶质（锂盐）50%、溶剂 30%、添加剂 10%。同一研报内的三条占比各建独立数据节点（不预做任何合并），非锂盐部分合计由下游 sum 算子 ind.electrolyte.cost_share.non_solute 完成；锂盐（六氟）单位成本贡献由下游 product 算子 ind.electrolyte.liPF6_cost 结合 ind.liPF6.price 得出。占比口径为成本比例（%），与电解液价格节点不做直接相加。",
+  "nodes": [
+    {
+      "id": "ind.electrolyte.cost_share.solute",
+      "metric": "电解液成本中溶质(锂盐)占比",
+      "unit": "%",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2022-06-15",
+      "source_url": "https://pdf.dfcfw.com/pdf/H3_AP202206151572341878_1.pdf",
+      "distribution": {"type": "point", "value": 50},
+      "quote": "电解液各成分占电解液成本比例：溶质（锂盐）50%、溶剂 30%、添加剂 10%。来源：民生证券研报（2022-06-15）。"
+    },
+    {
+      "id": "ind.electrolyte.cost_share.solvent",
+      "metric": "电解液成本中溶剂占比",
+      "unit": "%",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2022-06-15",
+      "source_url": "https://pdf.dfcfw.com/pdf/H3_AP202206151572341878_1.pdf",
+      "distribution": {"type": "point", "value": 30},
+      "quote": "电解液成本构成：溶剂 30%。来源：民生证券（2022-06-15）。"
+    },
+    {
+      "id": "ind.electrolyte.cost_share.additive",
+      "metric": "电解液成本中添加剂占比",
+      "unit": "%",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2022-06-15",
+      "source_url": "https://pdf.dfcfw.com/pdf/H3_AP202206151572341878_1.pdf",
+      "distribution": {"type": "point", "value": 10},
+      "quote": "电解液成本构成：添加剂 10%。来源：民生证券（2022-06-15）。"
+    }
+  ]
+}

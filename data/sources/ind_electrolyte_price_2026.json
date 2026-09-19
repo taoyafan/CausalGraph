@@ -1,0 +1,66 @@
+{
+  "source_id": "ind_electrolyte_price_2026",
+  "source_name": "电解液价格与出货量 2026（TrendForce / 隆众资讯 / 起点研究院 / GGII）",
+  "publisher": "TrendForce / 隆众资讯 / 起点研究院 / GGII",
+  "as_of": "2026-09-18",
+  "retrieved_at": "2026-09-19",
+  "sources": [
+    {"report": "TrendForce 集邦咨询 电池材料价格", "source_url": "https://www.trendforce.cn/price/battery-price/electrolyte", "as_of": "2026-09-07"},
+    {"report": "隆众资讯 电解液现货报价", "source_url": "https://material.oilchem.net/new_material/electrolyte.shtml", "as_of": "2026-09-18"},
+    {"report": "起点研究院 SPIR 2026H1 全球电解液出货", "source_url": "https://finance.sina.com.cn/wm/2026-07-15/doc-inihwmie4775609.shtml", "as_of": "2026-06-30"},
+    {"report": "GGII 高工产研 2026H1 中国电解液出货", "source_url": "https://www.stcn.com/article/detail/4110862.html", "as_of": "2026-06-30"}
+  ],
+  "note": "本文件含三类节点：① 三元动力电解液价格的两个独立来源（TrendForce 均价、隆众资讯现货价）各建独立节点、由下游 mixture 算子 ind.electrolyte.price.ncm 等权融合；② 磷酸铁锂电解液均价单来源节点（用于下游 subtract 求价差）；③ 2026H1 全球/中国电解液出货量（起点研究院 SPIR、GGII）。单位换算说明：TrendForce 原文「3.20 万元/吨」「3.10 万元/吨」按无损单位换算记为 32000 / 31000 元/吨（节点 quote 保留原文）。各节点之间未做任何换算/合并。",
+  "nodes": [
+    {
+      "id": "ind.electrolyte.price.ncm.trendforce",
+      "metric": "三元动力电解液均价_2026-09-07",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-09-07",
+      "source_url": "https://www.trendforce.cn/price/battery-price/electrolyte",
+      "distribution": {"type": "point", "value": 32000, "domain": [0, null]},
+      "quote": "电解液-三元电池用均价 3.20 万元/吨（+7.74%）。来源：TrendForce。"
+    },
+    {
+      "id": "ind.electrolyte.price.lfp.trendforce",
+      "metric": "磷酸铁锂电解液均价_2026-09-07",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-09-07",
+      "source_url": "https://www.trendforce.cn/price/battery-price/electrolyte",
+      "distribution": {"type": "point", "value": 31000, "domain": [0, null]},
+      "quote": "电解液-磷酸铁锂电池用均价 3.10 万元/吨（+6.90%）。来源：TrendForce。"
+    },
+    {
+      "id": "ind.electrolyte.price.ncm.oilchem",
+      "metric": "三元动力型电解液现货价_2026-09-18",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-09-18",
+      "source_url": "https://material.oilchem.net/new_material/electrolyte.shtml",
+      "distribution": {"type": "point", "value": 32500, "domain": [0, null]},
+      "quote": "电解液（三元动力型）现货价 32,500 元/吨。来源：隆众资讯。"
+    },
+    {
+      "id": "ind.electrolyte.shipment.global_h1_2026",
+      "metric": "全球电解液出货量_2026H1",
+      "unit": "万吨",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-06-30",
+      "source_url": "https://finance.sina.com.cn/wm/2026-07-15/doc-inihwmie4775609.shtml",
+      "distribution": {"type": "point", "value": 151.7},
+      "quote": "2026H1 全球电解液出货量 151.7 万吨（同比 +48.7%）。来源：起点研究院 SPIR。"
+    },
+    {
+      "id": "ind.electrolyte.shipment.china_h1_2026",
+      "metric": "中国电解液出货量_2026H1",
+      "unit": "万吨",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-06-30",
+      "source_url": "https://www.stcn.com/article/detail/4110862.html",
+      "distribution": {"type": "point", "value": 142.0},
+      "quote": "2026H1 全球电解液出货约 149 万吨，中国 142 万吨（同比 +63%）。来源：GGII 高工产研。"
+    }
+  ]
+}

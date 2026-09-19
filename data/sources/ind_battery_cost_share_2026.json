@@ -1,0 +1,34 @@
+{
+  "source_id": "ind_battery_cost_share_2026",
+  "source_name": "电解液占动力电池成本比例——假设锚（AI 提出、协作者确认）+ 民生证券口径",
+  "publisher": "CausalGraph 协作者假设 / 民生证券",
+  "as_of": "2026-09-19",
+  "retrieved_at": "2026-09-19",
+  "sources": [
+    {"report": "CausalGraph 协作者假设锚（AI 提出、2026-09-19 确认）", "source_url": "http://www.carmery.net/m/view.php?aid=867", "as_of": "2026-09-19"},
+    {"report": "民生证券《天赐材料研究》", "source_url": "http://pdf.dfcfw.com/pdf/H3_AP202102021457350244_1.pdf", "as_of": "2021-02-02"}
+  ],
+  "note": "AI 提出、协作者于 2026-09-19 确认的假设锚；quote 内的 5%~10% 老口径仅作支撑陈述，不构成 σ 的推导链。本文件另含民生证券 2021 口径（约 5%）节点，与假设锚年份口径不同，二者不预做合成，由下游 mixture 算子 ind.battery.cost_share.electrolyte_mix 等权融合。",
+  "nodes": [
+    {
+      "id": "ind.battery.cost_share.electrolyte",
+      "metric": "电解液占动力电池成本比例(协作确认假设)",
+      "unit": "%",
+      "evidence_type": "assumption",
+      "as_of": "2026-09-19",
+      "source_url": "http://www.carmery.net/m/view.php?aid=867",
+      "distribution": {"type": "normal", "mu": 8.0, "sigma": 1.25, "domain": [0, null]},
+      "quote": "假设锚（AI 提出、协作者 2026-09-19 确认）：以 2021-2022 年老口径区间 5%~10% 为支撑，取众数 8%、σ=1.25（%）。背景：宁德时代口径的电解液单项成本占比未披露、未找到。"
+    },
+    {
+      "id": "ind.battery.cost_share.electrolyte.minisheng",
+      "metric": "电解液占电池成本比例(民生证券口径)",
+      "unit": "%",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2021-02-02",
+      "source_url": "http://pdf.dfcfw.com/pdf/H3_AP202102021457350244_1.pdf",
+      "distribution": {"type": "point", "value": 5.0, "domain": [0, null]},
+      "quote": "电解液在电池中的成本约为 0.027-0.033 元/Wh，占电池成本约 5%。来源：民生证券《天赐材料研究》（2021-02-02）。"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "source_id": "ind_electrolyte_dosage_2026",
+  "source_name": "电解液单吨六氟用量（研报口径）",
+  "publisher": "中信证券",
+  "as_of": "2020-09-16",
+  "retrieved_at": "2026-09-19",
+  "source_url": "http://pdf.dfcfw.com/pdf/H3_AP202009161413299918_1.pdf",
+  "note": "本文件含两组节点，均不预做合并，由下游算子融合：① 单吨电解液六氟用量的三个来源——中信证券《六氟磷酸锂行业深度报告》（2020-09-16）约 0.13 吨/吨、OFweek 锂电网（2021-06）约 0.12 吨/吨、天赐材料投资者互动（每日经济新闻转载，2026-03-19）1GWh 配方口径（1000 吨电解液对应 125 吨六氟，单吨用量由 divide 算子 ind.electrolyte.liPF6_dosage_1gwh 反推，不在数据节点内预先计算），三者由 mixture 算子 ind.electrolyte.liPF6_dosage 等权融合，用于把六氟价格传导到电解液成本；② 六氟占电解液成本比的第二来源（证券时报 2025-11-13 口径 40%~50%），与民生证券 2022 口径的溶质占比 50% 由 mixture 算子 ind.electrolyte.liPF6_cost_share 等权融合。",
+  "nodes": [
+    {
+      "id": "ind.electrolyte.liPF6_dosage.cs",
+      "metric": "单吨电解液六氟磷酸锂用量",
+      "unit": "吨/吨",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2020-09-16",
+      "source_url": "http://pdf.dfcfw.com/pdf/H3_AP202009161413299918_1.pdf",
+      "distribution": {"type": "point", "value": 0.13, "domain": [0, null]},
+      "quote": "单吨电解液对应六氟磷酸锂需求约 0.13 吨。来源：中信证券《六氟磷酸锂行业深度报告》（2020-09-16）。"
+    },
+    {
+      "id": "ind.electrolyte.liPF6_dosage.ofweek",
+      "metric": "单吨电解液六氟用量(2021口径)",
+      "unit": "吨/吨",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2021-06-30",
+      "source_url": "https://libattery.ofweek.com/2021-06/ART-36002-8500-30504822_2.html",
+      "distribution": {"type": "point", "value": 0.12},
+      "quote": "目前单吨电解液六氟磷酸锂用量在 0.12 吨左右。来源：OFweek锂电网（2021-06）。"
+    },
+    {
+      "id": "ind.electrolyte.dosage_1gwh.electrolyte",
+      "metric": "每GWh电池电解液用量",
+      "unit": "吨/GWh",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-03-19",
+      "source_url": "https://wap.eastmoney.com/a/202603193677429026.html",
+      "distribution": {"type": "point", "value": 1000},
+      "quote": "按目前主流的电解液配方，1GWh锂电池需要约1000吨的电解液。来源：天赐材料投资者互动平台回复（每日经济新闻，2026-03-19）。"
+    },
+    {
+      "id": "ind.electrolyte.dosage_1gwh.liPF6",
+      "metric": "每GWh电池六氟用量",
+      "unit": "吨/GWh",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-03-19",
+      "source_url": "https://wap.eastmoney.com/a/202603193677429026.html",
+      "distribution": {"type": "point", "value": 125},
+      "quote": "（1GWh锂电池需要约1000吨的电解液，）对应约125吨六氟磷酸锂。来源：天赐材料投资者互动平台回复（每日经济新闻，2026-03-19）。"
+    },
+    {
+      "id": "ind.electrolyte.liPF6_cost_share.hexun",
+      "metric": "六氟占电解液成本比例(证券时报口径)",
+      "unit": "%",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2025-11-13",
+      "source_url": "https://m.hexun.com/stock/2025-11-13/222281400.html",
+      "distribution": {"type": "uniform", "low": 40, "high": 50, "domain": [0, null]},
+      "quote": "六氟磷酸锂是电解液的核心原材料，成本占比40%—50%。来源：证券时报（2025-11-13）。"
+    }
+  ]
+}

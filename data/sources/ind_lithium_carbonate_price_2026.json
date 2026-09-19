@@ -1,0 +1,45 @@
+{
+  "source_id": "ind_lithium_carbonate_price_2026",
+  "source_name": "电池级碳酸锂现货价 2026-09-16~18（上海钢联 / 生意社 / Trading Economics）",
+  "publisher": "上海钢联 / 生意社 / Trading Economics",
+  "as_of": "2026-09-18",
+  "retrieved_at": "2026-09-19",
+  "sources": [
+    {"report": "上海钢联 Mysteel 碳酸锂现货价（MMLC）", "source_url": "https://www.mysteel.com/mmlc/", "as_of": "2026-09-17"},
+    {"report": "生意社 碳酸锂基准价", "source_url": "https://www.100ppi.com/news/detail-20260916-6223166.html", "as_of": "2026-09-16"},
+    {"report": "Trading Economics 碳酸锂（CFD 基准）报价", "source_url": "https://zh.tradingeconomics.com/commodity/lithium", "as_of": "2026-09-18"}
+  ],
+  "note": "同一指标（电池级碳酸锂现货价）的三个独立市场报价来源。按铁律 1「严格单一来源」各建一个数据节点，不跨来源平均/加权，由下游 mixture 算子 ind.li2co3.price 等权融合。三个来源口径不同：上海钢联为早盘现货中间价、生意社为基准价、Trading Economics 为 CFD 基准价；节点值一律照抄来源披露数字，未做任何单位换算或区间合成。",
+  "nodes": [
+    {
+      "id": "ind.li2co3.price.mysteel",
+      "metric": "电池级碳酸锂现货中间价_2026-09-17",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-09-17",
+      "source_url": "https://www.mysteel.com/mmlc/",
+      "distribution": {"type": "point", "value": 128850, "domain": [0, null]},
+      "quote": "电池级碳酸锂（Li₂CO₃≥99.5%，早盘）现货中间价 128,850 元/吨（区间 126,700–131,000，较前日 +1,250）。来源：上海钢联 Mysteel（MMLC）。"
+    },
+    {
+      "id": "ind.li2co3.price.ppi",
+      "metric": "生意社碳酸锂基准价_2026-09-16",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-09-16",
+      "source_url": "https://www.100ppi.com/news/detail-20260916-6223166.html",
+      "distribution": {"type": "point", "value": 131000, "domain": [0, null]},
+      "quote": "生意社碳酸锂（电池级）基准价 131,000.00 元/吨，较本月初 156,000.00 元/吨下降 16.03%。来源：生意社。"
+    },
+    {
+      "id": "ind.li2co3.price.te",
+      "metric": "碳酸锂(CFD基准)报价_2026-09-18",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-09-18",
+      "source_url": "https://zh.tradingeconomics.com/commodity/lithium",
+      "distribution": {"type": "point", "value": 134300, "domain": [0, null]},
+      "quote": "碳酸锂（CFD 基准）134,300 元/吨，较前日 +0.83%，一年前同比 +82.72%。来源：Trading Economics。"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "source_id": "capchem_battery_chem_2025",
+  "source_name": "新宙邦 电池化学品产能/产量与 2026 出货、六氟产能（定期报告 / 证券时报 / EVTank / 海融网）",
+  "publisher": "新宙邦定期报告 / 证券时报 / EVTank",
+  "as_of": "2026-09-10",
+  "retrieved_at": "2026-09-19",
+  "sources": [
+    {"report": "证券时报 新宙邦 2025 年电池化学品产能/产量", "source_url": "https://www.stcn.com/article/detail/3947695.html", "as_of": "2025-12-31"},
+    {"report": "EVTank／电池网 2026H1 新宙邦电解液出货量", "source_url": "https://www.itdcw.com/news/top/091015MQ2026.html", "as_of": "2026-06-30"},
+    {"report": "海融网 新宙邦（江西石磊）六氟磷酸锂名义产能", "source_url": "https://www.hirohida.com/news/news_details/32098.html", "as_of": "2026-05-26"}
+  ],
+  "note": "新宙邦电池化学品链的四个节点，口径不一：产能/产量为公司定期报告口径（audited，单位万吨，产量节点 quote 含披露的产能利用率 77.66%）；2026H1 电解液出货量为第三方机构（EVTank／电池网）测算（analyst_estimate，出货口径）；六氟磷酸锂名义产能为媒体报道口径（analyst_estimate，江西石磊名义产能、非并表自产产量）。节点之间未做任何换算或合并，产能利用率由下游 divide 算子 capchem.battery_chem.utilization_2025 产出。",
+  "nodes": [
+    {
+      "id": "capchem.battery_chem.capacity_2025",
+      "metric": "新宙邦电池化学品产能_2025",
+      "unit": "万吨",
+      "evidence_type": "audited",
+      "as_of": "2025-12-31",
+      "source_url": "https://www.stcn.com/article/detail/3947695.html",
+      "distribution": {"type": "point", "value": 68.16},
+      "quote": "新宙邦 2025 年电池化学品产能 68.16 万吨。来源：证券时报（2026-06-08）。"
+    },
+    {
+      "id": "capchem.battery_chem.output_2025",
+      "metric": "新宙邦电池化学品产量_2025",
+      "unit": "万吨",
+      "evidence_type": "audited",
+      "as_of": "2025-12-31",
+      "source_url": "https://www.stcn.com/article/detail/3947695.html",
+      "distribution": {"type": "point", "value": 52.93},
+      "quote": "新宙邦 2025 年电池化学品产量 52.93 万吨，产能利用率约 77.66%。来源：证券时报（2026-06-08）。"
+    },
+    {
+      "id": "capchem.battery_chem.shipment_h1_2026",
+      "metric": "新宙邦电解液出货量_2026H1",
+      "unit": "万吨",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-06-30",
+      "source_url": "https://www.itdcw.com/news/top/091015MQ2026.html",
+      "distribution": {"type": "point", "value": 20.9},
+      "quote": "2026H1 新宙邦电解液出货量约 20.9 万吨。来源：EVTank／电池网。"
+    },
+    {
+      "id": "capchem.liPF6.capacity_2026",
+      "metric": "新宙邦(江西石磊)六氟磷酸锂名义产能_2026",
+      "unit": "万吨",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-05-26",
+      "source_url": "https://www.hirohida.com/news/news_details/32098.html",
+      "distribution": {"type": "point", "value": 3.6},
+      "quote": "新宙邦（江西石磊）六氟磷酸锂产线技改基本完成，名义产能 3.6 万吨，春节后陆续爬坡。来源：海融网（2026-05-26）。"
+    }
+  ]
+}

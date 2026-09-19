@@ -1,0 +1,54 @@
+{
+  "source_id": "lithium_contracts_2026",
+  "source_name": "锂电产业链长协量 2026（新宙邦-宁德时代 公告 / 宁德时代-永太科技 报道）",
+  "publisher": "新宙邦公告 / 证券时报 / 中国化工信息周刊",
+  "as_of": "2026-06-10",
+  "retrieved_at": "2026-09-19",
+  "sources": [
+    {"report": "新宙邦（300037.SZ）与宁德时代《电解液合作协议》公告", "source_url": "https://www.stcn.com/article/detail/3947695.html", "as_of": "2026-06-07"},
+    {"report": "中国化工信息周刊 宁德时代-永太科技电解液长协", "source_url": "https://finance.sina.cn/2026-06-10/detail-iniaxkrt1218275.d.html", "as_of": "2026-06-08"}
+  ],
+  "note": "新宙邦-宁德时代长协的三个年度量节点（audited，2026-06-07 公告）与宁德时代-永太科技长协合计节点（audited，2026-06-08 报道）。三个年度量区间即公告披露的浮动范围：2026 年 5 万吨（±10%）→ uniform[4.5, 5.5]；2027 年 10 万吨（±12%）→ uniform[8.8, 11.2]；2028 年 15 万吨（±15%）→ uniform[12.75, 17.25]，未额外引入分布假设。三年合计由下游 sum 算子 capchem.contract.catl.total 完成，本文件不做加总。",
+  "nodes": [
+    {
+      "id": "capchem.contract.catl.fy2026",
+      "metric": "新宙邦-宁德时代电解液长协量_2026",
+      "unit": "万吨",
+      "evidence_type": "audited",
+      "as_of": "2026-06-07",
+      "source_url": "https://www.stcn.com/article/detail/3947695.html",
+      "distribution": {"type": "uniform", "low": 4.5, "high": 5.5, "domain": [0, null]},
+      "quote": "新宙邦与宁德时代《电解液合作协议》：2026 年 5 万吨（±10%）、2027 年 10 万吨（±12%）、2028 年 15 万吨（±15%），合计 30 万吨；有效期至 2028-12-31，违约赔偿 2,500 万元。（2026-06-07 公告）"
+    },
+    {
+      "id": "capchem.contract.catl.fy2027",
+      "metric": "新宙邦-宁德时代电解液长协量_2027",
+      "unit": "万吨",
+      "evidence_type": "audited",
+      "as_of": "2026-06-07",
+      "source_url": "https://www.stcn.com/article/detail/3947695.html",
+      "distribution": {"type": "uniform", "low": 8.8, "high": 11.2, "domain": [0, null]},
+      "quote": "新宙邦与宁德时代《电解液合作协议》：2026 年 5 万吨（±10%）、2027 年 10 万吨（±12%）、2028 年 15 万吨（±15%），合计 30 万吨；有效期至 2028-12-31，违约赔偿 2,500 万元。（2026-06-07 公告）"
+    },
+    {
+      "id": "capchem.contract.catl.fy2028",
+      "metric": "新宙邦-宁德时代电解液长协量_2028",
+      "unit": "万吨",
+      "evidence_type": "audited",
+      "as_of": "2026-06-07",
+      "source_url": "https://www.stcn.com/article/detail/3947695.html",
+      "distribution": {"type": "uniform", "low": 12.75, "high": 17.25, "domain": [0, null]},
+      "quote": "新宙邦与宁德时代《电解液合作协议》：2026 年 5 万吨（±10%）、2027 年 10 万吨（±12%）、2028 年 15 万吨（±15%），合计 30 万吨；有效期至 2028-12-31，违约赔偿 2,500 万元。（2026-06-07 公告）"
+    },
+    {
+      "id": "catl.electrolyte.contract.yongtai.total",
+      "metric": "宁德时代-永太科技电解液长协量_2026-2028合计",
+      "unit": "万吨",
+      "evidence_type": "audited",
+      "as_of": "2026-06-08",
+      "source_url": "https://finance.sina.cn/2026-06-10/detail-iniaxkrt1218275.d.html",
+      "distribution": {"type": "point", "value": 47},
+      "quote": "宁德时代与永太科技电解液长协采购量 2026–2028 年合计 47 万吨。来源：中国化工信息周刊（2026-06-08）。"
+    }
+  ]
+}

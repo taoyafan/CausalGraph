@@ -1,0 +1,54 @@
+{
+  "source_id": "ind_battery_demand_2026",
+  "source_name": "2026 年全球锂电需求预测与动力电池成本结构（中信建投 / 东方财富研报库）",
+  "publisher": "中信建投",
+  "as_of": "2026-03-23",
+  "retrieved_at": "2026-09-19",
+  "sources": [
+    {"report": "中信建投 2026 年全球锂电需求预测", "source_url": "https://www.itdcw.com/news/ycnews/03231545192026.html", "as_of": "2026-03-23"},
+    {"report": "东方财富研报库《2021 年动力电池产业全景洞察》", "source_url": "https://pdf.dfcfw.com/pdf/H3_AP202208171577292799_1.pdf", "as_of": "2021-12-31"}
+  ],
+  "note": "本文件含两类节点：① 2026 年全球锂电需求预测（中信建投，analyst_estimate）；② 2021 年研报口径的动力电池原材料成本构成（正极/负极/隔膜占比，各建独立节点）。成本构成三节点为 2021 年口径（as_of 2021-12-31），与 2026 需求节点年份口径不同，节点之间不做任何合成或换算；电池成本四大材料合计由下游 sum 算子 ind.battery.cost_share.materials_sum 完成。",
+  "nodes": [
+    {
+      "id": "ind.battery.demand.global_fy2026",
+      "metric": "全球锂电需求预测_2026",
+      "unit": "GWh",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-03-23",
+      "source_url": "https://www.itdcw.com/news/ycnews/03231545192026.html",
+      "distribution": {"type": "point", "value": 3065},
+      "quote": "2026 年全球锂电需求 3065GWh（同比 +33.7%）。来源：中信建投。"
+    },
+    {
+      "id": "ind.battery.cost_share.cathode",
+      "metric": "电池成本中正极占比（2021 研报口径）",
+      "unit": "%",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2021-12-31",
+      "source_url": "https://pdf.dfcfw.com/pdf/H3_AP202208171577292799_1.pdf",
+      "distribution": {"type": "point", "value": 45},
+      "quote": "动力电池原材料成本构成：正极 45%，负极/隔膜/电解液均约 10%。来源：东方财富研报库《2021 年动力电池产业全景洞察》。"
+    },
+    {
+      "id": "ind.battery.cost_share.anode",
+      "metric": "电池成本中负极占比（2021 研报口径）",
+      "unit": "%",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2021-12-31",
+      "source_url": "https://pdf.dfcfw.com/pdf/H3_AP202208171577292799_1.pdf",
+      "distribution": {"type": "point", "value": 10},
+      "quote": "动力电池原材料成本构成：负极约 10%。来源：东方财富研报库（2021）。"
+    },
+    {
+      "id": "ind.battery.cost_share.separator",
+      "metric": "电池成本中隔膜占比（2021 研报口径）",
+      "unit": "%",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2021-12-31",
+      "source_url": "https://pdf.dfcfw.com/pdf/H3_AP202208171577292799_1.pdf",
+      "distribution": {"type": "point", "value": 10},
+      "quote": "动力电池成本构成：隔膜约 10%。来源：东方财富研报库（2021）。"
+    }
+  ]
+}
