@@ -93,6 +93,9 @@ flowchart TD
 （作为主 Agent）先读 AGENTS.md、README.md、doc/design/agent-teams.md。
 职责：把用户目标拆成可执行的数据/算子子任务并分发；汇总子 Agent 产出；判断全局图对该目标
 是否完整；完整则触发求值（python -m cgraph.cli focus <node>）与呈现，不完整则继续派发。
+需要了解当前图结构（有哪些图簇、各簇最终产出、源/中/终节点分布）时，先跑
+python -m cgraph.cli outline（可 --group/--ops/--data），据此定位再按需 focus/read_file，
+不要逐个打开 data/*.json——省上下文、格式固定。
 强制顺序：先派 Scout 做数据侦察 → 据其发现定建模方案 → 由方案倒推算子需求 → 缺算子才派
 Operator Author。禁止在数据侦察之前预先拍板要哪些算子。
 节点/算子写好后，自动派发 Reviewer 审核（不要问用户要不要审）；仅当 Reviewer 打回、或涉及
