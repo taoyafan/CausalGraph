@@ -76,7 +76,7 @@
 ### 2.5 CLI 交互层
 
 - 以 focus 节点为中心渲染字符树：`()` 数据节点、`[]` 算子节点、行尾告警；`--level 0/1/2/3/4` 分档（摘要／一层上游／全树／公式视图／debug 展开来源）。
-- 各档格式与 `trace`/`check`/`export`/`scenario` 用法见 [cli-output.md](doc/design/cli-output.md)。
+- 各档格式与 `trace`/`check`/`export`/`scenario`/`outline` 用法见 [cli-output.md](doc/design/cli-output.md)。
 
 ### 2.6 Agent 团队与跨 Harness 分工
 

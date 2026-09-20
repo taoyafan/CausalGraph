@@ -131,6 +131,39 @@ def cmd_export(args):
     print("直接用浏览器打开 web/index.html 即可（无需后端）。")
 
 
+def cmd_outline(args):
+    """全图结构鸟瞰：不求值、只读拓扑，按图簇分组列出 源/中/终 三层节点，供 Agent 快速建立结构认知。"""
+    from .webexport import outline_data
+    graph = load_world(args.sources, args.operators, 1)
+    data = outline_data(graph)
+    c = data["counts"]
+    print(f"全图 | {c['nodes']} 节点: 数据源 {c['data']} · 中间算子 {c['op']} · 终点 {c['sink']}"
+          f" | 分组 {c['groups']} · 弱连通分量 {c['components']}")
+    print("图例: ★=图簇头条(汇聚上游最多) 终=终点 中=中间算子 源=数据源  ↑N=传递上游节点数\n")
+    groups = data["groups"]
+    if args.group:
+        groups = [g for g in groups if g["key"] == args.group or g["label"] == args.group]
+        if not groups:
+            print(f"（无匹配分组: {args.group}）")
+            return
+    for g in groups:
+        print(f"■ {g['label']} {g['key']}  | 源{len(g['data'])} 中{len(g['ops'])} 终{len(g['sinks'])}")
+        for s in g["sinks"]:
+            mark = "★" if s["headline"] else " "
+            print(f"  终{mark} {s['id']:<44} {s['label']}  [{s['unit']}]  ↑{s['anc']}")
+        if args.ops:
+            for o in g["ops"]:
+                print(f"  中  {o['id']:<44} {o['label']}  [{o['unit']}]  ({o['op']})")
+        elif g["ops"]:
+            print(f"  中  {len(g['ops'])} 个（加 --ops 展开）")
+        if args.data:
+            for d in g["data"]:
+                print(f"  源  {d['id']:<44} {d['label']}  [{d['unit']}]  <{d['source']}>")
+        elif g["data"]:
+            print(f"  源  {len(g['data'])} 个（加 --data 展开）")
+        print()
+
+
 def cmd_scenario_action(args):
     """情景文件管理：list / show / remove（恢复 = 删除文件或条目，无显式恢复命令）。"""
     if args.action == "list":
@@ -212,6 +245,14 @@ def main(argv=None):
     c.add_argument("--sources", default=default_sources, help="数据源目录")
     c.add_argument("--operators", default=default_operators, help="算子子图目录")
     c.set_defaults(func=cmd_check)
+
+    o = sub.add_parser("outline", help="全图结构鸟瞰：按图簇分组列出 源/中/终 三层节点（不求值，固定格式）")
+    o.add_argument("--group", default=None, help="只看某分组（id 根 token 或中文名，如 ind / 产业环节）")
+    o.add_argument("--ops", action="store_true", help="展开中间算子节点（默认只给个数）")
+    o.add_argument("--data", action="store_true", help="展开数据源节点（默认只给个数）")
+    o.add_argument("--sources", default=default_sources, help="数据源目录")
+    o.add_argument("--operators", default=default_operators, help="算子子图目录")
+    o.set_defaults(func=cmd_outline)
 
     e = sub.add_parser("export", help="导出静态 JS(web/export.js)，前端直读、无需后端")
     e.add_argument("--out", default=None, help="输出文件(默认 web/export.js)")

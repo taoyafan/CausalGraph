@@ -130,6 +130,67 @@ def list_focusable(graph):
     return items
 
 
+def outline_data(graph):
+    """全图结构鸟瞰(不求值, 只读拓扑): 把每个节点归入三层并按图簇分组, 供 `cgraph outline`。
+
+    三层判定纯结构、与 id 命名无关:
+      - 数据源(source): DataNode, 零依赖的原子输入(树叶/根);
+      - 中间(op)      : 被其它算子 inputs 引用的算子节点(链条骨架);
+      - 终点(sink)    : 无人引用的算子节点(该图簇的最终产出/头条候选)。
+    分组键 = 节点所在弱连通分量头条(sink 中祖先最多者)的 id 根 token, 与 list_focusable 一致。
+    """
+    comp = _components(graph)
+    referenced = set()
+    for node in graph.nodes.values():
+        if isinstance(node, OperatorNode):
+            referenced.update(node.inputs)
+    memo = {}
+    anc = {nid: len(_ancestor_set(nid, graph, memo)) for nid in graph.nodes}
+    # 每个连通分量的头条 = 无人引用且祖先最多的算子节点
+    headline = {}
+    for nid, node in graph.nodes.items():
+        if isinstance(node, OperatorNode) and nid not in referenced:
+            c = comp[nid]
+            if c not in headline or anc[nid] > anc[headline[c]]:
+                headline[c] = nid
+    comp_key = {}
+    for nid in graph.nodes:
+        c = comp[nid]
+        if c not in comp_key:
+            comp_key[c] = (headline.get(c) or nid).split(".", 1)[0]
+
+    groups = {}
+    for nid, node in graph.nodes.items():
+        key = comp_key[comp[nid]]
+        g = groups.setdefault(key, {"key": key, "label": GROUP_LABELS.get(key, key),
+                                    "sinks": [], "ops": [], "data": []})
+        if isinstance(node, DataNode):
+            g["data"].append({"id": nid, "label": node.metric,
+                              "unit": display_unit(node), "source": node.source_id})
+        elif nid in referenced:
+            g["ops"].append({"id": nid, "label": node.output_metric,
+                             "unit": display_unit(node), "op": node.operator})
+        else:
+            g["sinks"].append({"id": nid, "label": node.output_metric,
+                               "unit": display_unit(node), "anc": anc[nid],
+                               "headline": headline.get(comp[nid]) == nid})
+
+    for g in groups.values():
+        g["sinks"].sort(key=lambda x: (not x["headline"], -x["anc"], x["id"]))
+        g["ops"].sort(key=lambda x: x["id"])
+        g["data"].sort(key=lambda x: x["id"])
+    out_groups = sorted(groups.values(), key=lambda g: (g["label"], g["key"]))
+    n_data = sum(len(g["data"]) for g in out_groups)
+    n_op = sum(len(g["ops"]) for g in out_groups)
+    n_sink = sum(len(g["sinks"]) for g in out_groups)
+    return {
+        "counts": {"nodes": len(graph.nodes), "data": n_data, "op": n_op,
+                   "sink": n_sink, "groups": len(out_groups),
+                   "components": len(set(comp.values()))},
+        "groups": out_groups,
+    }
+
+
 def _node_self(graph, node_id):
     """单个节点的自身载荷(不含下游 children/inputs)。数据节点带出处/证据, 算子带算子信息。"""
     node = graph.nodes[node_id]
