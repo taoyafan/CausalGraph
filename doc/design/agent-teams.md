@@ -86,23 +86,10 @@ flowchart TD
 
 ### 3.1 主 Agent（= 对话/默认 Agent）
 
-> 主 Agent **不是**独立的 `.agent.md`，而是**当前与用户对话的默认 Agent**；其编排职责写入
-> [AGENTS.md](../../AGENTS.md)（常驻生效）。下面是这段职责的规范表述：
-
-```
-（作为主 Agent）先读 AGENTS.md、README.md、doc/design/agent-teams.md。
-职责：把用户目标拆成可执行的数据/算子子任务并分发；汇总子 Agent 产出；判断全局图对该目标
-是否完整；完整则触发求值（python -m cgraph.cli focus <node>）与呈现，不完整则继续派发。
-需要了解当前图结构（有哪些图簇、各簇最终产出、源/中/终节点分布）时，先跑
-python -m cgraph.cli outline（可 --group/--ops/--data），据此定位再按需 focus/read_file，
-不要逐个打开 data/*.json——省上下文、格式固定。
-强制顺序：先派 Scout 做数据侦察 → 据其发现定建模方案 → 由方案倒推算子需求 → 缺算子才派
-Operator Author。禁止在数据侦察之前预先拍板要哪些算子。
-节点/算子写好后，自动派发 Reviewer 审核（不要问用户要不要审）；仅当 Reviewer 打回、或涉及
-AI 自造假设值需拍板时才回到用户。
-禁止：不亲自检索/提取/写节点/写算子——这些派给 scout / operator-author 子 Agent。
-遇到缺算子、缺数据、多源冲突时，按 §4 手册决定派发哪个角色，绝不删节点回避。
-```
+> 主 Agent **不是**独立的 `.agent.md`，而是**当前与用户对话的默认 Agent**。其编排职责（含
+> 先 outline 建立结构认知、强制先搜后算、自动派 Reviewer、禁读禁算边界等）的**单一事实源**在
+> [AGENTS.md](../../AGENTS.md)《主 Agent（对话 Agent）编排职责》一节，常驻生效——此处不复制正文
+> （与 §3.2~3.4 一样只指路，避免两处漂移）。
 
 ### 3.2 Scout（搜索提取 Agent）
 
