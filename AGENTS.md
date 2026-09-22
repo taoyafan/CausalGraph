@@ -80,6 +80,9 @@
 - **底层节点 id 前缀不限**（可用拼音如 `songfa.*`），只要 `GROUP_LABELS` 映射到中文即可。
 - **券商/机构类节点 id 必须带公司前缀**（如 `capchem.broker.huaan.fy2026e`）：全局单图共用一套
   id 命名空间，不带前缀时第二家公司再用同一家券商就会 id 冲突、加载直接报错。
+- **展示数字≤５位、超长用万/亿**：属公布（展示）层约定，是建模与 reviewer 共守的铁律，
+  完整口径见 [invariants.md 第 7 条](doc/design/agents/invariants.md)（内部值照实存，只调
+  `display_scale`+`display_unit`，不进 check 审计）。
 
 ## 数据诚实性原则
 

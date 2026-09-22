@@ -11,6 +11,8 @@
       "id": "ind.liPF6.price.center_fy2026",
       "metric": "2026年六氟价格中枢预测",
       "unit": "元/吨",
+      "display_unit": "万元/吨",
+      "display_scale": 10000,
       "evidence_type": "analyst_estimate",
       "as_of": "2026-06-10",
       "source_url": "http://www.chinabattery.org/detail/1056959.html",

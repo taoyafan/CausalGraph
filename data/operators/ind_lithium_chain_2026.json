@@ -7,14 +7,18 @@
       "operator": "mixture",
       "inputs": ["ind.li2co3.price.mysteel", "ind.li2co3.price.ppi", "ind.li2co3.price.te"],
       "output_metric": "碳酸锂现货价(多来源等权融合)",
-      "unit": "元/吨"
+      "unit": "元/吨",
+      "display_unit": "万元/吨",
+      "display_scale": 10000
     },
     {
       "id": "ind.liPF6.price",
       "operator": "mixture",
       "inputs": ["ind.liPF6.price.oilchem", "ind.liPF6.price.trendforce"],
       "output_metric": "六氟磷酸锂价(多来源等权融合)",
-      "unit": "元/吨"
+      "unit": "元/吨",
+      "display_unit": "万元/吨",
+      "display_scale": 10000
     },
     {
       "id": "ind.electrolyte.price.ncm",
@@ -306,6 +310,8 @@
       "inputs": ["ind.electrolyte.dosage_1gwh.electrolyte", "ind.electrolyte.price.ncm"],
       "output_metric": "每GWh电池的电解液成本",
       "unit": "元/GWh",
+      "display_unit": "万元/GWh",
+      "display_scale": 10000,
       "note": "= 1000 吨电解液/GWh × 三元电解液均价"
     },
     {
@@ -323,6 +329,8 @@
       "inputs": ["ind.battery.electrolyte_cost_per_gwh", "ind.battery.cost_share.electrolyte_mix_ratio"],
       "output_metric": "由电解液成本与占比反推的电池单位成本",
       "unit": "元/GWh",
+      "display_unit": "万元/GWh",
+      "display_scale": 10000,
       "note": "由电解液成本与占比反推；P50 落在 5% 支路——等权 mixture 含点源（民生 2021 年 5%），中位数向点源坍塌；8% 锚支路对应约 0.40 元/Wh，5% 支路约 0.65 元/Wh"
     },
     {
@@ -403,6 +411,8 @@
       "operator": "product",
       "inputs": ["ind.electrolyte.shipment.global_h1_2026", "ind.electrolyte.price.ncm"],
       "unit": "万元",
+      "display_unit": "亿元",
+      "display_scale": 10000,
       "output_metric": "全球电解液市场规模隐含值_2026H1",
       "note": "= 出货(万吨) × 均价(元/吨)，数值单位为万元"
     },
@@ -444,6 +454,8 @@
       "operator": "product",
       "inputs": ["capchem.battery_chem.shipment_h1_2026", "ind.electrolyte.price.ncm"],
       "unit": "万元",
+      "display_unit": "亿元",
+      "display_scale": 10000,
       "output_metric": "新宙邦电解液隐含收入_2026H1",
       "note": "= 电解液出货(万吨) × 环节电解液均价(元/吨)，数值单位为万元；两者均为电解液口径"
     },
