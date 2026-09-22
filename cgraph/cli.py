@@ -127,11 +127,13 @@ def cmd_export(args):
         print(f"[WARN] {e}")
     web_dir = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "web"))
     out = args.out or os.path.join(web_dir, "export.js")
-    payload = _json.dumps({"nodes": nodes, "graph": gmap, "views": views}, ensure_ascii=False)
+    # Web 只消费视图目录；诊断桶(orphans)是建模自检项, 仅 CLI `outline --orphans` 暴露, 不进前端 payload。
+    web_views = {"categories": views["categories"]}
+    payload = _json.dumps({"nodes": nodes, "graph": gmap, "views": web_views}, ensure_ascii=False)
     with open(out, "w", encoding="utf-8") as f:
         f.write("window.CG_EXPORT = " + payload + ";\n")
     nv = sum(len(c["views"]) for c in views["categories"])
-    print(f"已导出 {len(gmap)} 个节点({len(nodes)} 可 focus，{nv} 视图，{len(views['orphans'])} 诊断节点) -> {out}")
+    print(f"已导出 {len(gmap)} 个节点({len(nodes)} 可 focus，{nv} 视图；{len(views['orphans'])} 诊断节点仅 CLI outline 可见) -> {out}")
     print("直接用浏览器打开 web/index.html 即可（无需后端）。")
 
 

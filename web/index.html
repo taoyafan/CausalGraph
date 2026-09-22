@@ -108,6 +108,7 @@
     <h1>CausalGraph <small>因果推理图 · 可溯源</small></h1>
     <div class="picker">
       <select id="viewPicker"></select>
+      <select id="nodePicker"></select>
     </div>
   </header>
   <main id="main"><div class="loading">加载中…</div></main>
@@ -296,33 +297,11 @@ function showView(view) {
   const panel = (view.panel && view.panel.length)
     ? view.panel
     : [{ id: view.anchor, label: view.anchor_label, unit: view.anchor_unit }];
+  fillNodePicker(view.anchor, collectMembers(view.anchor, view.panel));
   main.appendChild(renderViewPanel(panel));
   const detail = el("div"); detail.id = "detail";
   main.appendChild(detail);
   loadFocus(view.anchor);
-}
-
-// 诊断桶: 列出未归入任何视图的旁支节点(vs/ratio 校验等), 点击钻取其贡献树。
-function showOrphans() {
-  const main = document.getElementById("main");
-  main.innerHTML = "";
-  const g = window.CG_EXPORT.graph || {};
-  const info = el("div", "sec-title");
-  info.textContent = `未归类诊断节点 ${VIEWS.orphans.length} 个（不在任何视图锚点的上游，多为旁支 vs/ratio 校验）`;
-  main.appendChild(info);
-  VIEWS.orphans.forEach(o => {
-    const node = g[o.id];
-    const card = el("div", "card"); card.style.marginBottom = "6px";
-    const row = el("div", "row tap");
-    const u = (node && (node.display_unit || o.unit)) || "";
-    row.innerHTML = `<div class="title"><b>${o.label}</b><div class="meta">${o.id}</div></div>
-      <div class="stat"><b>${node && node.stats ? fmt(node.stats.p50) + u : "—"}</b></div>`;
-    row.addEventListener("click", () => loadFocus(o.id));
-    card.appendChild(row);
-    main.appendChild(card);
-  });
-  const detail = el("div"); detail.id = "detail";
-  main.appendChild(detail);
 }
 
 async function loadFocus(node) {
@@ -338,12 +317,48 @@ async function loadFocus(node) {
     host.appendChild(t);
     host.appendChild(nodeView(tree, 0));
     document.querySelectorAll(".pseg").forEach(c => c.classList.toggle("on", c.dataset.id === node));
+    const np = document.getElementById("nodePicker");
+    if (np && [...np.options].some(o => o.value === node)) np.value = node;
   } catch (e) {
     host.innerHTML = `<div class="err">加载失败: ${e}</div>`;
   }
 }
 
-let VIEWS = null;       // window.CG_EXPORT.views: {categories, orphans, errors}
+// 从锚点(及 panel)沿 inputs 递归收集全部上游成员 id(去重), 供第二级"任意节点"下拉列出。
+function collectMembers(anchor, panel) {
+  const g = window.CG_EXPORT.graph || {};
+  const seen = new Set(), stack = [anchor, ...((panel || []).map(p => p.id))];
+  while (stack.length) {
+    const id = stack.pop();
+    if (!id || seen.has(id) || !g[id]) continue;
+    seen.add(id);
+    (g[id].inputs || []).forEach(c => stack.push(c));
+  }
+  return [...seen];
+}
+
+// 填第二级下拉: 锚点(★)置顶, 其余算子(·)在前、数据源在后, 各按标签排序。
+function fillNodePicker(anchor, memberIds) {
+  const np = document.getElementById("nodePicker");
+  const g = window.CG_EXPORT.graph || {};
+  np.innerHTML = "";
+  const rest = memberIds.filter(id => id !== anchor && g[id]);
+  rest.sort((a, b) => {
+    const ka = g[a].kind === "operator" ? 0 : 1, kb = g[b].kind === "operator" ? 0 : 1;
+    if (ka !== kb) return ka - kb;
+    const la = g[a].label || a, lb = g[b].label || b;
+    return la < lb ? -1 : la > lb ? 1 : 0;
+  });
+  const ordered = anchor && g[anchor] ? [anchor, ...rest] : rest;
+  ordered.forEach(id => {
+    const n = g[id]; if (!n) return;
+    const mark = id === anchor ? "★ " : (n.kind === "operator" ? "· " : "◦ ");
+    const o = el("option"); o.value = id; o.textContent = mark + (n.label || id);
+    np.appendChild(o);
+  });
+}
+
+let VIEWS = null;       // window.CG_EXPORT.views: {categories}（诊断桶 orphans 仅 CLI outline 暴露）
 let VIEW_INDEX = [];    // 下拉 option value(序号) -> 视图对象
 
 // 用『分类(optgroup) → 视图』填充下拉; 末尾附诊断桶入口。
@@ -358,22 +373,16 @@ function buildViewPicker() {
     });
     vp.appendChild(og);
   });
-  if (VIEWS.orphans && VIEWS.orphans.length) {
-    const og = el("optgroup"); og.label = "诊断";
-    const o = el("option"); o.value = "orphans";
-    o.textContent = `未归类诊断节点 (${VIEWS.orphans.length})`;
-    og.appendChild(o); vp.appendChild(og);
-  }
 }
 
 function onPick(val) {
-  if (val === "orphans") { showOrphans(); return; }
   const v = VIEW_INDEX[Number(val)];
   if (v) showView(v);
 }
 
 async function init() {
   const vp = document.getElementById("viewPicker");
+  const np = document.getElementById("nodePicker");
   try {
     VIEWS = (window.CG_EXPORT && window.CG_EXPORT.views) || null;
     if (!VIEWS || !VIEWS.categories || !VIEWS.categories.length) {
@@ -382,6 +391,7 @@ async function init() {
     }
     buildViewPicker();
     vp.addEventListener("change", () => onPick(vp.value));
+    np.addEventListener("change", () => loadFocus(np.value));
     onPick(vp.value);
   } catch (e) {
     document.getElementById("main").innerHTML = `<div class="err">加载失败: ${e}</div>`;
