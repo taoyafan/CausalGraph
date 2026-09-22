@@ -5,6 +5,9 @@
   置信度、分布直方图、数据节点出处),结构对齐小程序渲染。
 """
 
+import json
+import os
+
 from .confidence import confidence_for
 from .operators import formula_of
 from .model import DataNode, OperatorNode
@@ -189,6 +192,79 @@ def outline_data(graph):
                    "components": len(set(comp.values()))},
         "groups": out_groups,
     }
+
+
+def _views_path():
+    return os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "data", "views.json"))
+
+
+def load_views(path=None):
+    """读视图注册表 data/views.json（分类→视图→锚点/panel）。缺文件返回空目录。"""
+    path = path or _views_path()
+    if not os.path.exists(path):
+        return {"categories": []}
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _label_unit(graph, nid):
+    node = graph.nodes[nid]
+    label = node.output_metric if isinstance(node, OperatorNode) else node.metric
+    return label, display_unit(node)
+
+
+def build_views(graph, views_cfg=None):
+    """把 views.json 编译成前端/CLI 可消费的视图目录（不求值，只读拓扑）。
+
+    - 视图成员 = 锚点的上游闭包 ∪ 锚点自身；panel 各节点的闭包也计入『已覆盖』。
+    - 诊断桶 orphans = 不在任何视图覆盖集内的算子节点（多为旁支 vs/ratio 校验）。
+    - 锚点/panel 指向不存在的节点 → 收进 errors，供导出时告警（强制命名/纠错）。
+    """
+    cfg = views_cfg or load_views()
+    memo = {}
+    anc = {nid: len(_ancestor_set(nid, graph, memo)) for nid in graph.nodes}
+    covered, errors = set(), []
+
+    def closure(nid):
+        return _ancestor_set(nid, graph, memo) | {nid}
+
+    out_cats = []
+    for cat in cfg.get("categories", []):
+        vitems = []
+        for v in cat.get("views", []):
+            anchor = v.get("anchor")
+            if anchor not in graph.nodes:
+                errors.append(f"视图『{v.get('name')}』锚点不存在: {anchor}")
+                continue
+            members = closure(anchor)
+            covered |= members
+            panel = []
+            for pid in v.get("panel", []):
+                if pid not in graph.nodes:
+                    errors.append(f"视图『{v.get('name')}』panel 节点不存在: {pid}")
+                    continue
+                covered |= closure(pid)
+                plabel, punit = _label_unit(graph, pid)
+                panel.append({"id": pid, "label": plabel, "unit": punit})
+            alabel, aunit = _label_unit(graph, anchor)
+            n_src = sum(1 for m in members if isinstance(graph.nodes[m], DataNode))
+            vitems.append({
+                "name": v.get("name"), "anchor": anchor,
+                "anchor_label": alabel, "anchor_unit": aunit,
+                "panel": panel, "note": v.get("note"),
+                "member_count": len(members), "src_count": n_src,
+                "op_count": len(members) - n_src,
+            })
+        out_cats.append({"name": cat.get("name"), "note": cat.get("note"), "views": vitems})
+
+    # 诊断桶：未被任何视图覆盖的算子节点（旁支校验/孤立推导），按聚合度降序
+    orphans = []
+    for nid, node in graph.nodes.items():
+        if isinstance(node, OperatorNode) and nid not in covered:
+            olabel, ounit = _label_unit(graph, nid)
+            orphans.append({"id": nid, "label": olabel, "unit": ounit, "anc": anc[nid]})
+    orphans.sort(key=lambda x: (-x["anc"], x["id"]))
+    return {"categories": out_cats, "orphans": orphans, "errors": errors}
 
 
 def _node_self(graph, node_id):

@@ -117,25 +117,90 @@ def cmd_check(args):
 def cmd_export(args):
     """把全图求值结果导出为静态 JS(web/export.js)，前端直读、无需后端。"""
     import random
-    from .webexport import list_focusable, build_graph
+    from .webexport import list_focusable, build_graph, build_views
     random.seed(args.seed)
     graph = load_world(args.sources, args.operators, args.samples)
     nodes = list_focusable(graph)
     gmap = build_graph(graph)  # 扁平 DAG: 每节点只存一次, 前端按 inputs 还原贡献树
+    views = build_views(graph)  # 视图目录（分类→视图→锚点/panel）+ 诊断桶
+    for e in views["errors"]:
+        print(f"[WARN] {e}")
     web_dir = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "web"))
     out = args.out or os.path.join(web_dir, "export.js")
-    payload = _json.dumps({"nodes": nodes, "graph": gmap}, ensure_ascii=False)
+    payload = _json.dumps({"nodes": nodes, "graph": gmap, "views": views}, ensure_ascii=False)
     with open(out, "w", encoding="utf-8") as f:
         f.write("window.CG_EXPORT = " + payload + ";\n")
-    print(f"已导出 {len(gmap)} 个节点(其中 {len(nodes)} 个可 focus) -> {out}")
+    nv = sum(len(c["views"]) for c in views["categories"])
+    print(f"已导出 {len(gmap)} 个节点({len(nodes)} 可 focus，{nv} 视图，{len(views['orphans'])} 诊断节点) -> {out}")
     print("直接用浏览器打开 web/index.html 即可（无需后端）。")
 
 
 def cmd_outline(args):
-    """全图结构鸟瞰：不求值、只读拓扑，按图簇分组列出 源/中/终 三层节点，供 Agent 快速建立结构认知。"""
-    from .webexport import outline_data
+    """视图目录：按 data/views.json 的『分类 → 视图(锚点)』列出该看什么，并把不服务于任何视图的旁支节点收进诊断桶。
+    --raw 回退到纯结构鸟瞰（按图簇分组的 源/中/终 三层）。"""
+    from .webexport import build_views, outline_data
     graph = load_world(args.sources, args.operators, 1)
-    data = outline_data(graph)
+    if args.raw:
+        _render_raw_outline(outline_data(graph), args)
+        return
+    v = build_views(graph)
+    for e in v["errors"]:
+        print(f"[WARN] {e}")
+    if args.view:
+        _render_one_view(graph, v, args)
+        return
+    nv = sum(len(c["views"]) for c in v["categories"])
+    print(f"视图目录 | {len(v['categories'])} 分类 · {nv} 视图 · {len(v['orphans'])} 诊断节点")
+    print("图例: ★=视图锚点(该视图要回答的结论)  ↑=锚点上游节点数  [单位]\n")
+    for cat in v["categories"]:
+        print(f"▣ {cat['name']}")
+        for vi in cat["views"]:
+            panel = f"  panel: {', '.join(p['id'] for p in vi['panel'])}" if vi["panel"] else ""
+            print(f"  ★ {vi['name']:<22} → {vi['anchor']}")
+            print(f"      {vi['anchor_label']} [{vi['anchor_unit']}]  成员{vi['member_count']}"
+                  f"(源{vi['src_count']}/算子{vi['op_count']}){panel}")
+        print()
+    if v["orphans"]:
+        print(f"▣ 未归类·诊断节点  {len(v['orphans'])} 个（不在任何视图锚点的上游，多为旁支 vs/ratio 校验）")
+        if args.orphans:
+            for o in v["orphans"]:
+                print(f"  ◦ {o['id']:<46} {o['label']} [{o['unit']}]  ↑{o['anc']}")
+        else:
+            print("  （加 --orphans 展开）")
+
+
+def _render_one_view(graph, v, args):
+    """--view <名>：列出单个视图的锚点 + panel + 成员（源/算子）。"""
+    from .webexport import _ancestor_set
+    target = None
+    for cat in v["categories"]:
+        for vi in cat["views"]:
+            if vi["name"] == args.view or vi["anchor"] == args.view:
+                target = vi
+                break
+    if target is None:
+        print(f"（无匹配视图: {args.view}）")
+        return
+    print(f"★ 视图 {target['name']}  → {target['anchor']}  {target['anchor_label']} [{target['anchor_unit']}]")
+    if target["panel"]:
+        print("  panel: " + ", ".join(f"{p['id']}[{p['unit']}]" for p in target["panel"]))
+    members = _ancestor_set(target["anchor"], graph, {}) | {target["anchor"]}
+    from .model import DataNode
+    srcs = sorted(m for m in members if isinstance(graph.nodes[m], DataNode))
+    ops = sorted(m for m in members if not isinstance(graph.nodes[m], DataNode))
+    print(f"\n  算子成员 {len(ops)}:")
+    for m in ops:
+        print(f"    {m}")
+    if args.data:
+        print(f"\n  数据源成员 {len(srcs)}:")
+        for m in srcs:
+            print(f"    {m}")
+    else:
+        print(f"\n  数据源成员 {len(srcs)} 个（加 --data 展开）")
+
+
+def _render_raw_outline(data, args):
+    """纯结构鸟瞰（旧行为）：按图簇分组列出 源/中/终 三层节点。"""
     c = data["counts"]
     print(f"全图 | {c['nodes']} 节点: 数据源 {c['data']} · 中间算子 {c['op']} · 终点 {c['sink']}"
           f" | 分组 {c['groups']} · 弱连通分量 {c['components']}")
@@ -246,10 +311,13 @@ def main(argv=None):
     c.add_argument("--operators", default=default_operators, help="算子子图目录")
     c.set_defaults(func=cmd_check)
 
-    o = sub.add_parser("outline", help="全图结构鸟瞰：按图簇分组列出 源/中/终 三层节点（不求值，固定格式）")
-    o.add_argument("--group", default=None, help="只看某分组（id 根 token 或中文名，如 ind / 产业环节）")
-    o.add_argument("--ops", action="store_true", help="展开中间算子节点（默认只给个数）")
-    o.add_argument("--data", action="store_true", help="展开数据源节点（默认只给个数）")
+    o = sub.add_parser("outline", help="视图目录：按 data/views.json 列出『分类→视图(锚点)』该看什么；--raw 回退结构鸟瞰")
+    o.add_argument("--view", default=None, help="只看某视图（视图名或锚点 id），展开其成员")
+    o.add_argument("--orphans", action="store_true", help="展开诊断桶（未归入任何视图的旁支节点）")
+    o.add_argument("--raw", action="store_true", help="回退到纯结构鸟瞰（按图簇分组的 源/中/终 三层）")
+    o.add_argument("--group", default=None, help="[--raw] 只看某分组（id 根 token 或中文名，如 ind / 产业环节）")
+    o.add_argument("--ops", action="store_true", help="[--raw] 展开中间算子节点（默认只给个数）")
+    o.add_argument("--data", action="store_true", help="展开数据源节点（--view/--raw 下生效）")
     o.add_argument("--sources", default=default_sources, help="数据源目录")
     o.add_argument("--operators", default=default_operators, help="算子子图目录")
     o.set_defaults(func=cmd_outline)

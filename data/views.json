@@ -1,0 +1,30 @@
+{
+  "note": "视图层：视图 = 人类命名的锚点节点 + 分类，与图连通性解耦（不按 id 前缀、不按连通分量）。视图成员 = 锚点的上游闭包（加载时自动求）；不在任何视图闭包内的算子终点 → 诊断桶。公司视图锚『前瞻PE』、产业视图锚『价格/供需』。设计见 doc/design/views.md。",
+  "categories": [
+    {
+      "name": "公司·前瞻估值与盈利",
+      "note": "锚点=次年前瞻PE；panel 并列三年前瞻PE。litong/kbl 未建市值/估值链，暂锚利润节点。",
+      "views": [
+        {"name": "新宙邦", "anchor": "capchem.pe.2026", "panel": ["capchem.pe.2026", "capchem.pe.2027", "capchem.pe.2028"]},
+        {"name": "宁德时代", "anchor": "catl.pe.2026", "panel": ["catl.pe.2026", "catl.pe.2027", "catl.pe.2028"]},
+        {"name": "胜宏科技", "anchor": "shenghong.pe.2026", "panel": ["shenghong.pe.2026", "shenghong.pe.2027", "shenghong.pe.2028"]},
+        {"name": "广合科技", "anchor": "guanghe.pe.2026", "panel": ["guanghe.pe.2026", "guanghe.pe.2027", "guanghe.pe.2028"]},
+        {"name": "沪电股份", "anchor": "hudian.pe.2026", "panel": ["hudian.pe.2026", "hudian.pe.2027", "hudian.pe.2028"]},
+        {"name": "生益科技", "anchor": "shengyi.pe.2026", "panel": ["shengyi.pe.2026", "shengyi.pe.2027", "shengyi.pe.2028"]},
+        {"name": "深南电路", "anchor": "shennan.pe.2026", "panel": ["shennan.pe.2026", "shennan.pe.2027", "shennan.pe.2028"]},
+        {"name": "松发股份", "anchor": "songfa.pe.2026", "panel": ["songfa.pe.2026", "songfa.pe.2027", "songfa.pe.2028"]},
+        {"name": "利通电子", "anchor": "litong.profit.fy2026", "note": "暂无前瞻PE（未建市值/估值链），锚 2026 归母利润"},
+        {"name": "建滔积层板", "anchor": "kbl.fy2026.core_attributable_profit", "note": "暂无前瞻PE，锚 2026 核心归母利润"}
+      ]
+    },
+    {
+      "name": "锂电产业链·价格与供需",
+      "note": "锚点=环节价格；panel 并列价格与供需/盈利，聚焦『未来价格变动与供需关系』。",
+      "views": [
+        {"name": "碳酸锂·价格", "anchor": "ind.li2co3.price", "panel": ["ind.li2co3.price"]},
+        {"name": "六氟磷酸锂·价格与供需", "anchor": "ind.liPF6.price", "panel": ["ind.liPF6.price", "ind.liPF6.supply_demand_ratio_fy2026", "ind.liPF6.gap_ratio_q4_2026"]},
+        {"name": "电解液·价格与盈利", "anchor": "ind.electrolyte.price.ncm", "panel": ["ind.electrolyte.price.ncm", "ind.electrolyte.gross_margin_implied"]}
+      ]
+    }
+  ]
+}

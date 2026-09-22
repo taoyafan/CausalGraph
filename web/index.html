@@ -107,8 +107,7 @@
   <header>
     <h1>CausalGraph <small>因果推理图 · 可溯源</small></h1>
     <div class="picker">
-      <select id="graphPicker"></select>
-      <select id="nodePicker"></select>
+      <select id="viewPicker"></select>
     </div>
   </header>
   <main id="main"><div class="loading">加载中…</div></main>
@@ -214,7 +213,6 @@ function nodeView(n, depth) {
     pin.title = "以此节点作为顶部主视图";
     pin.addEventListener("click", (e) => {
       e.stopPropagation();
-      const np = document.getElementById("nodePicker"); if (np) np.value = n.id;
       loadFocus(n.id);
     });
     row.appendChild(pin);
@@ -270,39 +268,61 @@ function buildTree(g, id) {
   return Object.assign({}, flat, { children });
 }
 
-// 估值看板: 把选中公司里 panel=true 的指标并成一条紧凑横条, 每格只显示中位数, 点格子钻取其贡献树。
-function renderPanel(group) {
+// 视图看板: 把 view.panel 的指标并成一条紧凑横条, 每格只显示中位数, 点格子钻取其贡献树。
+function renderViewPanel(panel) {
   const g = window.CG_EXPORT.graph || {};
-  const members = ALL_NODES.filter(n => n.group === group && n.panel)
-    .sort((a, b) => a.label < b.label ? -1 : a.label > b.label ? 1 : 0);
   const box = el("div", "panel");
-  if (!members.length) return box;
-  const t = el("div", "sec-title"); t.textContent = "估值看板（点看溯源）";
+  if (!panel || !panel.length) return box;
+  const t = el("div", "sec-title"); t.textContent = "看板（点看溯源）";
   const strip = el("div", "pstrip");
-  members.forEach(m => {
+  panel.forEach(m => {
     const node = g[m.id]; if (!node || !node.stats) return;
-    const u = node.display_unit || "";
+    const u = node.display_unit || m.unit || "";
     const seg = el("div", "pseg");
     seg.dataset.id = m.id;
-    seg.innerHTML = `<div class="pl">${m.label.split("(")[0].replace(/_/g, " ")}</div>
+    seg.innerHTML = `<div class="pl">${(m.label || "").split("(")[0].replace(/_/g, " ")}</div>
       <div class="pv">${fmt(node.stats.p50)}<span>${u}</span></div>`;
-    seg.addEventListener("click", () => {
-      const np = document.getElementById("nodePicker"); np.value = m.id; loadFocus(m.id);
-    });
+    seg.addEventListener("click", () => loadFocus(m.id));
     strip.appendChild(seg);
   });
   box.append(t, strip);
   return box;
 }
 
-// 选定公司: 顶部看板 + 下方钻取详情(detail)。
-function showGroup(group, node) {
+// 选定视图: 顶部看板(panel, 无则退化为锚点单格) + 下方锚点贡献树钻取。
+function showView(view) {
   const main = document.getElementById("main");
   main.innerHTML = "";
-  main.appendChild(renderPanel(group));
+  const panel = (view.panel && view.panel.length)
+    ? view.panel
+    : [{ id: view.anchor, label: view.anchor_label, unit: view.anchor_unit }];
+  main.appendChild(renderViewPanel(panel));
   const detail = el("div"); detail.id = "detail";
   main.appendChild(detail);
-  loadFocus(node);
+  loadFocus(view.anchor);
+}
+
+// 诊断桶: 列出未归入任何视图的旁支节点(vs/ratio 校验等), 点击钻取其贡献树。
+function showOrphans() {
+  const main = document.getElementById("main");
+  main.innerHTML = "";
+  const g = window.CG_EXPORT.graph || {};
+  const info = el("div", "sec-title");
+  info.textContent = `未归类诊断节点 ${VIEWS.orphans.length} 个（不在任何视图锚点的上游，多为旁支 vs/ratio 校验）`;
+  main.appendChild(info);
+  VIEWS.orphans.forEach(o => {
+    const node = g[o.id];
+    const card = el("div", "card"); card.style.marginBottom = "6px";
+    const row = el("div", "row tap");
+    const u = (node && (node.display_unit || o.unit)) || "";
+    row.innerHTML = `<div class="title"><b>${o.label}</b><div class="meta">${o.id}</div></div>
+      <div class="stat"><b>${node && node.stats ? fmt(node.stats.p50) + u : "—"}</b></div>`;
+    row.addEventListener("click", () => loadFocus(o.id));
+    card.appendChild(row);
+    main.appendChild(card);
+  });
+  const detail = el("div"); detail.id = "detail";
+  main.appendChild(detail);
 }
 
 async function loadFocus(node) {
@@ -323,42 +343,46 @@ async function loadFocus(node) {
   }
 }
 
-let ALL_NODES = [];  // window.CG_EXPORT.nodes: 全部算子节点(已按 图→头条→字母 排好序)
+let VIEWS = null;       // window.CG_EXPORT.views: {categories, orphans, errors}
+let VIEW_INDEX = [];    // 下拉 option value(序号) -> 视图对象
 
-// 按出现顺序取出去重后的图分组 [{key, label}]
-function graphGroups(nodes) {
-  const seen = [], label = {};
-  nodes.forEach(n => { if (!(n.group in label)) { label[n.group] = n.group_label; seen.push(n.group); } });
-  return seen.map(k => ({ key: k, label: label[k] }));
+// 用『分类(optgroup) → 视图』填充下拉; 末尾附诊断桶入口。
+function buildViewPicker() {
+  const vp = document.getElementById("viewPicker");
+  vp.innerHTML = ""; VIEW_INDEX = [];
+  VIEWS.categories.forEach(cat => {
+    const og = el("optgroup"); og.label = cat.name;
+    cat.views.forEach(v => {
+      const o = el("option"); o.value = String(VIEW_INDEX.length); o.textContent = v.name;
+      VIEW_INDEX.push(v); og.appendChild(o);
+    });
+    vp.appendChild(og);
+  });
+  if (VIEWS.orphans && VIEWS.orphans.length) {
+    const og = el("optgroup"); og.label = "诊断";
+    const o = el("option"); o.value = "orphans";
+    o.textContent = `未归类诊断节点 (${VIEWS.orphans.length})`;
+    og.appendChild(o); vp.appendChild(og);
+  }
 }
 
-// 用选定图的节点填充第二级下拉(ALL_NODES 已排序: 组内头条置顶)
-function fillNodePicker(group) {
-  const np = document.getElementById("nodePicker");
-  np.innerHTML = "";
-  ALL_NODES.filter(n => n.group === group).forEach(n => {
-    const o = el("option"); o.value = n.id;
-    o.textContent = (n.is_headline ? "★ " : "") + n.label;
-    np.appendChild(o);
-  });
+function onPick(val) {
+  if (val === "orphans") { showOrphans(); return; }
+  const v = VIEW_INDEX[Number(val)];
+  if (v) showView(v);
 }
 
 async function init() {
-  const gp = document.getElementById("graphPicker");
-  const np = document.getElementById("nodePicker");
+  const vp = document.getElementById("viewPicker");
   try {
-    ALL_NODES = (window.CG_EXPORT && window.CG_EXPORT.nodes) || [];
-    if (!ALL_NODES.length) {
-      document.getElementById("main").innerHTML = `<div class="err">未找到导出数据 export.js，请先运行 python -m cgraph.cli export</div>`;
+    VIEWS = (window.CG_EXPORT && window.CG_EXPORT.views) || null;
+    if (!VIEWS || !VIEWS.categories || !VIEWS.categories.length) {
+      document.getElementById("main").innerHTML = `<div class="err">未找到视图数据 export.js，请先运行 python -m cgraph.cli export</div>`;
       return;
     }
-    graphGroups(ALL_NODES).forEach(g => {
-      const o = el("option"); o.value = g.key; o.textContent = g.label; gp.appendChild(o);
-    });
-    gp.addEventListener("change", () => { fillNodePicker(gp.value); showGroup(gp.value, document.getElementById("nodePicker").value); });
-    np.addEventListener("change", () => loadFocus(np.value));
-    fillNodePicker(gp.value);
-    showGroup(gp.value, np.value);
+    buildViewPicker();
+    vp.addEventListener("change", () => onPick(vp.value));
+    onPick(vp.value);
   } catch (e) {
     document.getElementById("main").innerHTML = `<div class="err">加载失败: ${e}</div>`;
   }
