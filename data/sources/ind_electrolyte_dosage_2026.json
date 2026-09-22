@@ -61,6 +61,16 @@
       "source_url": "https://m.hexun.com/stock/2025-11-13/222281400.html",
       "distribution": {"type": "uniform", "low": 40, "high": 50, "domain": [0, null]},
       "quote": "六氟磷酸锂是电解液的核心原材料，成本占比40%—50%。来源：证券时报（2025-11-13）。"
+    },
+    {
+      "id": "ind.electrolyte.liPF6_cost_share.sina",
+      "metric": "六氟磷酸锂占电解液成本比例(新浪2025口径)",
+      "unit": "%",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2025-11-01",
+      "source_url": "https://m.baidu.com/bh/m/detail/ar_9499441844469364914",
+      "distribution": {"type": "point", "value": 35, "domain": [0, null]},
+      "quote": "六氟磷酸锂在电解液成本中占比约35%。来源：新浪财经（2025-11-01）。"
     }
   ]
 }

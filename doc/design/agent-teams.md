@@ -23,6 +23,7 @@ CausalGraph 的建图工作由**一支分工明确的 Agent 团队**协作完成
 | **主 Agent（= 对话/默认 Agent）** | 思考建模：决定用什么公式计算某值、需要哪些信息节点；把信息需求派给 Scout、把节点增删派给 Persister、把审核派给 Reviewer；汇总结果、触发求值与呈现。**即当前与用户对话的默认 Agent，职责写在 [AGENTS.md](../../AGENTS.md)，无独立 `.agent.md`** | 不亲自搜索/提取原文、不亲自增删节点、不亲自写算子代码、不亲自做数值计算 |
 | **Scout（搜索提取 Agent）** | 领取具体信息需求 → 检索来源 → 提取**原子事实**（含出处 URL）回报给主 Agent，不落盘；缺算子/缺数据时上报，不自行凑 | 不做任何数值计算；不写数据节点；不评审自己 |
 | **Persister（落盘 Agent）** | 领取具体节点增删任务（主 Agent 给出节点 id/字段内容或要删的 id）→ 按节点 schema 格式写入/修改/删除 data/sources 与 data/operators 下的 JSON 文件；只做"照填"不做"设计" | 不决定分布参数/公式/节点设计（那是主 Agent 的建模职责）；不检索；不评审自己 |
+| **Model Reviewer（建模审核 Agent）** | 落盘**前**审核**建模方案本身**（设计意图，非 JSON）：公式/口径一致、禁跨期比值、禁时变内容跨期融合（铁律 8）、先搜后算、数据/算子/假设三分离、因果方向与 DAG、分布依据诚实；通过或打回并给理由 | 不搜数据、不写 JSON、不写算子代码、不做数值改动；不接触 URL；不审已落盘的 JSON（那是 Reviewer） |
 | **Reviewer（审核 Agent）** | 审核节点/算子是否符合铁律与 schema、图结构是否被破坏（断边/成环/悬空/id 冲突）；通过或打回并给出理由 | 不新建数据、不改数据内容（只批准/打回）；完全不接触 URL、不做网络验证（Scout 的摘要+URL 即溯源终点） |
 | **Operator Author（算子作者 Agent）** | 主 Agent 把**公式语义**（用什么公式算、参数含义）告诉它 → 实现为受控、可复现的具名算子代码入库（`cgraph/operators.py`），写清语义与参数 | 不新建数据节点；不内联一次性公式；不自行决定公式（公式由主 Agent 给出） |
 
@@ -40,9 +41,11 @@ flowchart TD
     U[目标/问题] --> O["主 Agent（思考建模：公式/需要哪些信息）"]
     O -->|信息需求| S[Scout 搜索提取]
     S -->|原子事实+出处URL| O
-    O -->|节点设计(字段内容)| P[Persister 落盘]
+    O -->|建模方案| MR[Model Reviewer 建模审核]
+    MR -->|打回+理由| O
+    MR -->|方案通过，主 Agent 定稿字段| P[Persister 落盘]
     P -->|增删节点 JSON| N[(data/sources + data/operators)]
-    N --> R[Reviewer 审核]
+    N --> R[Reviewer 节点审核]
     R -->|打回+理由| O
     R -->|通过| G[并入全局图]
     G --> O
@@ -55,6 +58,10 @@ flowchart TD
 - **Scout 只搜不落盘**：Scout 返回原子事实（含出处 URL）给主 Agent，主 Agent 设计节点后由 Persister 落盘。
 - **Persister 只填不设计**：Persister 是"照填"机器——主 Agent 给出 id/字段/分布/quote，Persister 按 schema
   写入或删除；任何节点设计决策留在主 Agent（或打回时由 Reviewer 指出）。
+- **建模审核在落盘前（Model Reviewer）**：涉及新建/改节点或算子的建模方案，主 Agent 定方案后**先派
+  Model Reviewer 审建模逻辑**（公式/口径/因果方向/禁时变融合/分布依据），通过后才派 Persister 落盘；
+  落盘后再过 Reviewer 审节点。两道审核分工：Model Reviewer 审"设计对不对"（落盘前看方案），Reviewer
+  审"落盘产物对不对"（落盘后看 JSON 的 schema/铁律/图结构）。
 - **数据侦察在前、算子在后（强制顺序）**：算子需求是被数据形态与建模方案倒推出来的。必须
   先派 Scout 摸清"有哪些披露口径、数据长什么样、缺口在哪"，主 Agent 据此定建模方案，
   再由方案倒推需要的算子；**只有在方案确定缺算子时才派 Operator Author**（主 Agent 把公式语义
@@ -79,6 +86,7 @@ flowchart TD
 | 全体共守的铁律 | [agents/invariants.md](agents/invariants.md) |
 | Scout | [agents/scout.md](agents/scout.md) |
 | Persister | [agents/persister.md](agents/persister.md) |
+| Model Reviewer（落盘前审建模方案） | [agents/model-reviewer.md](agents/model-reviewer.md) |
 | Reviewer | [agents/reviewer.md](agents/reviewer.md) |
 | Operator Author（仅缺算子时启用） | [agents/operator-author.md](agents/operator-author.md) |
 
@@ -112,7 +120,8 @@ Agent 执行任务时常见障碍及**标准解法**（对应铁律"遇阻不放
 | 问题 | 标准解法 |
 |------|----------|
 | **先定算子还是先搜数据** | 永远先搜数据。派 Scout 摸清数据形态与缺口 → 主 Agent 定建模方案 → 方案倒推算子需求 → 缺算子才派 Operator Author。不得在数据侦察前预设算子。 |
-| **节点/算子写好后要不要审** | 主 Agent 一律自动派 Reviewer 审核，不问用户。仅 Reviewer 打回或涉 AI 假设值拍板时才回到用户。 |
+| **建模方案要不要审** | 涉及新建/改节点或算子的建模方案，主 Agent 定稿后一律先派 Model Reviewer 审建模逻辑（落盘**前**：公式/口径/禁时变融合/因果方向/分布依据），通过再落盘。纯展示缩放/改名等不涉建模逻辑的改动除外。 |
+| **节点/算子写好后要不要审** | 主 Agent 一律自动派 Reviewer 审核（落盘**后**），不问用户。仅 Reviewer 打回或涉 AI 假设值拍板时才回到用户。 |
 | **没有合适算子** | 派 Operator Author 把运算实现为受控算子代码入库（非内联公式），经 Reviewer 审核。绝不把运算塞进数据节点。 |
 | **某量需要计算才能得到** | 拆成"原始数据节点 + assumption 节点 + 算子"。计算归算子，主观归 assumption 节点。 |
 | **多源同指标冲突** | 不是错误：各建独立 DataNode（不同 source_id），由下游融合算子（mixture）加权并触发 Method Conflict 告警。 |
@@ -136,16 +145,18 @@ Agent 执行任务时常见障碍及**标准解法**（对应铁律"遇阻不放
 - **主 Agent = 对话/默认 Agent**：不做独立 `.agent.md`（那是过度设计）；其编排职责写入 [AGENTS.md](../../AGENTS.md)，
   对每次对话常驻生效——**跟用户对话的默认 Agent 就是主 Agent**。主 Agent 只需知道各角色提示词文件的**路径**，
   编排时**不读提示词内容**（防上下文污染）。
-- **四个专家角色做成子 Agent**（需要上下文隔离 + 工具收窄 + 独立人格）：
+- **五个专家角色做成子 Agent**（需要上下文隔离 + 工具收窄 + 独立人格）：
   - VS Code Copilot：`.github/agents/<role>.agent.md`（**已落地**），frontmatter 配 `tools`。当前工具权限：
     `scout` = [read, edit, search, web, execute]（检索/提取，不落盘）；
     `persister` = [read, edit, execute]（落盘：读写 JSON + 跑 check 自检）；
+    `model-reviewer` = [read, search, execute]（**只读审建模方案 + 否决权**；`execute` 仅用于跑 focus/check 验证方案）；
     `reviewer` = [read, search, execute]（**只读审核 + 否决权**；`execute` 仅用于跑 `check`）；
     `operator-author` = [read, edit, search, execute]（写算子代码，仅缺算子时启用）。
   - Hermes（delegate_task 现场派发，无注册文件）：派发时 context 只写指针——
     "你是 Scout/Persister/Reviewer/Operator Author，用 read 依次打开 doc/design/agents/invariants.md 与
     对应角色文件，逐字执行，然后完成：<任务>"；toolsets 映射：
     `scout` = [web, file, terminal]；`persister` = [file, terminal]（terminal 用于跑 check 自检）；
+    `model-reviewer` = [file, terminal]（terminal 仅用于跑 focus/check 验证方案）；
     `reviewer` = [file, terminal]（terminal 仅用于跑 check）；
     `operator-author` = [file, terminal]。
   - 其它 harness（Claude subagents 等）：按各自的 subagent/system-prompt 机制承载同一套提示词。

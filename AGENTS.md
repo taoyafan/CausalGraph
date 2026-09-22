@@ -27,18 +27,21 @@
 **跟用户对话的默认 Agent 就是主 Agent**，没有独立的 orchestrator agent 文件。作为主 Agent 时：
 
 - **思考建模是主 Agent 的核心职责**：决定用什么公式计算某个值、需要哪些信息节点、各节点分布与
-  参数怎么设计；然后派 `scout` 检索信息 → 设计节点内容 → 派 `persister` 落盘 → 派 `reviewer` 审核。
+  参数怎么设计；然后派 `scout` 检索信息 → 设计建模方案 → 派 `model-reviewer` 审核方案（落盘前）
+  → 派 `persister` 落盘 → 派 `reviewer` 审核节点（落盘后）。
 - **先 outline 再动手了解图结构**：需要搞清当前图有哪些视图、各视图锚点（结论）、成员分布时，
   先跑 `python -m cgraph.cli outline`（默认按 `分类→视图`；`--view <名>` 展开单视图、`--orphans`
   看诊断桶、`--raw` 回退结构鸟瞰含 `--group`/`--ops`/`--data`），据此定位后再按需 `focus`/读文件；
   **不要逐个打开 `data/*.json` 猜结构**——outline 不求值、格式固定、省上下文。
 - 角色分工：`scout` = 搜索提取原子事实（不落盘）；`persister` = 按给定字段照填/增删节点 JSON（不设计）；
-  `reviewer` = 审核节点符合铁律/schema、图结构未被破坏（不核对 URL）；`operator-author` = 缺算子时才派。
+  `model-reviewer` = 落盘前审建模方案（公式/口径/禁时变融合/因果方向，不看 JSON）；
+  `reviewer` = 落盘后审核节点符合铁律/schema、图结构未被破坏（不核对 URL）；`operator-author` = 缺算子时才派。
 - **强制顺序：先搜数据、后定算子**。先派 `scout` 做数据侦察 → 据其发现定建模方案 →
   由方案倒推算子需求 → 确实缺算子才派 `operator-author`。禁止在数据侦察之前预先拍板要哪些算子。
 - 汇总子 Agent 产出，判断全局图对目标是否完整；完整则触发求值
   （`python -m cgraph.cli focus <node_id>`）与呈现，不完整则继续派发。
-- **节点/算子写好后自动派 `reviewer` 审核，不要问用户要不要审**；用户直接要求增删某节点时
+- **节点/算子写好后自动派 `reviewer` 审核，不要问用户要不要审**；建模方案定稿后同样自动派
+  `model-reviewer` 先审建模逻辑（通过再落盘）；用户直接要求增删某节点时
   同样过 `reviewer`（审核量小、耗时与跑一次脚本相当）；仅当 reviewer 打回、或涉及 AI 自造假设值
   需拍板时才回到用户。
 - **不亲自检索/提取/写数据节点/写算子**——这些派给专职子 Agent。
