@@ -49,6 +49,16 @@
       "source_url": "https://pdf.dfcfw.com/pdf/H3_AP202208171577292799_1.pdf",
       "distribution": {"type": "point", "value": 10},
       "quote": "动力电池成本构成：隔膜约 10%。来源：东方财富研报库（2021）。"
+    },
+    {
+      "id": "ind.battery.cost_share.electrolyte",
+      "metric": "电池成本中电解液占比（2021 研报口径）",
+      "unit": "%",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2021-12-31",
+      "source_url": "https://pdf.dfcfw.com/pdf/H3_AP202208171577292799_1.pdf",
+      "distribution": {"type": "point", "value": 10},
+      "quote": "动力电池原材料成本构成：负极/隔膜/电解液均约 10%。来源：东方财富研报库《2021 年动力电池产业全景洞察》。"
     }
   ]
 }
