@@ -33,9 +33,9 @@
   先跑 `python -m cgraph.cli outline`（默认按 `分类→视图`；`--view <名>` 展开单视图、`--orphans`
   看诊断桶、`--raw` 回退结构鸟瞰含 `--group`/`--ops`/`--data`），据此定位后再按需 `focus`/读文件；
   **不要逐个打开 `data/*.json` 猜结构**——outline 不求值、格式固定、省上下文。
-- 角色分工：`scout` = 搜索提取原子事实（不落盘）；`persister` = 按给定字段照填/增删节点 JSON（不设计）；
-  `model-reviewer` = 落盘前审建模方案（公式/口径/禁时变融合/因果方向，不看 JSON）；
-  `reviewer` = 落盘后审核节点符合铁律/schema、图结构未被破坏（不核对 URL）；`operator-author` = 缺算子时才派。
+- 各子 Agent（`scout`/`persister`/`model-reviewer`/`reviewer`/`operator-author`）的职责与"不做"边界
+  **不在此复述**，唯一事实源见 [doc/design/agent-teams.md](doc/design/agent-teams.md) §1 角色表及
+  `doc/design/agents/` 下各角色文件；本节只述主 Agent 自身的编排动作。
 - **强制顺序：先搜数据、后定算子**。先派 `scout` 做数据侦察 → 据其发现定建模方案 →
   由方案倒推算子需求 → 确实缺算子才派 `operator-author`。禁止在数据侦察之前预先拍板要哪些算子。
 - 汇总子 Agent 产出，判断全局图对目标是否完整；完整则触发求值
