@@ -517,6 +517,71 @@
       "unit": "比率",
       "output_metric": "电解液反推成本/毛利反推成本",
       "note": ">1 表示电解液链反推偏高；仅作校验，不作结论"
+    },
+    {
+      "id": "ind.liPF6.price.novdec_2026_est",
+      "operator": "product",
+      "inputs": ["ind.liPF6.price.sci.20261001", "ind.liPF6.price.novdec_vs_oct_2026"],
+      "output_metric": "六氟磷酸锂_2026年11-12月月均价_持平外推(生意社口径)",
+      "unit": "元/吨",
+      "display_unit": "万元/吨",
+      "display_scale": 10000
+    },
+    {
+      "id": "ind.liPF6.price.novdec_2026_x2",
+      "operator": "affine",
+      "inputs": ["ind.liPF6.price.novdec_2026_est"],
+      "params": {"a": 0, "b": 2},
+      "output_metric": "六氟磷酸锂_2026年11+12月两个月价格合计",
+      "unit": "元/吨",
+      "display_unit": "万元/吨",
+      "display_scale": 10000,
+      "note": "×2 = 11、12 两个月，结构常数"
+    },
+    {
+      "id": "ind.liPF6.price.h2_sum_2026",
+      "operator": "sum",
+      "inputs": ["ind.liPF6.price.sci.20260701", "ind.liPF6.price.sci.20260803", "ind.liPF6.price.sci.20260901", "ind.liPF6.price.sci.20261001", "ind.liPF6.price.novdec_2026_x2"],
+      "output_metric": "六氟磷酸锂_2026年7-12月六个月价格合计(生意社口径)",
+      "unit": "元/吨",
+      "display_unit": "万元/吨",
+      "display_scale": 10000
+    },
+    {
+      "id": "ind.liPF6.price.h2avg_2026_est",
+      "operator": "affine",
+      "inputs": ["ind.liPF6.price.h2_sum_2026"],
+      "params": {"a": 0, "b": 0.16666666666666666},
+      "output_metric": "六氟磷酸锂_2026H2均价估计(生意社口径)",
+      "unit": "元/吨",
+      "display_unit": "万元/吨",
+      "display_scale": 10000,
+      "note": "÷6 = 7~12 月共 6 个月（结构常数）；7~10 月以月初基准价近似当月均价，近似偏差由 ind.liPF6.price.basis_100ppi_vs_maihuasu_2026 承载"
+    },
+    {
+      "id": "ind.liPF6.price.h1avg_2026_sci_basis",
+      "operator": "sum",
+      "inputs": ["ind.liPF6.price.h1avg_2026.maihuasu", "ind.liPF6.price.basis_100ppi_vs_maihuasu_2026"],
+      "output_metric": "六氟磷酸锂_2026H1均价(换算至生意社口径)",
+      "unit": "元/吨",
+      "display_unit": "万元/吨",
+      "display_scale": 10000
+    },
+    {
+      "id": "ind.liPF6.price.delta_h2_vs_h1_2026",
+      "operator": "subtract",
+      "inputs": ["ind.liPF6.price.h2avg_2026_est", "ind.liPF6.price.h1avg_2026_sci_basis"],
+      "output_metric": "六氟磷酸锂_2026H2均价相对H1变动额",
+      "unit": "元/吨",
+      "note": "H1 来自买化塑、H2 来自生意社，跨发布方基差已由基差假设锚显式承载"
+    },
+    {
+      "id": "ind.electrolyte.liPF6_cost.delta_h2_vs_h1_2026",
+      "operator": "product",
+      "inputs": ["ind.liPF6.price.delta_h2_vs_h1_2026", "ind.electrolyte.liPF6_dosage"],
+      "output_metric": "单吨电解液六氟成本变动额_2026H2相对H1",
+      "unit": "元/吨",
+      "note": "dosage 为时间稳定的配比系数，跨 vintage 融合允许"
     }
   ]
 }

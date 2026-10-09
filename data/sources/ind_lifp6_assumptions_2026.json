@@ -1,0 +1,27 @@
+{
+  "source_id": "ind_lifp6_assumptions_2026",
+  "source_name": "六氟磷酸锂 2026H2 价格假设（主 Agent 提出、协作者确认）",
+  "publisher": "CausalGraph 主 Agent / 协作者",
+  "as_of": "2026-10-09",
+  "retrieved_at": "2026-10-09",
+  "nodes": [
+    {
+      "id": "ind.liPF6.price.novdec_vs_oct_2026",
+      "metric": "六氟磷酸锂_2026年11-12月均价相对10-01生意社价比值_持平假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-09",
+      "distribution": {"type": "split_normal", "mu": 1.0, "sigma_low": 0.05, "sigma_high": 0.05, "domain": [0.5, 1.5]},
+      "quote": "持平假设：2026 年 11~12 月六氟磷酸锂均价与 10 月初生意社基准价持平（众数 1.0），±5% 承载走势不确定性。定性背景：9 月国内电解液及原料市场整体上涨、六氟稳中偏上（隆众资讯 2026-10-06 月度总结导语 https://www.oilchem.net/26-1006-10-925bda1e80961419.html ）。此为主 Agent 提出、协作者 2026-10-09 确认的假设，非披露值。"
+    },
+    {
+      "id": "ind.liPF6.price.basis_100ppi_vs_maihuasu_2026",
+      "metric": "六氟价格口径基差_生意社月初价口径相对买化塑市场均价",
+      "unit": "元/吨",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-09",
+      "distribution": {"type": "split_normal", "mu": 0, "sigma_low": 3000, "sigma_high": 3000, "domain": [-10000, 10000]},
+      "quote": "口径基差假设：把买化塑 2026H1 市场均价换算到'生意社月初基准价'口径时的水平偏差，合并承载两类可比性偏差——①发布方统计口径不同（买化塑市场均价 vs 生意社基准价）；②H2 以月初价近似月均（行情上行时月初价偏低）。方向不确定，众数 0、σ≈3000 元/吨（约 2.5%）。此为主 Agent 提出的中性不确定性假设（model-reviewer 要求），待协作者确认，非披露值。"
+    }
+  ]
+}
