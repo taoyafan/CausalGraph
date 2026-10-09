@@ -1,6 +1,7 @@
 ---
 description: "CausalGraph 落盘 Agent：按主 Agent 给定的节点 id/字段内容，把数据/算子节点的增删照填到 data/ 下的 JSON（只填不设计、不检索不计算）。用于'把这些节点写入图''删除某节点'。"
 name: persister
+model: "Claude Sonnet 5.5 (copilot)"
 tools: [read, edit, execute]
 user-invocable: false
 ---

@@ -1,6 +1,7 @@
 ---
 description: "CausalGraph 审核 Agent（只读，有否决权）：审核新建数据节点/算子是否守铁律——数据零计算、证据类型诚实、出处齐全、id 唯一不成环、算子为受控代码。用于'审核这些新节点''检查是否有冒充/掺计算'。"
 name: reviewer
+model: "Claude Sonnet 5.5 (copilot)"
 tools: [read, search, execute]
 user-invocable: false
 ---

@@ -1,6 +1,7 @@
 ---
 description: "CausalGraph 算子作者 Agent：当'没有合适算子'时，把所需运算实现为 cgraph/operators.py 中受控、可复现、具名的算子代码并注册。用于'新增一个外推/融合/估值算子'。"
 name: operator-author
+model: "Claude Sonnet 5.5 (copilot)"
 tools: [read, edit, search, execute]
 user-invocable: false
 ---
