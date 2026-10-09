@@ -14,22 +14,20 @@ from .confidence import confidence_for
 from .operators import formula_of
 from .model import DataNode
 from .display import (
-    data_value, describe_distribution, display_number, display_stats,
-    display_unit, evidence_type_label, operator_label,
+    data_value, describe_distribution, display_stats, display_unit,
+    evidence_type_label, fmt_quantile, loss_suffix, operator_label,
 )
 
 
 def _fmt_stats(node, s):
-    s = display_stats(node, s)
-    return f"P10={s['p10']:.2f} P50={s['p50']:.2f} P90={s['p90']:.2f}"
+    d = display_stats(node, s)
+    return (f"P10={fmt_quantile(d['p10'])} P50={fmt_quantile(d['p50'])} "
+            f"P90={fmt_quantile(d['p90'])}{loss_suffix(d)}")
 
 
 def _header(graph, focus_id):
-    s = graph.stats[focus_id]
     node = graph.nodes[focus_id]
-    mean = display_number(node, s["mean"])
-    print(f"FOCUS = {focus_id}  ->  {_fmt_stats(node, s)}  "
-          f"(mean={mean:.2f}) {display_unit(node)}")
+    print(f"FOCUS = {focus_id}  ->  {_fmt_stats(node, graph.stats[focus_id])} {display_unit(node)}")
 
 
 # ---------------------------------------------------------------- 子树工具

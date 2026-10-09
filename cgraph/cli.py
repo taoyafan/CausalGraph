@@ -17,7 +17,8 @@ from .render import render_level0, render_level1, render_tree, render_formula, r
 from .loader import load_world
 from .check import check_world
 from .model import DataNode
-from .display import display_number, display_unit, evidence_type_label
+from .display import (display_number, display_stats, display_unit, evidence_type_label,
+                      fmt_quantile, loss_suffix)
 from .scenario import load_scenario, list_scenarios, show_scenario, remove_scenario, scenario_path
 import json as _json
 
@@ -72,22 +73,31 @@ def _render_diff(args, focus_id, overrides, mutes, meta):
 
     print(f"情景: {args.scenario}" + (f"  {meta.get('desc', '')}" if meta else ""))
     node = base.nodes[focus_id]
-    bs = {k: display_number(node, v) for k, v in base.stats[focus_id].items()}
-    ss = {k: display_number(node, v) for k, v in scen.stats[focus_id].items()}
-    d = ss["p50"] - bs["p50"]
-    pct = f" ({d / abs(bs['p50']):+.1%})" if bs["p50"] else ""
+    bs = display_stats(node, base.stats[focus_id])
+    ss = display_stats(node, scen.stats[focus_id])
     print(f"FOCUS {focus_id}")
-    print(f"  基线: P10={bs['p10']:.2f} P50={bs['p50']:.2f} P90={bs['p90']:.2f}")
-    print(f"  情景: P10={ss['p10']:.2f} P50={ss['p50']:.2f} P90={ss['p90']:.2f}")
-    print(f"  P50 变化: {d:+.2f}{pct} {display_unit(node)}")
+    for tag, s in (("基线", bs), ("情景", ss)):
+        print(f"  {tag}: P10={fmt_quantile(s['p10'])} P50={fmt_quantile(s['p50'])} "
+              f"P90={fmt_quantile(s['p90'])}{loss_suffix(s)}")
+    if bs["p50"] is not None and ss["p50"] is not None:
+        d = ss["p50"] - bs["p50"]
+        pct = f" ({d / abs(bs['p50']):+.1%})" if bs["p50"] else ""
+        print(f"  P50 变化: {d:+.2f}{pct} {display_unit(node)}")
+    else:
+        print(f"  P50 变化: {fmt_quantile(bs['p50'])} → {fmt_quantile(ss['p50'])} {display_unit(node)}")
 
     print("\n下游受影响节点（P50 对比）:")
     for nid in scen.nodes:
         if nid not in scen.stats or nid == focus_id:
             continue
         b, s = base.stats.get(nid), scen.stats.get(nid)
-        if b and s and abs(s["p50"] - b["p50"]) > 1e-9:
-            changed = scen.nodes[nid]
+        if not (b and s) or b["p50"] == s["p50"]:
+            continue
+        changed = scen.nodes[nid]
+        if b["p50"] is None or s["p50"] is None:
+            bp, sp = display_stats(changed, b)["p50"], display_stats(changed, s)["p50"]
+            print(f"  {nid}: {fmt_quantile(bp, 3)} → {fmt_quantile(sp, 3)} {display_unit(changed)}")
+        elif abs(s["p50"] - b["p50"]) > 1e-9:
             bp50 = display_number(changed, b["p50"])
             sp50 = display_number(changed, s["p50"])
             print(f"  {nid}: {bp50:.3f} → {sp50:.3f} ({sp50 - bp50:+.3f}) {display_unit(changed)}")

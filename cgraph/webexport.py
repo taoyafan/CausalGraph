@@ -41,6 +41,12 @@ def _histogram(samples, bins=24, trim=0.05, scale=1.0):
     return {"edges": edges, "counts": counts, "max": max(counts)}
 
 
+def _node_hist(node, samples):
+    if getattr(node, "quantile_order", None) == "inverse":
+        samples = [x for x in samples if 0 < x < float("inf")]
+    return _histogram(samples, scale=node.display_scale) if samples else None
+
+
 # 纯展示: 把自动分出的图簇(id 根 token)显示成人类可读名字; 缺失则回退显示 id 根本身。
 # 这是唯一的外部知识(图无从得知 capchem=新宙邦), 不参与任何排序/分组逻辑。
 GROUP_LABELS = {"capchem": "新宙邦", "shenghong": "胜宏科技", "litong": "利通电子", "kbl": "建滔积层板", "songfa": "松发股份", "catl": "宁德时代", "hudian": "沪电股份", "shennan": "深南电路", "shengyi": "生益科技", "guanghe": "广合科技", "ind": "产业环节"}
@@ -276,7 +282,7 @@ def _node_self(graph, node_id):
         "id": node_id,
         "kind": node.kind,
         "stats": display_stats(node, stats, digits=4),
-        "hist": _histogram(samples, scale=node.display_scale) if samples else None,
+        "hist": _node_hist(node, samples),
         "display_unit": display_unit(node),
         "display_scale": node.display_scale,
     }
@@ -413,7 +419,7 @@ def build_drilldown(graph, focus_id):
         "operator": node.operator,
         "operator_label": operator_label(node.operator),
         "stats": display_stats(node, stats, digits=4),
-        "hist": _histogram(graph.samples[focus_id], scale=node.display_scale),
+        "hist": _node_hist(node, graph.samples[focus_id]),
         "alert": graph.alerts.get(focus_id),
         "slots": slots,
     }

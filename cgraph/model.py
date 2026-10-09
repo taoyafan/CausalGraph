@@ -62,8 +62,11 @@ class OperatorNode:
     display_scale: float = 1.0
     panel: bool = False   # 是否作为公司"看板"并列展示的指标(纯展示标记, 不影响求值)
     macro: Optional[dict] = None  # 模板展开来源（仅 focus --level 4 debug 显示，不参与求值）
+    quantile_order: Optional[str] = None  # "inverse"=PE 类按 1/x 取分位(纯展示口径, 不影响样本)
 
     def __post_init__(self):
+        if self.quantile_order not in (None, "inverse"):
+            raise ValueError(f"算子节点 {self.id} 的 quantile_order 只允许 'inverse'")
         if self.display_unit is None:
             self.display_unit = self.unit
         if (not isinstance(self.display_scale, (int, float))
@@ -85,4 +88,5 @@ class OperatorNode:
             display_scale=d.get("display_scale", 1),
             panel=d.get("panel", False),
             macro=d.get("_macro"),
+            quantile_order=d.get("quantile_order"),
         )

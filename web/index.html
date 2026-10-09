@@ -115,7 +115,8 @@
 </div>
 <script src="export.js"></script>
 <script>
-const fmt = (v, d = 2) => (v === undefined || v === null) ? "—" : Number(v).toFixed(d);
+const fmt = (v, d = 2) => v === null ? "NM" : v === undefined ? "—" : Number(v).toFixed(d);
+const lossTxt = (s) => s.loss_prob ? ` · 亏损概率 ${(s.loss_prob * 100).toFixed(1)}%` : "";
 const el = (t, c) => { const e = document.createElement(t); if (c) e.className = c; return e; };
 
 function confColor(c) { return c >= 0.8 ? "var(--hi)" : c >= 0.4 ? "var(--mid)" : "var(--lo)"; }
@@ -171,7 +172,7 @@ function summaryCard(root) {
   const unit = root.display_unit || root.unit || "";
   c.innerHTML = `<div class="lbl">${root.label}</div>
     <div class="p50">${fmt(root.stats.p50)}<span>${unit}</span></div>
-    <div class="range">区间 P10–P90: ${fmt(root.stats.p10)} ~ ${fmt(root.stats.p90)}${unit} · 均值 ${fmt(root.stats.mean)}${unit}</div>`;
+    <div class="range">区间 P10–P90: ${fmt(root.stats.p10)} ~ ${fmt(root.stats.p90)}${unit}${lossTxt(root.stats)}</div>`;
   c.appendChild(spark(root.hist, unit));
   c.appendChild(sparkAxis(root.hist, unit));
   return c;

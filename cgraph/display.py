@@ -41,11 +41,27 @@ def display_number(node, value):
     return value / display_scale(node)
 
 
+_QUANTILE_KEYS = ("p10", "p50", "p90")
+
+
 def display_stats(node, stats, digits=None):
-    values = {key: display_number(node, value) for key, value in stats.items()}
+    """分位数按 display_scale 缩放；None(=NM) 原样保留；loss_prob 是概率不缩放。"""
+    values = dict(stats)
+    for key in _QUANTILE_KEYS:
+        if values.get(key) is not None:
+            values[key] = display_number(node, values[key])
     if digits is not None:
-        values = {key: round(value, digits) for key, value in values.items()}
+        values = {k: (round(v, digits) if v is not None else None) for k, v in values.items()}
     return values
+
+
+def fmt_quantile(value, digits=2):
+    return "NM" if value is None else f"{value:.{digits}f}"
+
+
+def loss_suffix(stats):
+    p = stats.get("loss_prob")
+    return f" 亏损概率={p:.1%}" if p else ""
 
 
 def operator_label(value):

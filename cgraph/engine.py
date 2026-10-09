@@ -11,15 +11,16 @@ from .model import DataNode, OperatorNode
 from .operators import OPERATORS
 
 
-def percentiles(samples):
-    s = sorted(samples)
-    n = len(s)
-    return {
-        "p10": s[int(0.10 * n)],
-        "p50": s[int(0.50 * n)],
-        "p90": s[int(0.90 * n)],
-        "mean": sum(s) / n,
-    }
+def percentiles(samples, inverse=False):
+    """inverse=True 用于 PE 类比值：按 1/x 排序（负值=亏损视为最贵），落入亏损区的分位记 None(NM)。"""
+    n = len(samples)
+    if not inverse:
+        s = sorted(samples)
+        return {"p10": s[int(0.10 * n)], "p50": s[int(0.50 * n)], "p90": s[int(0.90 * n)]}
+    pos = sorted(x for x in samples if 0 < x < float("inf"))
+    q = lambda p: pos[int(p * n)] if int(p * n) < len(pos) else None
+    return {"p10": q(0.10), "p50": q(0.50), "p90": q(0.90),
+            "loss_prob": (n - len(pos)) / n}
 
 
 # 各算子要求的输入个数；None = 可变元数（屏蔽后剩余输入仍可计算）
@@ -83,7 +84,8 @@ class Graph:
             raise TypeError(f"未知节点类型: {node}")
 
         self.samples[node_id] = xs
-        self.stats[node_id] = percentiles(xs)
+        self.stats[node_id] = percentiles(
+            xs, inverse=getattr(node, "quantile_order", None) == "inverse")
         return xs
 
     def evaluate(self, focus_id):

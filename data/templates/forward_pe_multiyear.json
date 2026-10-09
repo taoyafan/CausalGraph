@@ -34,7 +34,8 @@
       "inputs": ["{market_cap}", "{profit_ref[year]}"],
       "output_metric": "前瞻PE_{year}E(总市值÷{year}E归母)",
       "unit": "倍",
-      "panel": true
+      "panel": true,
+      "quantile_order": "inverse"
     }
   ]
 }

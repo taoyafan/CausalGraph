@@ -158,7 +158,7 @@ def expand_instance(tpl_name, tpl, inst, instances_file):
                 }
             except _Skip:
                 continue
-            for k in ("display_unit", "display_scale", "panel"):
+            for k in ("display_unit", "display_scale", "panel", "quantile_order"):
                 if k in spec:
                     d[k] = _fill(spec[k], bind, subs)
             out.append(d)
