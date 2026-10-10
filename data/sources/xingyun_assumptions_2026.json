@@ -1,0 +1,65 @@
+{
+  "source_id": "xingyun_assumptions_2026",
+  "source_name": "行云科技 2026Q4~2028 自下而上——我方假设(非公司/非券商)",
+  "publisher": "CausalGraph 协作者假设",
+  "as_of": "2026-10-10",
+  "source_url": "https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202609241829868297&client_source=web&page_index=1",
+  "retrieved_at": "2026-10-10",
+  "note": "行云科技无任何券商预测(同花顺/东财0家),2026Q4~2028归母全靠自下而上:租金×起租进度×净利率×归母比例+非租赁业务-股权激励。以下锚全部为AI拍定,待协作者确认;引擎对assumption按C=0.4展宽σ(下列σ为给定值)。",
+  "nodes": [
+    {
+      "id": "xingyun.margin.rent_net",
+      "metric": "算力租赁税后净利率(净利/不含税租金收入,不含股权激励)_假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "split_normal", "mu": 0.10, "sigma_low": 0.02, "sigma_high": 0.015, "domain": [0, 1]},
+      "quote": "单锚,落在唯一披露值上不偏推:公司V项目自测(公告2026-041,2026-04-07,涨价前)'预期5年累计税后净利率10.13%',融资租赁约27.6亿、占设备采购95%以上、5年、年化约4%,机器设备5年直线折旧。V补充协议租金+79%但公司提示'本次增加的租金不等同于直接增加了该订单的销售毛利'、IR称客户上调租金系'将硬件涨价风险反向兜底'——成本同步上行,不据此上推。下侧尾覆盖成本传导致净利率被稀释、起租期利息与折旧先于收入发生;10.13%仅为V单客户口径,外推至VB/VC/VD;分母含税口径未说明;可抵扣亏损6.68亿税盾不计(偏保守)。AI拍定,待协作者确认。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202604071821048671&client_source=web&page_index=1 、https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202607131826932964&client_source=web&page_index=1 、https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202608031827590417&client_source=web&page_index=1"
+    },
+    {
+      "id": "xingyun.ramp.deliver_ok",
+      "metric": "160.04亿订单最终落地比例(三年共用)_假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "split_normal", "mu": 0.92, "sigma_low": 0.04, "sigma_high": 0.016, "domain": [0, 1]},
+      "quote": "风险条款驱动的判断(无定量事实):授信申请215.44亿、已签融资及授信合同65.89亿(预告2026-129);VB补充协议要求首批8单元交付后8个月内交付完256单元,逾期经催告未交付客户可无责解除;VC逾期2个月客户可无责解除对应未交付部分;VB/VD交付'统筹资金及供应链资源'推进。众数0.92,下侧尾为资金/供应链约束致部分订单解约。Q4已起租部分基本不会被取消,Q4也乘此系数属小幅保守。AI拍定,待协作者确认。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202607291827460647&client_source=web&page_index=1 、https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202607011826638020&client_source=web&page_index=1 、https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202609041829025939&client_source=web&page_index=1"
+    },
+    {
+      "id": "xingyun.ramp.timing_q4_2026",
+      "metric": "2026Q4已起租租金占满产季租金比例(落地条件下)_假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "split_normal", "mu": 0.35, "sigma_low": 0.05, "sigma_high": 0.05, "domain": [0, 1]},
+      "quote": "V首批2026-08-01、VC首批08-07、VB首批8月起租;VB首批仅8/256单元,需在首批交付后8个月内交付完256单元;VD须在09-04签约后60天内完成交付;公司拒绝披露已起租单元数;预告称1-9月利润核心动力为服务器销售(租赁贡献尚小)。众数0.35。AI拍定,待协作者确认。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202607291827460647&client_source=web&page_index=1 、https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202609031828974348&client_source=web&page_index=1 、https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202609041829025939&client_source=web&page_index=1 、https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202610081830217300&client_source=web&page_index=1"
+    },
+    {
+      "id": "xingyun.ramp.timing_fy2027",
+      "metric": "2027全年平均起租比例(落地条件下)_假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "split_normal", "mu": 0.88, "sigma_low": 0.03, "sigma_high": 0.03, "domain": [0, 1]},
+      "quote": "VB 256单元约在2027-04前交付完毕(首批8月后8个月),VD 60天内交付;IR(2026-08-06)称'2027年所有长单将进入全面稳定结算周期'。众数0.88。2028年视为满产(timing=1,不建锚)。AI拍定,待协作者确认。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202608061827715219&client_source=web&page_index=1 、https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202607291827460647&client_source=web&page_index=1"
+    },
+    {
+      "id": "xingyun.nonrent.q4_2026",
+      "metric": "2026Q4非租赁业务及总部净贡献(服务器销售/电商/软件减总部费用)_假设",
+      "unit": "亿元",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "split_normal", "mu": 0.30, "sigma_low": 0.12, "sigma_high": 0.60},
+      "quote": "缺口占位,非事实推导:1-9月预告称服务器销售'爆发式增长'为扭亏核心动力;VF(含税2.392亿)、VG(约5.727亿)服务器销售合同9月底已'完成交付及验收'(确认季度、总额/净额法未披露,大概率已在Q3确认);VG《国际贸易销售框架协议》有效期至2027-08-06可续下单;H1服务器业务收入6,715.71万、毛利率98.02%(疑净额法);H1电商毛利率10.96%、软件9.28%。上侧放宽以覆盖Q3服务器销售节奏部分延续。AI拍定,待协作者确认。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202609291830001316&client_source=web&page_index=1 、https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202609291830001321&client_source=web&page_index=1 、https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202607301827495114&client_source=web&page_index=1"
+    },
+    {
+      "id": "xingyun.nonrent.annual_2027_2028",
+      "metric": "2027/2028每年非租赁业务及总部净贡献(稳态水平,两年共用)_假设",
+      "unit": "亿元",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "split_normal", "mu": 0.6, "sigma_low": 0.2, "sigma_high": 0.5},
+      "quote": "缺口占位,非事实推导:一个论点=非租赁业务稳态年净贡献水平。H1审计归母0.120亿(含非租赁业务,无租赁收入);服务器销售2026年爆发但一次性强;VG框架协议至2027-08-06(未单独给2027抬升)。该锚约占2027/2028归母的较大份额,对PE敏感。AI拍定,待协作者确认。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202607301827495114&client_source=web&page_index=1 、https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202609291830001321&client_source=web&page_index=1"
+    }
+  ]
+}

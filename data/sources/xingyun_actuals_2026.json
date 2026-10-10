@@ -1,0 +1,29 @@
+{
+  "source_id": "xingyun_actuals_2026",
+  "source_name": "行云科技 2026前三季度业绩预告 + 2026半年报",
+  "publisher": "行云科技股份有限公司 (300209.SZ)",
+  "as_of": "2026-10-08",
+  "source_url": "https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202610081830217300&client_source=web&page_index=1",
+  "retrieved_at": "2026-10-10",
+  "note": "行云科技(原有棵树,2026-02更名)。1-9月为业绩预告区间(未审计),三季报正式稿披露后替换。2025年报为保留意见,2025归母亏损0.83亿,故不建2026同比。",
+  "nodes": [
+    {
+      "id": "xingyun.profit.h1_2026",
+      "metric": "归母净利润_2026H1",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "as_of": "2026-07-31",
+      "distribution": {"type": "point", "value": 0.120, "domain": [0, null]},
+      "quote": "2026半年报(2026-07-31):H1归母净利润12,015,392.13元(约0.120亿),扣除股份支付影响后20,458,523.50元;Q1单季-2,203.64万、Q2单季3,405.18万;H1无算力租赁收入(首批8月起租)。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202607301827495114&client_source=web&page_index=1"
+    },
+    {
+      "id": "xingyun.profit.m1_9_2026",
+      "metric": "归母净利润_2026年1-9月_业绩预告区间",
+      "unit": "亿元",
+      "evidence_type": "guidance",
+      "as_of": "2026-10-08",
+      "distribution": {"type": "uniform", "low": 2.40, "high": 2.90, "domain": [0, null]},
+      "quote": "2026前三季度业绩预告(公告2026-129,2026-10-08,未审计):归母净利润盈利24,000~29,000万元(上年同期亏损7,232.30万元);扣非24,500~29,500万元;剔除股权激励摊销后29,000~33,000万元;报告期因2026年第一期股权激励摊销约5,800万元。原因:'算力业务尤其是服务器销售业务实现爆发式增长,成为驱动……扭亏为盈的核心动力';V/VB/VC首批集群自8月起正式起租并确认租赁收入。预告未拆分租赁与服务器销售。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202610081830217300&client_source=web&page_index=1"
+    }
+  ]
+}

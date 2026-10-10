@@ -49,7 +49,7 @@ def _node_hist(node, samples):
 
 # 纯展示: 把自动分出的图簇(id 根 token)显示成人类可读名字; 缺失则回退显示 id 根本身。
 # 这是唯一的外部知识(图无从得知 capchem=新宙邦), 不参与任何排序/分组逻辑。
-GROUP_LABELS = {"capchem": "新宙邦", "shenghong": "胜宏科技", "litong": "利通电子", "kbl": "建滔积层板", "songfa": "松发股份", "catl": "宁德时代", "hudian": "沪电股份", "shennan": "深南电路", "shengyi": "生益科技", "guanghe": "广合科技", "amlogic": "晶晨股份", "ind": "产业环节"}
+GROUP_LABELS = {"capchem": "新宙邦", "shenghong": "胜宏科技", "litong": "利通电子", "kbl": "建滔积层板", "songfa": "松发股份", "catl": "宁德时代", "hudian": "沪电股份", "shennan": "深南电路", "shengyi": "生益科技", "guanghe": "广合科技", "amlogic": "晶晨股份", "xingyun": "行云科技", "ind": "产业环节"}
 
 
 def _components(graph):

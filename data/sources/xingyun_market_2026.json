@@ -1,0 +1,20 @@
+{
+  "source_id": "xingyun_market_2026",
+  "source_name": "行云科技(300209.SZ) 行情快照——总市值",
+  "publisher": "东方财富 行情",
+  "as_of": "2026-10-09",
+  "source_url": "https://quote.eastmoney.com/sz300209.html",
+  "retrieved_at": "2026-10-10",
+  "note": "前瞻PE分子。东财行情接口2026-10-09 15:34:12快照(10-10周六无交易)。",
+  "nodes": [
+    {
+      "id": "xingyun.market.cap",
+      "metric": "A股总市值_2026-10-09",
+      "unit": "亿元",
+      "evidence_type": "market_observed",
+      "as_of": "2026-10-09",
+      "distribution": {"type": "point", "value": 320.01, "domain": [0, null]},
+      "quote": "东方财富行情接口(2026-10-09 15:34:12):最新价34.46元、总股本928,636,126股、总市值32,000,800,901.96元(约320.01亿)。来源:https://push2.eastmoney.com/api/qt/stock/get?secid=0.300209"
+    }
+  ]
+}

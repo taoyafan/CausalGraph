@@ -1,0 +1,47 @@
+{
+  "source_id": "xingyun_orders_2026",
+  "source_name": "行云科技 算力租赁订单与持股结构(IR记录+合同公告)",
+  "publisher": "行云科技股份有限公司 (300209.SZ)",
+  "as_of": "2026-09-24",
+  "source_url": "https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202609241829868297&client_source=web&page_index=1",
+  "retrieved_at": "2026-10-10",
+  "note": "160.04亿/32.67亿为IR口径(截至2026-09-21,四客户V/VB/VC/VD),晚于V补充协议(07-13)与VB补充协议(07-29),已含各订单调价;IR未标注含税与否(VC/VD合同为含税),含税不明在算子层用增值税多路mixture处理。VE(8.7168亿,09-23签)不在160.04口径内,未入图(偏保守)。",
+  "nodes": [
+    {
+      "id": "xingyun.rent.full_annual_y1_3",
+      "metric": "算力租赁_完整起租后前三年年租金(四客户)",
+      "unit": "亿元",
+      "evidence_type": "guidance",
+      "as_of": "2026-09-24",
+      "distribution": {"type": "point", "value": 32.67, "domain": [0, null]},
+      "quote": "投资者关系活动记录(2026-09-23活动,09-24披露):'公司目前公告披露与四个客户签订的算力长期租赁订单总规模约160.04亿元','预计前三年的每年租金收入约为32.67亿元,后两年约31.02亿元';V客户前三年与后两年租金存在差异。未标注含税与否。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202609241829868297&client_source=web&page_index=1"
+    },
+    {
+      "id": "xingyun.order.total_4cust",
+      "metric": "算力租赁5年期订单总额_四客户",
+      "unit": "亿元",
+      "evidence_type": "guidance",
+      "as_of": "2026-09-24",
+      "distribution": {"type": "point", "value": 160.04, "domain": [0, null]},
+      "quote": "投资者关系活动记录(2026-09-23活动,09-24披露):'公司目前公告披露与四个客户签订的算力长期租赁订单总规模约160.04亿元'(截至2026-09-21)。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202609241829868297&client_source=web&page_index=1"
+    },
+    {
+      "id": "xingyun.order.vc",
+      "metric": "VC客户算力服务合同总额(海南行云)",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "as_of": "2026-07-02",
+      "distribution": {"type": "point", "value": 55.0848, "domain": [0, null]},
+      "quote": "公告2026-094(2026-07-02):控股子公司海南行云与VC客户签订计算平台服务协议及补充协议,含税总金额550,848万元(原485,376万元),服务期5年,分批交付、分批起租。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202607011826638020&client_source=web&page_index=1"
+    },
+    {
+      "id": "xingyun.stake.hainan_parent",
+      "metric": "海南行云_上市公司持股比例",
+      "unit": "比率",
+      "evidence_type": "audited",
+      "as_of": "2026-07-02",
+      "distribution": {"type": "point", "value": 0.49, "domain": [0, 1]},
+      "quote": "公告2026-094:'海南行云……注册资本金1,000万元,公司持股49%,海南钧沐灼堂文化传媒有限公司持股48%,海南星博广告传媒有限公司持股3%';'董事会由3名董事组成,其中公司委派2人,为公司合并报表范围内的控股子公司'。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202607011826638020&client_source=web&page_index=1"
+    }
+  ]
+}

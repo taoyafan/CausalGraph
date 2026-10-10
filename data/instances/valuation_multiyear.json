@@ -95,6 +95,16 @@
         "profit_source": {"2027": "amlogic.consensus.fy2027e", "2028": "amlogic.consensus.fy2028e"},
         "profit_ref": {"2026": "amlogic.profit.fy2026"}
       }
+    },
+    {
+      "name": "xingyun",
+      "note": "行云科技(300209.SZ)：无券商覆盖，26/27/28 归母全部自下而上(租金×起租×净利率×归母比例+非租赁-股权激励)，假设锚待协作者确认。2026因2025亏损不建同比。",
+      "bind": {
+        "company": "xingyun",
+        "years": ["2026", "2027", "2028"],
+        "market_cap": "xingyun.market.cap",
+        "profit_ref": {"2026": "xingyun.profit.fy2026", "2027": "xingyun.profit.fy2027", "2028": "xingyun.profit.fy2028"}
+      }
     }
   ]
 }

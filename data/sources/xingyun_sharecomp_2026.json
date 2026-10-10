@@ -1,0 +1,65 @@
+{
+  "source_id": "xingyun_sharecomp_2026",
+  "source_name": "行云科技 2026年第一期股权激励摊销测算(授予公告)",
+  "publisher": "行云科技股份有限公司 (300209.SZ)",
+  "as_of": "2026-06-09",
+  "source_url": "https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202606091823398354&client_source=web&page_index=1",
+  "retrieved_at": "2026-10-10",
+  "note": "授予日2026-06-08实际测算表(以此为准,草案表因假设授予日/股价不同已被替代)。1-9月实际摊销0.58亿经预告原文确认为同一'2026年第一期股权激励计划',半年报员工持股/其他激励'不适用',口径一致。未计摊销的所得税盾(偏保守)。",
+  "nodes": [
+    {
+      "id": "xingyun.sharecomp.rsu.fy2026",
+      "metric": "第二类限制性股票摊销_2026",
+      "unit": "亿元",
+      "evidence_type": "guidance",
+      "as_of": "2026-06-09",
+      "distribution": {"type": "point", "value": 0.9896, "domain": [0, null]},
+      "quote": "授予公告(2026-06-09):第二类限制性股票1,861万股,授予价13.15元,需摊销总费用22,680.10万元,2026年9,896.48万元、2027年10,402.49万元、2028年2,381.13万元。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202606091823398354&client_source=web&page_index=1"
+    },
+    {
+      "id": "xingyun.sharecomp.rsu.fy2027",
+      "metric": "第二类限制性股票摊销_2027",
+      "unit": "亿元",
+      "evidence_type": "guidance",
+      "as_of": "2026-06-09",
+      "distribution": {"type": "point", "value": 1.0402, "domain": [0, null]},
+      "quote": "授予公告(2026-06-09):第二类限制性股票1,861万股,授予价13.15元,需摊销总费用22,680.10万元,2026年9,896.48万元、2027年10,402.49万元、2028年2,381.13万元。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202606091823398354&client_source=web&page_index=1"
+    },
+    {
+      "id": "xingyun.sharecomp.rsu.fy2028",
+      "metric": "第二类限制性股票摊销_2028",
+      "unit": "亿元",
+      "evidence_type": "guidance",
+      "as_of": "2026-06-09",
+      "distribution": {"type": "point", "value": 0.2381, "domain": [0, null]},
+      "quote": "授予公告(2026-06-09):第二类限制性股票1,861万股,授予价13.15元,需摊销总费用22,680.10万元,2026年9,896.48万元、2027年10,402.49万元、2028年2,381.13万元。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202606091823398354&client_source=web&page_index=1"
+    },
+    {
+      "id": "xingyun.sharecomp.opt.fy2026",
+      "metric": "股票期权摊销_2026",
+      "unit": "亿元",
+      "evidence_type": "guidance",
+      "as_of": "2026-06-09",
+      "distribution": {"type": "point", "value": 0.0999, "domain": [0, null]},
+      "quote": "授予公告:股票期权7,425.36万份,行权价26.31元,需摊销总费用1,713.40万元,2026年999.48万元、2027年713.92万元、2028年0。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202606091823398354&client_source=web&page_index=1"
+    },
+    {
+      "id": "xingyun.sharecomp.opt.fy2027",
+      "metric": "股票期权摊销_2027",
+      "unit": "亿元",
+      "evidence_type": "guidance",
+      "as_of": "2026-06-09",
+      "distribution": {"type": "point", "value": 0.0714, "domain": [0, null]},
+      "quote": "授予公告:股票期权7,425.36万份,行权价26.31元,需摊销总费用1,713.40万元,2026年999.48万元、2027年713.92万元、2028年0。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202606091823398354&client_source=web&page_index=1"
+    },
+    {
+      "id": "xingyun.sharecomp.m1_9_2026",
+      "metric": "股权激励摊销_2026年1-9月实际",
+      "unit": "亿元",
+      "evidence_type": "guidance",
+      "as_of": "2026-10-08",
+      "distribution": {"type": "point", "value": 0.58, "domain": [0, null]},
+      "quote": "前三季度业绩预告(2026-129):'报告期内因公司开展2026年第一期股权激励计划需摊销激励费用约5,800万元,按照企业会计准则计入当期损益'。来源:https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202610081830217300&client_source=web&page_index=1"
+    }
+  ]
+}

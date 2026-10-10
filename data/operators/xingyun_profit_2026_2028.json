@@ -1,0 +1,224 @@
+{
+  "subgraph": "xingyun_profit_2026_2028",
+  "note": "行云科技(300209.SZ)无券商覆盖,2026Q4~2028归母自下而上:租赁归母利润=不含税满产年租金×起租比例×租赁净利率×归母比例;归母=租赁归母利润+非租赁净贡献-股权激励摊销。2026=1~9月预告+Q4。含税不明→三路(不含税/÷1.06/÷1.13)等权mixture,权重AI设定待确认(VC/VD合同明示含税,证据略偏含税)。归母比例以VC合同额占四客户订单额代理其利润占比(VC分子为含税合同额、分母160.04未标含税,二阶口径误差)。股权激励仅2026年第一期计划(唯一在摊计划)。不入图:VE订单、可抵扣亏损税盾、股权激励税盾(均偏保守)。PE见data/instances/valuation_multiyear.json。",
+  "operators": [
+    {
+      "id": "xingyun.rent.full_annual.if_excl",
+      "operator": "affine",
+      "inputs": ["xingyun.rent.full_annual_y1_3"],
+      "params": {"a": 0, "b": 1},
+      "output_metric": "满产年租金_不含税(若IR口径为不含税)",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.vat.one_plus_6",
+      "operator": "affine",
+      "inputs": ["xingyun.vat.rate_6"],
+      "params": {"a": 1, "b": 1},
+      "output_metric": "1+增值税率6%",
+      "unit": "比率"
+    },
+    {
+      "id": "xingyun.vat.one_plus_13",
+      "operator": "affine",
+      "inputs": ["xingyun.vat.rate_13"],
+      "params": {"a": 1, "b": 1},
+      "output_metric": "1+增值税率13%",
+      "unit": "比率"
+    },
+    {
+      "id": "xingyun.rent.full_annual.if_incl_6",
+      "operator": "divide",
+      "inputs": ["xingyun.rent.full_annual_y1_3", "xingyun.vat.one_plus_6"],
+      "output_metric": "满产年租金_不含税(若IR口径含税6%)",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.rent.full_annual.if_incl_13",
+      "operator": "divide",
+      "inputs": ["xingyun.rent.full_annual_y1_3", "xingyun.vat.one_plus_13"],
+      "output_metric": "满产年租金_不含税(若IR口径含税13%)",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.rent.full_annual_ex_vat",
+      "operator": "mixture",
+      "inputs": ["xingyun.rent.full_annual.if_excl", "xingyun.rent.full_annual.if_incl_6", "xingyun.rent.full_annual.if_incl_13"],
+      "output_metric": "满产年租金_不含税(含税口径三路等权融合)",
+      "unit": "亿元",
+      "note": "三路回答同一量;等权为AI设定待确认"
+    },
+    {
+      "id": "xingyun.rent.vc_share",
+      "operator": "divide",
+      "inputs": ["xingyun.order.vc", "xingyun.order.total_4cust"],
+      "output_metric": "VC订单额占四客户订单额比例",
+      "unit": "比率"
+    },
+    {
+      "id": "xingyun.stake.hainan_minority",
+      "operator": "affine",
+      "inputs": ["xingyun.stake.hainan_parent"],
+      "params": {"a": 1, "b": -1},
+      "output_metric": "海南行云_少数股东持股比例",
+      "unit": "比率"
+    },
+    {
+      "id": "xingyun.rent.minority_share",
+      "operator": "product",
+      "inputs": ["xingyun.rent.vc_share", "xingyun.stake.hainan_minority"],
+      "output_metric": "租赁利润中少数股东占比(收入占比代理)",
+      "unit": "比率"
+    },
+    {
+      "id": "xingyun.rent.attrib_factor",
+      "operator": "affine",
+      "inputs": ["xingyun.rent.minority_share"],
+      "params": {"a": 1, "b": -1},
+      "output_metric": "租赁利润归母比例",
+      "unit": "比率"
+    },
+    {
+      "id": "xingyun.ramp.q4_2026",
+      "operator": "product",
+      "inputs": ["xingyun.ramp.timing_q4_2026", "xingyun.ramp.deliver_ok"],
+      "output_metric": "2026Q4起租比例(时点×落地)",
+      "unit": "比率"
+    },
+    {
+      "id": "xingyun.ramp.fy2027",
+      "operator": "product",
+      "inputs": ["xingyun.ramp.timing_fy2027", "xingyun.ramp.deliver_ok"],
+      "output_metric": "2027起租比例(时点×落地)",
+      "unit": "比率"
+    },
+    {
+      "id": "xingyun.rent.quarterly_full",
+      "operator": "affine",
+      "inputs": ["xingyun.rent.full_annual_ex_vat"],
+      "params": {"a": 0, "b": 0.25},
+      "output_metric": "满产季租金_不含税",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.rent.revenue.q4_2026",
+      "operator": "product",
+      "inputs": ["xingyun.rent.quarterly_full", "xingyun.ramp.q4_2026"],
+      "output_metric": "算力租赁收入_2026Q4",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.rent.revenue.fy2027",
+      "operator": "product",
+      "inputs": ["xingyun.rent.full_annual_ex_vat", "xingyun.ramp.fy2027"],
+      "output_metric": "算力租赁收入_2027",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.rent.revenue.fy2028",
+      "operator": "product",
+      "inputs": ["xingyun.rent.full_annual_ex_vat", "xingyun.ramp.deliver_ok"],
+      "output_metric": "算力租赁收入_2028(满产×落地;2028仍在起租后前三年内)",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.rent.attrib_profit.q4_2026",
+      "operator": "product",
+      "inputs": ["xingyun.rent.revenue.q4_2026", "xingyun.margin.rent_net", "xingyun.rent.attrib_factor"],
+      "output_metric": "算力租赁归母净利_2026Q4",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.rent.attrib_profit.fy2027",
+      "operator": "product",
+      "inputs": ["xingyun.rent.revenue.fy2027", "xingyun.margin.rent_net", "xingyun.rent.attrib_factor"],
+      "output_metric": "算力租赁归母净利_2027",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.rent.attrib_profit.fy2028",
+      "operator": "product",
+      "inputs": ["xingyun.rent.revenue.fy2028", "xingyun.margin.rent_net", "xingyun.rent.attrib_factor"],
+      "output_metric": "算力租赁归母净利_2028",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.sharecomp.fy2026",
+      "operator": "sum",
+      "inputs": ["xingyun.sharecomp.rsu.fy2026", "xingyun.sharecomp.opt.fy2026"],
+      "output_metric": "股权激励摊销_2026全年",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.sharecomp.q4_2026",
+      "operator": "subtract",
+      "inputs": ["xingyun.sharecomp.fy2026", "xingyun.sharecomp.m1_9_2026"],
+      "output_metric": "股权激励摊销_2026Q4(全年测算-1~9月实际,同一计划口径)",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.sharecomp.fy2027",
+      "operator": "sum",
+      "inputs": ["xingyun.sharecomp.rsu.fy2027", "xingyun.sharecomp.opt.fy2027"],
+      "output_metric": "股权激励摊销_2027",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.profit.q3_2026_implied",
+      "operator": "subtract",
+      "inputs": ["xingyun.profit.m1_9_2026", "xingyun.profit.h1_2026"],
+      "output_metric": "归母净利润_2026Q3隐含(对账节点)",
+      "unit": "亿元",
+      "note": "对账用:1~9月预告-H1实际;含8~9月首批租赁收入,主要来自服务器销售(预告原文);用于对照Q4租赁+非租赁路径的量级。"
+    },
+    {
+      "id": "xingyun.profit.q4_2026.pre_sbc",
+      "operator": "sum",
+      "inputs": ["xingyun.rent.attrib_profit.q4_2026", "xingyun.nonrent.q4_2026"],
+      "output_metric": "归母净利润_2026Q4(摊销前)",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.profit.q4_2026",
+      "operator": "subtract",
+      "inputs": ["xingyun.profit.q4_2026.pre_sbc", "xingyun.sharecomp.q4_2026"],
+      "output_metric": "归母净利润_2026Q4",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.profit.fy2026",
+      "operator": "sum",
+      "inputs": ["xingyun.profit.m1_9_2026", "xingyun.profit.q4_2026"],
+      "output_metric": "归母净利润_2026E(1~9月预告+Q4自下而上)",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.profit.fy2027.pre_sbc",
+      "operator": "sum",
+      "inputs": ["xingyun.rent.attrib_profit.fy2027", "xingyun.nonrent.annual_2027_2028"],
+      "output_metric": "归母净利润_2027E(摊销前)",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.profit.fy2027",
+      "operator": "subtract",
+      "inputs": ["xingyun.profit.fy2027.pre_sbc", "xingyun.sharecomp.fy2027"],
+      "output_metric": "归母净利润_2027E(自下而上)",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.profit.fy2028.pre_sbc",
+      "operator": "sum",
+      "inputs": ["xingyun.rent.attrib_profit.fy2028", "xingyun.nonrent.annual_2027_2028"],
+      "output_metric": "归母净利润_2028E(摊销前)",
+      "unit": "亿元"
+    },
+    {
+      "id": "xingyun.profit.fy2028",
+      "operator": "subtract",
+      "inputs": ["xingyun.profit.fy2028.pre_sbc", "xingyun.sharecomp.rsu.fy2028"],
+      "output_metric": "归母净利润_2028E(自下而上)",
+      "unit": "亿元"
+    }
+  ]
+}
