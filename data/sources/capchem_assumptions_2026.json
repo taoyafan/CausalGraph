@@ -5,16 +5,8 @@
   "as_of": "2026-08-28",
   "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-24/1225026296.PDF",
   "retrieved_at": "2026-08-28",
-  "note": "本文件含 audited 与 assumption/analyst_estimate 两类节点：audited 为公司定期报告披露值（如 2026 半年报电池化学品产量），assumption/analyst_estimate 为我方与券商测算的假设锚。电池化学品链已重建，原 volume_growth_h2/price_growth_h2/margin_h2_2026 三个电池假设节点已改为图内算子（见 operators 文件），本文件仅保留各锚的原子证据节点：电池化学品 H2 收入 = 电解液收入（H1 电解液单吨收入 × (1+单吨收入环比) × H2 电解液出货）+ 非电解液外销收入（H1 非电解液收入 × (1 + k × DMC 变动) × 外销量系数）；H1 电解液收入 = 分部收入 × (2025 F&S 电解液占比 × 漂移)；单吨收入环比 = mixture(电解液现货锚, 成本传导路径)；H2 毛利率偏离 = mixture(东吴锚, 券商锚, 成本传导推导)。电子/氟业务已把 g3 从“跨期环比外推(g2_cross+eps)”改为“同季同比驱动”：本文件保留 H2 同比增速的多条证据锰(电子：动量延续/增速放缓锰；有机氟：技改爬坡/产能上限锰)，由图内 mixture 融合为 seg.electronic.yoy_h2 / seg.fluorine.yoy_h2，g3 由图内算子 growth(2026H2, 2026H1) 得出、 2026H2=2025H2(audited派生)×(1+H2同比)；其他业务仍用原子假设 g3；毛利转净利率的 H1 实际值由图从真实节点算出（capchem.gross_to_net.h1_actual = H1 归母 ÷ H1 毛利合计），本文件只保留“H2≈H1”的调整系数假设。预测整体偏保守。",
+  "note": "本文件含 audited 与 assumption/analyst_estimate 两类节点：audited 为公司定期报告披露值（如 2026 半年报电池化学品产量），assumption/analyst_estimate 为我方与券商测算的假设锚。电池化学品链已重建，原 volume_growth_h2/price_growth_h2/margin_h2_2026 三个电池假设节点已改为图内算子（见 operators 文件），本文件仅保留各锚的原子证据节点：电池化学品 H2 收入 = H1 电解液单吨收入(分部收入÷电解液出货) × (1+单吨收入环比) × H2 电解液出货(东吴 FY50 − 东吴 H1 21)；单吨收入环比 = 电解液现货锚；H2 毛利率 = H1(audited) + δ，δ = mixture(东吴单吨盈利下探, 券商修复上探)。电子/氟业务已把 g3 从“跨期环比外推(g2_cross+eps)”改为“同季同比驱动”：本文件保留 H2 同比增速的多条证据锰(电子：动量延续/增速放缓锰；有机氟：技改爬坡/产能上限锰)，由图内 mixture 融合为 seg.electronic.yoy_h2 / seg.fluorine.yoy_h2，g3 由图内算子 growth(2026H2, 2026H1) 得出、 2026H2=2025H2(audited派生)×(1+H2同比)；其他业务仍用原子假设 g3；毛利转净利率的 H1 实际值由图从真实节点算出（capchem.gross_to_net.h1_actual = H1 归母 ÷ H1 毛利合计），本文件只保留“H2≈H1”的调整系数假设。预测整体偏保守。",
   "nodes": [
-    {
-      "id": "seg.battery.volume_h1_2026",
-      "metric": "电池化学品_H1产量_2026",
-      "unit": "万吨",
-      "evidence_type": "audited",
-      "distribution": {"type": "point", "value": 32.11},
-      "quote": "2026 半年报：电池化学品产量 321,052 吨（产能 365,238 吨、产能利用率 87.90%）。来源：新宙邦 2026 半年报 https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?stockid=300037&id=12512537，2026-08-21"
-    },
     {
       "id": "seg.battery.shipment_h1_2026.dongwu",
       "metric": "电池化学品_H1电解液出货量_2026_东吴8/21测算",
@@ -24,16 +16,6 @@
       "source_url": "https://pdf.dfcfw.com/pdf/H3_AP202608211828253964_1.pdf",
       "distribution": {"type": "point", "value": 21, "domain": [0, null]},
       "quote": "东吴证券 2026-08-21 新宙邦半年报点评：我们预计 26H1 电解液出货约 21 万吨，Q2 11 万吨+。来源：https://pdf.dfcfw.com/pdf/H3_AP202608211828253964_1.pdf 。"
-    },
-    {
-      "id": "seg.battery.shipment_fy2025.dongwu",
-      "metric": "电池化学品_2025电解液出货量_东吴",
-      "unit": "万吨",
-      "evidence_type": "analyst_estimate",
-      "as_of": "2026-03-24",
-      "source_url": "https://pdf.dfcfw.com/pdf/H3_AP202603241820730922_1.pdf",
-      "distribution": {"type": "point", "value": 28},
-      "quote": "东吴证券 2026-03-24 新宙邦年报点评：25 年电解液出货 28 万吨（同增 45%）。来源：https://pdf.dfcfw.com/pdf/H3_AP202603241820730922_1.pdf 。"
     },
     {
       "id": "seg.battery.shipment_fy2026_est",
@@ -51,16 +33,7 @@
       "unit": "比率",
       "evidence_type": "assumption",
       "distribution": {"type": "split_normal", "mu": 0.06, "sigma_low": 0.03, "sigma_high": 0.03, "domain": [-0.5, 0.5]},
-      "quote": "电解液现货锚：百川盈孚 2026-08-28 国内电解液现货参考价 3.35 万元/吨（企业对新单仅小幅调涨）。H2 电解液单吨收入环比变动判断 0-12%、众数 6%（公司单吨收入低于现货，打折扣）。来源：https://www.baiinfo.com/djy/dianjieye，2026-08-28 近似假设标注：电解液价格变动代表电解液单吨收入变动。此为我方判断，非披露值，待协作者确认。"
-    },
-    {
-      "id": "capchem.battery.price_pass_through",
-      "metric": "新宙邦电解液单吨收入对单吨电解液成本变动的传导系数β",
-      "unit": "比率",
-      "evidence_type": "assumption",
-      "as_of": "2026-10-09",
-      "distribution": {"type": "split_normal", "mu": 0.7, "sigma_low": 0.2, "sigma_high": 0.15, "domain": [0, 1.2]},
-      "quote": "传导系数β（软判断）：单吨电解液收入变动额 ÷ 单吨电解液成本变动额(六氟+溶剂+其余)。依据：新宙邦披露部分客户执行年度/半年度长单、处于价格过渡阶段，2026 年新签合同充分参考六氟最新价定价（电池中国网 2025-11-06 http://www.chinabattery.org/detail/1056565.html ；2026-04-02 http://www.chinabattery.org/detail/1056855.html ）；宁德长单锁量不锁价（寰宇通史坊 2026-07-30 https://baijiahao.baidu.com/s?id=1872130201297748014 ）。β 吸收长单过渡滞后与非全额转嫁。局限：滞后本质是时间平移，此处以衰减近似，存在符号风险（H1 高位尾部可能延续到 H2 实现价），此风险未入图。此为主 Agent 提出、协作者 2026-10-09 确认的假设，非披露值。（2026-10-10 口径由全产品均价改为电解液单吨收入，数值 0.7 沿用，协作者授权主 Agent 决定）"
+      "quote": "电解液现货锚：百川盈孚 2026-08-28 国内电解液现货参考价 3.35 万元/吨（企业对新单仅小幅调涨）。H2 电解液单吨收入环比变动判断 0-12%、众数 6%（公司单吨收入低于现货，打折扣）。来源：https://www.baiinfo.com/djy/dianjieye，2026-08-28 近似假设标注：电解液价格变动代表电解液单吨收入变动（分部收入≈电解液业务收入）。此为我方判断，非披露值，待协作者确认。"
     },
     {
       "id": "seg.battery.margin_delta_h2_dongwu",
@@ -68,7 +41,7 @@
       "unit": "比率",
       "evidence_type": "analyst_estimate",
       "distribution": {"type": "split_normal", "mu": -0.005, "sigma_low": 0.0075, "sigma_high": 0.0025, "domain": [-0.1, 0.1]},
-      "quote": "单证据：东吴证券 26Q2 电解液单吨盈利约 0.2 万元/吨、环比 Q1 0.23 万略降，H2 毛利率相对 H1 有下探压力（-2pct 至 0、众数-0.5pct）。来源：https://stock.quote.stockstar.com/corp_300037.shtml，2026-07-10 近似假设标注：以电解液盈利变动代表电池化学品分部毛利率变动（电解液约占分部收入 86%，见 capchem.electrolyte.rev_share_fy2025）。"
+      "quote": "单证据：东吴证券 26Q2 电解液单吨盈利约 0.2 万元/吨、环比 Q1 0.23 万略降，H2 毛利率相对 H1 有下探压力（-2pct 至 0、众数-0.5pct）。来源：https://stock.quote.stockstar.com/corp_300037.shtml，2026-07-10 近似假设标注：电解液盈利变动近似代表电池化学品全产品毛利率变动（电解液为主体）。"
     },
     {
       "id": "seg.battery.margin_delta_h2_brokers",
@@ -76,34 +49,7 @@
       "unit": "比率",
       "evidence_type": "analyst_estimate",
       "distribution": {"type": "split_normal", "mu": 0.01, "sigma_low": 0.005, "sigma_high": 0.01, "domain": [-0.1, 0.1]},
-      "quote": "券商修复锚：中金——六氟涨价逐步传导至电解液、电池化学品板块盈利有望修复，H2 毛利率有上探空间（0 至+3pct、众数+1pct）。来源：https://finance.sina.com.cn/stock/aiassist/agqsjs/2025-10-31/doc-infvuxsr3973331.shtml，2025-10-31 近似假设标注：以电解液盈利变动代表电池化学品分部毛利率变动（电解液约占分部收入 86%，见 capchem.electrolyte.rev_share_fy2025）。此为我方判断，非披露值，待协作者确认。"
-    },
-    {
-      "id": "seg.battery.elec_share_drift_h1_2026",
-      "metric": "2026H1电解液收入占比相对2025的漂移系数",
-      "unit": "比率",
-      "evidence_type": "assumption",
-      "as_of": "2026-10-10",
-      "distribution": {"type": "split_normal", "mu": 1.0, "sigma_low": 0.03, "sigma_high": 0.03, "domain": [0.7, 1.2]},
-      "quote": "中性先验 μ=1.0：同期存在反向驱动——六氟、DMC 涨价同时抬高电解液与溶剂价格；招股书 p153 称电池化学品倾向内部供应相当部分、余量外销，电解液放量时外销溶剂占比可能下降。无净方向证据。主 Agent 提出，协作者 2026-10-10 授权主 Agent 决定"
-    },
-    {
-      "id": "seg.battery.nonelec_price_vs_dmc_k",
-      "metric": "非电解液外销价格变动对DMC价格变动的弹性k",
-      "unit": "比率",
-      "evidence_type": "assumption",
-      "as_of": "2026-10-10",
-      "distribution": {"type": "split_normal", "mu": 0.6, "sigma_low": 0.2, "sigma_high": 0.2, "domain": [0, 1.2]},
-      "quote": "非电解液外销以溶剂为主（招股书 p13：溶剂、添加剂产能满足内部需求并对外销售），但还含添加剂等，价格并非全随 DMC；μ=0.6 为软判断，弹性<1。主 Agent 提出，协作者 2026-10-10 授权主 Agent 决定"
-    },
-    {
-      "id": "seg.battery.nonelec_volume_h2_vs_h1",
-      "metric": "非电解液外销量_2026H2相对H1系数",
-      "unit": "比率",
-      "evidence_type": "assumption",
-      "as_of": "2026-10-10",
-      "distribution": {"type": "split_normal", "mu": 1.0, "sigma_low": 0.08, "sigma_high": 0.08, "domain": [0.5, 1.5]},
-      "quote": "中性先验，无同向证据：参见诊断节点 seg.battery.nonelec_sales_volume_fy2025（2025 全年非电解液外销量）与 seg.battery.nonelec_sales_volume_h1_2026；招股书 2025H1/全年电池化学品销量 222/530 千吨显示 H2 季节性偏高，但电解液 H2 放量会增加自用溶剂、压低外销，方向相反。主 Agent 提出，协作者 2026-10-10 授权主 Agent 决定"
+      "quote": "券商修复锚：中金——六氟涨价逐步传导至电解液、电池化学品板块盈利有望修复，H2 毛利率有上探空间（0 至+3pct、众数+1pct）。来源：https://finance.sina.com.cn/stock/aiassist/agqsjs/2025-10-31/doc-infvuxsr3973331.shtml，2025-10-31 近似假设标注：电解液盈利变动近似代表电池化学品全产品毛利率变动（电解液为主体）。此为我方判断，非披露值，待协作者确认。"
     },
     {
       "id": "seg.electronic.yoy_h2_momentum",
@@ -160,6 +106,34 @@
       "evidence_type": "assumption",
       "distribution": {"type": "split_normal", "mu": 1.0, "sigma_low": 0.045, "sigma_high": 0.025, "domain": [0, null]},
       "quote": "我方假设：全年毛利转净利率 ≈ H1 实际水平（众数系数 1.00）。H1 实际值由图从真实节点算出（capchem.gross_to_net.h1_actual = H1归母 9.838 ÷ H1毛利合计），不再手算烘焙。下行 0.91 反映 H2 年度奖金/汇算清缴等期间费用上升，上行 1.05 反映规模效应；偏保守。"
+    },
+    {
+      "id": "capchem.electrolyte.price_beta",
+      "metric": "新宙邦电解液单吨收入对行业电解液价格变动的传导系数",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "split_normal", "mu": 0.7, "sigma_low": 0.2, "sigma_high": 0.15, "domain": [0, 1.2]},
+      "quote": "定义：公司电解液单吨收入变动率 ÷ 行业电解液价格变动率。依据：新宙邦称部分客户执行年度/半年度长单、价格传导处于过渡阶段，2026 年新签合同充分参考最新市场价格定价（电池中国网 2025-11-06 http://www.chinabattery.org/detail/1056565.html ；2026-04-02 http://www.chinabattery.org/detail/1056855.html ）。0.7 为主 Agent 软判断（协作者 2026-10-10 授权）。"
+    },
+    {
+      "id": "capchem.liPF6.self_supply_ratio",
+      "metric": "新宙邦六氟磷酸锂自供比例",
+      "unit": "比率",
+      "evidence_type": "guidance",
+      "as_of": "2025-11-25",
+      "source_url": "https://m.jiemian.com/article/13676787.html",
+      "distribution": {"type": "uniform", "low": 0.5, "high": 0.7},
+      "quote": "新宙邦互动平台（2025-11-25）：六氟自供比例 50%-70%，石磊氟材料现有六氟产能 2.4 万吨/年，剩余向长期合作伙伴采购。来源：界面新闻 https://m.jiemian.com/article/13676787.html 。注：自供含合营石磊，按'自供部分无净价格敞口'近似（石磊损益走投资收益，简化）；数据为 2025-11，可能已变化。"
+    },
+    {
+      "id": "capchem.tax.rate",
+      "metric": "新宙邦所得税率",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "point", "value": 0.15},
+      "quote": "按高新技术企业 15% 优惠税率假设，未核出处（协作者 2026-10-10 授权主 Agent 决定）。"
     }
   ]
 }

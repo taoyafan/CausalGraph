@@ -6,49 +6,13 @@
   "retrieved_at": "2026-10-09",
   "nodes": [
     {
-      "id": "ind.liPF6.price.novdec_vs_oct_2026",
-      "metric": "六氟磷酸锂_2026年11-12月均价相对10-01生意社价比值_持平假设",
-      "unit": "比率",
-      "evidence_type": "assumption",
-      "as_of": "2026-10-09",
-      "distribution": {"type": "split_normal", "mu": 1.0, "sigma_low": 0.05, "sigma_high": 0.05, "domain": [0.5, 1.5]},
-      "quote": "持平假设：2026 年 11~12 月六氟磷酸锂均价与 10 月初生意社基准价持平（众数 1.0），±5% 承载走势不确定性。定性背景：9 月国内电解液及原料市场整体上涨、六氟稳中偏上（隆众资讯 2026-10-06 月度总结导语 https://www.oilchem.net/26-1006-10-925bda1e80961419.html ）。此为主 Agent 提出、协作者 2026-10-09 确认的假设，非披露值。"
-    },
-    {
-      "id": "ind.liPF6.price.basis_100ppi_vs_maihuasu_2026",
-      "metric": "六氟价格口径基差_生意社月初价口径相对买化塑市场均价",
-      "unit": "元/吨",
-      "evidence_type": "assumption",
-      "as_of": "2026-10-09",
-      "distribution": {"type": "split_normal", "mu": 0, "sigma_low": 5000, "sigma_high": 5000, "domain": [-15000, 15000]},
-      "quote": "口径基差假设：把买化塑 2026H1 市场均价换算到'生意社月初基准价'口径时的水平偏差，合并承载两类可比性偏差：①发布方统计口径不同（买化塑市场均价 vs 生意社基准价）；②H2 以月初价近似月均（行情上行时月初价偏低）。方向不确定，众数 0、σ 见分布。此为主 Agent 提出的中性不确定性假设（model-reviewer 要求），非披露值。众数 0 表示无方向证据（非证据权衡的结果）：①发布方水平差——买化塑与生意社无可核的同期对照，方向未知；②月初价近似月均——生意社月内走势方向不一：7 月 1 日 107000、7 月 27 日 104500 元/吨（https://www.100ppi.com/forecast/detail-20260727-204074.html ），9 月 1 日 115500（https://www.100ppi.com/news/detail-20260901-6149293.html ）、9 月 22 日 115500 与月初持平（https://www.100ppi.com/forecast/detail-20260922-207332.html ）。σ 取宽以覆盖两类口径不确定性。协作者 2026-10-10 授权主 Agent 决定。"
-    },
-    {
-      "id": "ind.dmc.price.novdec_vs_oct_2026",
-      "metric": "DMC_2026年11-12月均价相对10-01生意社价比值_持平假设",
-      "unit": "比率",
-      "evidence_type": "assumption",
-      "as_of": "2026-10-10",
-      "distribution": {"type": "split_normal", "mu": 1.0, "sigma_low": 0.10, "sigma_high": 0.10, "domain": [0.5, 1.5]},
-      "quote": "持平假设：DMC 2026 年 11~12 月均价与 10 月初生意社基准价持平（众数 1.0），±10% 承载 DMC 较大波动（9 月→10 月初 +21.89%，生意社 2026-10-01 https://www.100ppi.com/news/detail-20261001-6294130.html ）。主 Agent 提出，协作者 2026-10-10 授权主 Agent 决定，非披露值。"
-    },
-    {
       "id": "ind.electrolyte.solvent_cost_per_dmc",
       "metric": "每吨电解液溶剂成本变动额÷DMC价格变动额",
       "unit": "吨/吨",
       "evidence_type": "assumption",
       "as_of": "2026-10-10",
       "distribution": {"type": "split_normal", "mu": 0.8, "sigma_low": 0.12, "sigma_high": 0.08, "domain": [0, 1.2]},
-      "quote": "定义：每吨电解液溶剂成本变动额 ÷ DMC 价格变动额。承载两层乘性近似：①溶剂吨耗；②以 DMC 价变动代表溶剂篮子(EC/EMC/DEC 等)变动。纯假设：两次检索均未核到电解液溶剂质量占比与 EC/EMC 同源价，故不作数据节点，两层近似合并于本锚。0.8 为主 Agent 软判断（协作者 2026-10-10 授权主 Agent 决定）。注意：本锚基本决定电解液成本路的符号。"
-    },
-    {
-      "id": "ind.electrolyte.other_cost.delta_h2_vs_h1_2026",
-      "metric": "每吨电解液添加剂及加工费等其余成本_H2相对H1变动额_占位",
-      "unit": "元/吨",
-      "evidence_type": "assumption",
-      "as_of": "2026-10-10",
-      "distribution": {"type": "split_normal", "mu": 0, "sigma_low": 200, "sigma_high": 400, "domain": [-5000, 5000]},
-      "quote": "占位（上侧偏宽仅承载下述方向证据）：添加剂(VC/FEC/LiFSI)无同源价、加工费无数据，幅度未知故众数取 0；上侧偏宽承载方向证据——新宙邦：'鉴于溶剂、核心添加剂等基础化工品价格持续上涨，有效对冲了六氟磷酸锂价格回落的影响，公司电解液产品价格相对稳定'（电池中国网 2026-04-02 http://www.chinabattery.org/detail/1056855.html ）。主 Agent 提出，协作者 2026-10-10 授权主 Agent 决定。"
+      "quote": "定义：每吨电解液溶剂成本变动额 ÷ DMC 价格变动额。承载两层乘性近似：①溶剂吨耗；②以 DMC 价变动代表溶剂篮子(EC/EMC/DEC 等)变动。纯假设：两次检索均未核到电解液溶剂质量占比与 EC/EMC 同源价，故不作数据节点，两层近似合并于本锚。0.8 为主 Agent 软判断（协作者 2026-10-10 授权主 Agent 决定）。"
     }
   ]
 }

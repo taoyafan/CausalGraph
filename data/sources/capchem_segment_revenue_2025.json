@@ -43,16 +43,6 @@
       "quote": "2025 半年报 分产品：有机氟化学品 营业收入 721,835,375.91 元（≈7.22 亿），毛利率 62.80%，收入同比 +1.37%。"
     },
     {
-      "id": "seg.other.rev_h1_2025",
-      "metric": "其他业务_营业收入_2025H1",
-      "unit": "亿元",
-      "evidence_type": "audited",
-      "as_of": "2025-06-30",
-      "source_url": "https://static.cninfo.com.cn/finalpage/2025-08-26/1224572024.PDF",
-      "distribution": {"type": "point", "value": 0.320, "domain": [0, null]},
-      "quote": "2025 半年报 附注 61『营业收入、营业成本的分解信息』分产品(合同分类·化工行业)：其他 营业收入 32,018,951.75 元（≈0.32 亿）、营业成本 19,135,196.94 元。（半年报正文分产品表仅列占比≥10%的三大产品，未单列其他，故取自财务报告附注分解表。）"
-    },
-    {
       "id": "seg.electronic.rev_fy_2025",
       "metric": "电子信息化学品_营业收入_2025FY",
       "unit": "亿元",
@@ -71,16 +61,6 @@
       "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-24/1225026296.PDF",
       "distribution": {"type": "point", "value": 14.263, "domain": [0, null]},
       "quote": "2025 年报『营业收入构成-分产品』：有机氟化学品 营业收入 1,426,342,449.53 元（≈14.26 亿，占营收 14.80%），同比 -6.70%。"
-    },
-    {
-      "id": "seg.other.rev_fy_2025",
-      "metric": "其他业务_营业收入_2025FY",
-      "unit": "亿元",
-      "evidence_type": "audited",
-      "as_of": "2025-12-31",
-      "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-24/1225026296.PDF",
-      "distribution": {"type": "point", "value": 0.689, "domain": [0, null]},
-      "quote": "2025 年报『营业收入构成-分产品』：其他 营业收入 68,927,385.54 元（≈0.69 亿，占营收 0.72%），同比 +1.03%。"
     }
   ]
 }

@@ -1,0 +1,72 @@
+{
+  "template": "price_exposure",
+  "note": "产品价格情景 → 公司税后利润变动。每家公司按 sell/buy 产品列表各生成 3 个节点：raw = 参考价(元/吨) × 变动率 × 月数 × 月均量(万吨/月) × 系数（万元）；pretax = raw × (±1e-4)（亿元，卖方 +、买方 −）；net = pretax × 税后保留比例。只用 product/affine。加公司：加一条 bind；另需公司侧一个汇总 sum 节点并把前瞻 PE 的 profit_ref 指向它（模板无法生成变长 sum）。",
+  "params": {
+    "company": "公司 id 前缀",
+    "sell": "卖出产品列表",
+    "buy": "买入原料列表",
+    "label": "产品 → 中文名",
+    "price_ref": "产品 → 参考价节点(元/吨)",
+    "change": "产品 → 价格变动率旋钮",
+    "months": "产品 → 持续月数旋钮",
+    "monthly_volume": "产品 → 月均量节点(万吨/月)",
+    "coef": "产品 → 敞口系数(卖方=售价传导系数；买方=每单位量的原料用量×外购比例等)",
+    "tax_keep": "税后保留比例节点"
+  },
+  "operators": [
+    {
+      "repeat": {"var": "p", "in": "sell"},
+      "id": "{company}.price_exposure.sell.{p}.raw",
+      "operator": "product",
+      "inputs": ["{price_ref[p]}", "{change[p]}", "{months[p]}", "{monthly_volume[p]}", "{coef[p]}"],
+      "output_metric": "卖{label[p]}_价格情景收入变动(税前,万元)",
+      "unit": "万元",
+      "display_unit": "亿元",
+      "display_scale": 10000
+    },
+    {
+      "repeat": {"var": "p", "in": "sell"},
+      "id": "{company}.price_exposure.sell.{p}.pretax",
+      "operator": "affine",
+      "inputs": ["{company}.price_exposure.sell.{p}.raw"],
+      "params": {"a": 0.0, "b": 0.0001},
+      "output_metric": "卖{label[p]}_价格情景利润变动(税前)",
+      "unit": "亿元"
+    },
+    {
+      "repeat": {"var": "p", "in": "sell"},
+      "id": "{company}.price_exposure.sell.{p}.net",
+      "operator": "product",
+      "inputs": ["{company}.price_exposure.sell.{p}.pretax", "{tax_keep}"],
+      "output_metric": "卖{label[p]}_价格情景利润变动(税后)",
+      "unit": "亿元"
+    },
+    {
+      "repeat": {"var": "p", "in": "buy"},
+      "id": "{company}.price_exposure.buy.{p}.raw",
+      "operator": "product",
+      "inputs": ["{price_ref[p]}", "{change[p]}", "{months[p]}", "{monthly_volume[p]}", "{coef[p]}"],
+      "output_metric": "买{label[p]}_价格情景成本变动(税前,万元)",
+      "unit": "万元",
+      "display_unit": "亿元",
+      "display_scale": 10000
+    },
+    {
+      "repeat": {"var": "p", "in": "buy"},
+      "id": "{company}.price_exposure.buy.{p}.pretax",
+      "operator": "affine",
+      "inputs": ["{company}.price_exposure.buy.{p}.raw"],
+      "params": {"a": 0.0, "b": -0.0001},
+      "output_metric": "买{label[p]}_价格情景利润变动(税前)",
+      "unit": "亿元"
+    },
+    {
+      "repeat": {"var": "p", "in": "buy"},
+      "id": "{company}.price_exposure.buy.{p}.net",
+      "operator": "product",
+      "inputs": ["{company}.price_exposure.buy.{p}.pretax", "{tax_keep}"],
+      "output_metric": "买{label[p]}_价格情景利润变动(税后)",
+      "unit": "亿元"
+    }
+  ]
+}

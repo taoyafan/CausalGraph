@@ -37,36 +37,6 @@
       "quote": "电解质锂盐-六氟磷酸锂均价 10.86 万元/吨（+8.49%）。来源：TrendForce 集邦咨询。"
     },
     {
-      "id": "ind.liPF6.capacity.cn_2025",
-      "metric": "中国六氟磷酸锂产能_2025",
-      "unit": "万吨/年",
-      "evidence_type": "analyst_estimate",
-      "as_of": "2025-12-31",
-      "source_url": "https://news.chemnet.com/toutiao/detail-56020.html",
-      "distribution": {"type": "point", "value": 45.1},
-      "quote": "2025 年中国六氟磷酸锂产能约 45.1 万吨/年（+14.2%）。来源：ChemNet 化工头条。"
-    },
-    {
-      "id": "ind.liPF6.output.cn_2025",
-      "metric": "中国六氟磷酸锂产量_2025",
-      "unit": "万吨/年",
-      "evidence_type": "analyst_estimate",
-      "as_of": "2025-12-31",
-      "source_url": "https://news.chemnet.com/toutiao/detail-56020.html",
-      "distribution": {"type": "point", "value": 28.4},
-      "quote": "2025 年中国六氟磷酸锂产量约 28.4 万吨（+36.5%）。来源：ChemNet 化工头条。"
-    },
-    {
-      "id": "ind.liPF6.utilization.cn_2025",
-      "metric": "六氟磷酸锂开工率_2025",
-      "unit": "%",
-      "evidence_type": "analyst_estimate",
-      "as_of": "2025-12-31",
-      "source_url": "https://news.chemnet.com/toutiao/detail-56020.html",
-      "distribution": {"type": "point", "value": 63.0},
-      "quote": "2025 年开工率 63.0%（较 2024 年上升 17.2 个百分点）。来源：ChemNet 化工头条。"
-    },
-    {
       "id": "ind.liPF6.demand.fy2026",
       "metric": "六氟磷酸锂需求预测_2026",
       "unit": "万吨",
@@ -85,26 +55,6 @@
       "source_url": "https://www.itdcw.com/news/ycnews/03231545192026.html",
       "distribution": {"type": "point", "value": 41.4},
       "quote": "2026 年六氟磷酸锂有效产能约 41.4 万吨（中信建投预测）。"
-    },
-    {
-      "id": "ind.liPF6.gap.q4_2026",
-      "metric": "六氟磷酸锂供需缺口预测_2026Q4",
-      "unit": "万吨",
-      "evidence_type": "analyst_estimate",
-      "as_of": "2026-03-23",
-      "source_url": "https://www.itdcw.com/news/ycnews/03231545192026.html",
-      "distribution": {"type": "point", "value": 0.7},
-      "quote": "2026 年 Q4 约 0.7 万吨缺口（Q3/Q4 供需比 105%/93%）（中信建投预测）。"
-    },
-    {
-      "id": "ind.liPF6.supply_demand_ratio_q3_2026",
-      "metric": "六氟磷酸锂供需比预测_2026Q3",
-      "unit": "比率",
-      "evidence_type": "analyst_estimate",
-      "as_of": "2026-03-23",
-      "source_url": "https://www.itdcw.com/news/ycnews/03231545192026.html",
-      "distribution": {"type": "point", "value": 1.05},
-      "quote": "2026 年 Q3 供需比 105%（中信建投预测）。"
     },
     {
       "id": "ind.liPF6.supply_demand_ratio_q4_2026",

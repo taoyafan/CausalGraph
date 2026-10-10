@@ -1,0 +1,40 @@
+{
+  "template": "price_exposure",
+  "instances": [
+    {
+      "name": "新宙邦",
+      "bind": {
+        "company": "capchem",
+        "sell": ["electrolyte"],
+        "buy": ["liPF6", "dmc"],
+        "label": {"electrolyte": "电解液", "liPF6": "六氟磷酸锂", "dmc": "DMC"},
+        "price_ref": {
+          "electrolyte": "capchem.electrolyte.unit_rev_h1_yuan",
+          "liPF6": "ind.liPF6.price",
+          "dmc": "ind.dmc.price.sci.20261001"
+        },
+        "change": {
+          "electrolyte": "ind.electrolyte.price.change",
+          "liPF6": "ind.liPF6.price.change",
+          "dmc": "ind.dmc.price.change"
+        },
+        "months": {
+          "electrolyte": "ind.electrolyte.price.change_months",
+          "liPF6": "ind.liPF6.price.change_months",
+          "dmc": "ind.dmc.price.change_months"
+        },
+        "monthly_volume": {
+          "electrolyte": "capchem.electrolyte.monthly_shipment_h2_2026",
+          "liPF6": "capchem.electrolyte.monthly_shipment_h2_2026",
+          "dmc": "capchem.electrolyte.monthly_shipment_h2_2026"
+        },
+        "coef": {
+          "electrolyte": "capchem.electrolyte.price_beta",
+          "liPF6": "capchem.liPF6.purchase_per_ton_electrolyte",
+          "dmc": "ind.electrolyte.solvent_cost_per_dmc"
+        },
+        "tax_keep": "capchem.tax.keep_ratio"
+      }
+    }
+  ]
+}

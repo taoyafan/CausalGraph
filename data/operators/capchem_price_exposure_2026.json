@@ -1,0 +1,62 @@
+{
+  "subgraph": "capchem_price_exposure_2026",
+  "note": "新宙邦价格情景：price_exposure 模板（data/templates/price_exposure.json）按产品生成税后利润变动，本文件提供绑定所需的单位换算与系数，并把各产品变动汇总进 2026 利润。加一家公司 = price_exposure 实例加一条 bind + 本类文件一个汇总节点 + 前瞻 PE 实例 profit_ref 改指向汇总节点。",
+  "operators": [
+    {
+      "id": "capchem.electrolyte.unit_rev_h1_yuan",
+      "operator": "affine",
+      "inputs": ["seg.battery.unit_rev_h1_2026"],
+      "params": {"a": 0.0, "b": 10000},
+      "output_metric": "新宙邦电解液H1单吨收入(元/吨)",
+      "unit": "元/吨",
+      "display_unit": "万元/吨",
+      "display_scale": 10000,
+      "note": "万元/吨→元/吨"
+    },
+    {
+      "id": "capchem.electrolyte.monthly_shipment_h2_2026",
+      "operator": "affine",
+      "inputs": ["seg.battery.shipment_h2_2026_est"],
+      "params": {"a": 0.0, "b": 0.16666666666666666},
+      "output_metric": "新宙邦电解液月均出货_2026H2",
+      "unit": "万吨/月",
+      "note": "H2 出货 ÷ 6"
+    },
+    {
+      "id": "capchem.liPF6.external_ratio",
+      "operator": "affine",
+      "inputs": ["capchem.liPF6.self_supply_ratio"],
+      "params": {"a": 1, "b": -1},
+      "output_metric": "新宙邦六氟外购比例(1−自供率)",
+      "unit": "比率"
+    },
+    {
+      "id": "capchem.liPF6.purchase_per_ton_electrolyte",
+      "operator": "product",
+      "inputs": ["ind.electrolyte.liPF6_dosage", "capchem.liPF6.external_ratio"],
+      "output_metric": "新宙邦每吨电解液外购六氟量",
+      "unit": "吨/吨"
+    },
+    {
+      "id": "capchem.tax.keep_ratio",
+      "operator": "affine",
+      "inputs": ["capchem.tax.rate"],
+      "params": {"a": 1, "b": -1},
+      "output_metric": "新宙邦税后保留比例(1−税率)",
+      "unit": "比率"
+    },
+    {
+      "id": "capchem.profit.fy2026.price_scenario",
+      "operator": "sum",
+      "inputs": [
+        "capchem.profit.fy2026",
+        "capchem.price_exposure.sell.electrolyte.net",
+        "capchem.price_exposure.buy.liPF6.net",
+        "capchem.price_exposure.buy.dmc.net"
+      ],
+      "output_metric": "归母净利润_2026全年(含价格情景)",
+      "unit": "亿元",
+      "note": "基线旋钮=0 时等于 capchem.profit.fy2026。价格情景只计入 FY2026（≤3 个月）；2027/28 PE 不随情景变化；2027 yoy 以情景 2026 为基数会变化，不作结论，情景结论只看本节点差额与 capchem.pe.2026。三个产品旋钮相互独立：六氟涨价是否传到电解液售价，需在情景中同时设置电解液 change。"
+    }
+  ]
+}

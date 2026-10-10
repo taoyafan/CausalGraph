@@ -1,0 +1,64 @@
+{
+  "source_id": "ind_price_scenario_knobs_2026",
+  "source_name": "行业产品价格情景旋钮（基线=不假设价格变动）",
+  "publisher": "CausalGraph 主 Agent",
+  "as_of": "2026-10-10",
+  "retrieved_at": "2026-10-10",
+  "note": "情景旋钮：基线 change=0 表示不假设价格变动（非预测值），情景文件中覆盖为假设涨跌幅与持续月数；被所有绑定了该产品的公司 price_exposure 共用。change_months 基线 3=2026 年剩余月数(10~12 月)，FY2026 只承接 ≤3 个月，超出部分属 2027、本图不计入。",
+  "nodes": [
+    {
+      "id": "ind.electrolyte.price.change",
+      "metric": "电解液价格情景变动率(相对现价)",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "point", "value": 0},
+      "quote": "情景旋钮，基线 0 = 不假设价格变动，非预测值。"
+    },
+    {
+      "id": "ind.electrolyte.price.change_months",
+      "metric": "电解液价格情景持续月数",
+      "unit": "月",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "point", "value": 3},
+      "quote": "情景旋钮，基线 3 = 2026 年剩余月数；FY2026 只承接 ≤3 个月。"
+    },
+    {
+      "id": "ind.liPF6.price.change",
+      "metric": "六氟磷酸锂价格情景变动率(相对现价)",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "point", "value": 0},
+      "quote": "情景旋钮，基线 0 = 不假设价格变动，非预测值。"
+    },
+    {
+      "id": "ind.liPF6.price.change_months",
+      "metric": "六氟磷酸锂价格情景持续月数",
+      "unit": "月",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "point", "value": 3},
+      "quote": "情景旋钮，基线 3 = 2026 年剩余月数；FY2026 只承接 ≤3 个月。"
+    },
+    {
+      "id": "ind.dmc.price.change",
+      "metric": "DMC价格情景变动率(相对现价)",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "point", "value": 0},
+      "quote": "情景旋钮，基线 0 = 不假设价格变动，非预测值。"
+    },
+    {
+      "id": "ind.dmc.price.change_months",
+      "metric": "DMC价格情景持续月数",
+      "unit": "月",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "point", "value": 3},
+      "quote": "情景旋钮，基线 3 = 2026 年剩余月数；FY2026 只承接 ≤3 个月。"
+    }
+  ]
+}

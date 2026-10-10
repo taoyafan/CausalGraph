@@ -1,0 +1,15 @@
+{
+  "desc": "六氟磷酸锂价格较现价涨 20%，持续 3 个月",
+  "created_by": "agent",
+  "overrides": {
+    "ind.liPF6.price.change": {
+      "distribution": {"type": "point", "value": 0.2},
+      "reason": "示例情景"
+    },
+    "ind.liPF6.price.change_months": {
+      "distribution": {"type": "point", "value": 3},
+      "reason": "示例情景"
+    }
+  },
+  "mutes": []
+}

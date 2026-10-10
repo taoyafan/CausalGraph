@@ -10,7 +10,7 @@
         "years": ["2026", "2027", "2028"],
         "market_cap": "capchem.market.cap",
         "profit_source": {"2027": "capchem.consensus.fy2027e", "2028": "capchem.consensus.fy2028e"},
-        "profit_ref": {"2026": "capchem.profit.fy2026"}
+        "profit_ref": {"2026": "capchem.profit.fy2026.price_scenario"}
       }
     },
     {

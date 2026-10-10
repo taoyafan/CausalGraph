@@ -1,0 +1,15 @@
+{
+  "desc": "电解液价格较现价涨 100%，持续 2 个月",
+  "created_by": "agent",
+  "overrides": {
+    "ind.electrolyte.price.change": {
+      "distribution": {"type": "point", "value": 1.0},
+      "reason": "示例情景"
+    },
+    "ind.electrolyte.price.change_months": {
+      "distribution": {"type": "point", "value": 2},
+      "reason": "示例情景"
+    }
+  },
+  "mutes": []
+}
