@@ -1,0 +1,46 @@
+{
+  "source_id": "capchem_hk_prospectus_2026",
+  "source_name": "新宙邦 H 股招股书申请版本（2026-08-28）",
+  "publisher": "深圳新宙邦科技股份有限公司（港交所披露易）",
+  "as_of": "2026-08-28",
+  "source_url": "https://www1.hkexnews.hk/app/sehk/2026/108824/documents/sehk26082802199.pdf",
+  "retrieved_at": "2026-10-10",
+  "nodes": [
+    {
+      "id": "capchem.battery_chem.sales_volume_h1_2026",
+      "metric": "电池化学品销量_2026H1(招股书)",
+      "unit": "万吨",
+      "evidence_type": "audited",
+      "as_of": "2026-06-30",
+      "distribution": {"type": "point", "value": 33.2},
+      "quote": "Battery chemicals sales volume ('000 tonnes) six months ended 30 June 2026: 332（PDF p16/p219，无损换算为 33.2 万吨）。H 股招股书申请版本，数据可能修订。"
+    },
+    {
+      "id": "capchem.battery_chem.sales_volume_fy2025",
+      "metric": "电池化学品销量_2025(招股书)",
+      "unit": "万吨",
+      "evidence_type": "audited",
+      "as_of": "2025-12-31",
+      "distribution": {"type": "point", "value": 53.0},
+      "quote": "Battery chemicals sales volume ('000 tonnes) 2025: 530（PDF p16/p219，无损换算为 53.0 万吨）。H 股招股书申请版本，数据可能修订。"
+    },
+    {
+      "id": "capchem.battery_chem.revenue_fy2025",
+      "metric": "电池化学品分部收入_2025(招股书)",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "as_of": "2025-12-31",
+      "distribution": {"type": "point", "value": 66.79414},
+      "quote": "Battery chemicals revenue 2025: RMB6,679,414 thousand（附注 4，p340-342；均为 Sales to external customers，无分部间销售行；无损换算为 66.79414 亿元）。H 股招股书申请版本，数据可能修订。"
+    },
+    {
+      "id": "capchem.electrolyte.revenue_fy2025.fs",
+      "metric": "新宙邦电解液收入_2025(Frost&Sullivan)",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2025-12-31",
+      "distribution": {"type": "point", "value": 57.42},
+      "quote": "Frost & Sullivan（招股书行业章节 p87）：2025 年新宙邦电解液收入 RMB5,742 million，全球份额 11.8%、排名第二。F&S 行业口径，可能与财报口径不同。H 股招股书申请版本，数据可能修订。"
+    }
+  ]
+}

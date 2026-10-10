@@ -640,6 +640,13 @@
       "note": "H1/H2 同源同规则(生意社月初价)，无需基差锚"
     },
     {
+      "id": "ind.dmc.price.h2_vs_h1_ratio",
+      "operator": "divide",
+      "inputs": ["ind.dmc.price.h2avg_2026_est", "ind.dmc.price.h1avg_2026"],
+      "output_metric": "DMC_2026H2均价÷H1均价(生意社)",
+      "unit": "比率"
+    },
+    {
       "id": "ind.electrolyte.solvent_cost.delta_h2_vs_h1_2026",
       "operator": "product",
       "inputs": ["ind.dmc.price.delta_h2_vs_h1_2026", "ind.electrolyte.solvent_cost_per_dmc"],
