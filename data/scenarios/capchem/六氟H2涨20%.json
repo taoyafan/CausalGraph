@@ -1,0 +1,15 @@
+{
+  "desc": "六氟磷酸锂 H2 价格涨 20%（相对现价）",
+  "created_by": "agent",
+  "overrides": {
+    "ind.liPF6.price.oilchem": {
+      "distribution": {"type": "point", "value": 138000, "domain": [0, null]},
+      "reason": "验收：六氟价格→新宙邦利润"
+    },
+    "ind.liPF6.price.trendforce": {
+      "distribution": {"type": "point", "value": 130320, "domain": [0, null]},
+      "reason": "验收：六氟价格→新宙邦利润"
+    }
+  },
+  "mutes": []
+}

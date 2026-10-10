@@ -1,6 +1,6 @@
 {
   "subgraph": "capchem_segments_2026",
-  "note": "新宙邦 2026 全年归母净利润——分业务自下而上（不含券商）。电池化学品链：H2 收入 = H1 电解液单吨收入(分部收入÷电解液出货) × (1+单吨收入环比) × H2 电解液出货(东吴 FY50 − 东吴 H1 21)；单吨收入环比 = 电解液现货锚；H2 毛利率 = margin_h1_2026(audited) + margin_delta_h2，margin_delta_h2 = mixture(东吴单吨盈利, 券商修复)。电子/氟/其他业务全年毛利由 seg_gross_profit(H1收入, g3, H1毛利率, 全年调整系数) 一步算出；其中电子/氟的 g3 已由“跨期环比外推”改为“同季同比驱动”：g3 = growth(2026H2, 2026H1)、 2026H2 = 2025H2(audited派生)×(1+H2同比增速_融合)，H2同比增速由多条证据锰 mixture 融合(每份证据一个数据节点、再合并计算，不删证据)：电子=动量延续锰+增速放缓锰、有机氟=技改爬坡锰+产能上限锰。避免拿跨年 H2→H1 的环比去代年内 H1→H2 的季节性方向错配；其他业务占比<1% 仍用原子假设 g3。算子皆纯数学(C_op=1.0，定义即代码)，主观性集中在 assumptions 文件的假设节点——本文件输入的数据节点含 audited（公司披露）与 assumption/analyst_estimate（我方/券商锚）两类——及两个调整系数。",
+  "note": "新宙邦 2026 全年归母净利润——分业务自下而上（不含券商）。电池化学品链：H2 毛利 = (H2 单吨收入 − H2 单吨成本) × H2 电解液出货；H2 单吨收入 = H1 单吨收入 × (1 + β × (行业铁锂电解液 H2 代理价 ÷ H1 均价 − 1))；H2 单吨成本 = H1 单吨成本 + 六氟外购成本变动（(六氟现价 − H1 均价) × 单耗 × (1 − 自供率)），其余单位成本按 H1 不变。电子/氟/其他业务全年毛利由 seg_gross_profit(H1收入, g3, H1毛利率, 全年调整系数) 一步算出；其中电子/氟的 g3 已由“跨期环比外推”改为“同季同比驱动”：g3 = growth(2026H2, 2026H1)、 2026H2 = 2025H2(audited派生)×(1+H2同比增速_融合)，H2同比增速由多条证据锰 mixture 融合(每份证据一个数据节点、再合并计算，不删证据)：电子=动量延续锰+增速放缓锰、有机氟=技改爬坡锰+产能上限锰。避免拿跨年 H2→H1 的环比去代年内 H1→H2 的季节性方向错配；其他业务占比<1% 仍用原子假设 g3。算子皆纯数学(C_op=1.0，定义即代码)，主观性集中在 assumptions 文件的假设节点——本文件输入的数据节点含 audited（公司披露）与 assumption/analyst_estimate（我方/券商锚）两类——及两个调整系数。",
   "operators": [
     {
       "id": "seg.electronic.rev_h2_2025",
@@ -155,26 +155,28 @@
       "note": "分部收入含少量非电解液外销，按电解液出货摊，单吨收入口径偏高（粗粒度可接受）"
     },
     {
-      "id": "seg.battery.price_growth_h2",
-      "operator": "mixture",
-      "inputs": ["seg.battery.price_growth_h2_spot"],
-      "output_metric": "电池化学品_H2电解液单吨收入环比变动_融合",
+      "id": "seg.battery.lfp_price_ratio_h2_vs_h1",
+      "operator": "divide",
+      "inputs": ["ind.electrolyte.price.lfp.oilchem", "ind.electrolyte.price.lfp.h1avg_2026.maihuasu"],
+      "output_metric": "铁锂电解液价格_H2代理÷H1均价",
       "unit": "比率",
-      "note": "基线 H2 电解液单吨收入环比，取电解液现货锚；价格情景由 price_exposure 模板承载"
+      "note": "H2 代理为隆众 10-08 现价、H1 为买化塑均价，跨发布方"
     },
     {
-      "id": "seg.battery.margin_delta_h2",
-      "operator": "mixture",
-      "inputs": ["seg.battery.margin_delta_h2_dongwu", "seg.battery.margin_delta_h2_brokers"],
-      "output_metric": "电池化学品_H2毛利率相对H1偏离_融合",
+      "id": "seg.battery.lfp_price_change_h2",
+      "operator": "affine",
+      "inputs": ["seg.battery.lfp_price_ratio_h2_vs_h1"],
+      "params": {"a": -1.0, "b": 1.0},
+      "output_metric": "行业铁锂电解液价格变动率_H2相对H1",
       "unit": "比率"
     },
     {
-      "id": "seg.battery.margin_h2_2026",
-      "operator": "sum",
-      "inputs": ["seg.battery.margin_h1_2026", "seg.battery.margin_delta_h2"],
-      "output_metric": "电池化学品_H2毛利率_2026",
-      "unit": "比率"
+      "id": "seg.battery.price_growth_h2",
+      "operator": "product",
+      "inputs": ["seg.battery.lfp_price_change_h2", "capchem.electrolyte.price_beta"],
+      "output_metric": "电池化学品_H2电解液单吨收入环比变动(行业价格×β)",
+      "unit": "比率",
+      "note": "= β × (行业铁锂电解液 H2 代理价 ÷ H1 均价 − 1)。情景覆盖 ind.electrolyte.price.lfp.oilchem 即可传导。电解液售价与六氟成本是两个独立驱动，六氟到售价的传导未建模；联合情景需同时覆盖两侧价格节点。"
     },
     {
       "id": "seg.battery.price_growth_h2_plus1",
@@ -206,10 +208,71 @@
       "unit": "亿元"
     },
     {
+      "id": "seg.battery.cost_ratio_h1_2026",
+      "operator": "affine",
+      "inputs": ["seg.battery.margin_h1_2026"],
+      "params": {"a": 1.0, "b": -1.0},
+      "output_metric": "电池化学品_H1成本率(1−毛利率)",
+      "unit": "比率"
+    },
+    {
+      "id": "seg.battery.unit_cost_h1_2026",
+      "operator": "product",
+      "inputs": ["seg.battery.unit_rev_h1_2026", "seg.battery.cost_ratio_h1_2026"],
+      "output_metric": "电池化学品_H1单吨成本_2026",
+      "unit": "万元/吨"
+    },
+    {
+      "id": "ind.liPF6.price.change_h2_vs_h1",
+      "operator": "subtract",
+      "inputs": ["ind.liPF6.price", "ind.liPF6.price.h1avg_2026.maihuasu"],
+      "output_metric": "六氟磷酸锂价格变动额_H2代理相对H1均价",
+      "unit": "元/吨",
+      "note": "H2 代理为现价 mixture（TrendForce 9-07、隆众 9-18），现价仅近似 H2 均价；H1 为买化塑均价，跨发布方基差与价差同量级、未入图"
+    },
+    {
+      "id": "capchem.liPF6.external_ratio",
+      "operator": "affine",
+      "inputs": ["capchem.liPF6.self_supply_ratio"],
+      "params": {"a": 1.0, "b": -1.0},
+      "output_metric": "新宙邦六氟外购比例(1−自供率)",
+      "unit": "比率"
+    },
+    {
+      "id": "capchem.liPF6.cost_delta_per_ton_electrolyte",
+      "operator": "product",
+      "inputs": ["ind.liPF6.price.change_h2_vs_h1", "ind.electrolyte.liPF6_dosage", "capchem.liPF6.external_ratio"],
+      "output_metric": "新宙邦单吨电解液六氟外购成本变动_H2相对H1",
+      "unit": "元/吨"
+    },
+    {
+      "id": "capchem.liPF6.cost_delta_per_ton_electrolyte_wan",
+      "operator": "affine",
+      "inputs": ["capchem.liPF6.cost_delta_per_ton_electrolyte"],
+      "params": {"a": 0.0, "b": 0.0001},
+      "output_metric": "新宙邦单吨电解液六氟外购成本变动(万元/吨)",
+      "unit": "万元/吨"
+    },
+    {
+      "id": "seg.battery.unit_cost_h2_2026",
+      "operator": "sum",
+      "inputs": ["seg.battery.unit_cost_h1_2026", "capchem.liPF6.cost_delta_per_ton_electrolyte_wan"],
+      "output_metric": "电池化学品_H2单吨成本_2026",
+      "unit": "万元/吨",
+      "note": "= H1 单吨成本 + 六氟外购成本变动；六氟以外的单位成本（溶剂/添加剂/制造费用）按 H1 水平不变（粗粒度）。情景覆盖 ind.liPF6.price.oilchem / ind.liPF6.price.trendforce 即可传导；六氟到售价的传导未建模。"
+    },
+    {
+      "id": "seg.battery.unit_gp_h2_2026",
+      "operator": "subtract",
+      "inputs": ["seg.battery.unit_rev_h2_2026", "seg.battery.unit_cost_h2_2026"],
+      "output_metric": "电池化学品_H2单吨毛利_2026",
+      "unit": "万元/吨"
+    },
+    {
       "id": "seg.battery.gp_h2_2026",
       "operator": "product",
-      "inputs": ["seg.battery.rev_h2_2026", "seg.battery.margin_h2_2026"],
-      "output_metric": "电池化学品_H2毛利_2026",
+      "inputs": ["seg.battery.unit_gp_h2_2026", "seg.battery.shipment_h2_2026_est"],
+      "output_metric": "电池化学品_H2毛利_2026(单吨毛利×电解液出货)",
       "unit": "亿元"
     },
     {

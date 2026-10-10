@@ -1,0 +1,11 @@
+{
+  "desc": "行业铁锂电解液 H2 价格涨 20%（相对现价）",
+  "created_by": "agent",
+  "overrides": {
+    "ind.electrolyte.price.lfp.oilchem": {
+      "distribution": {"type": "point", "value": 39300, "domain": [0, null]},
+      "reason": "验收：电解液价格→新宙邦利润"
+    }
+  },
+  "mutes": []
+}

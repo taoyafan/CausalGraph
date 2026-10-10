@@ -31,6 +31,16 @@
       "source_url": "https://material.oilchem.net/new_material/electrolyte.shtml",
       "distribution": {"type": "point", "value": 32500, "domain": [0, null]},
       "quote": "电解液（三元动力型）现货价 32,500 元/吨。来源：隆众资讯。"
+    },
+    {
+      "id": "ind.electrolyte.price.lfp.oilchem",
+      "metric": "磷酸铁锂电解液报价_2026-10-08(隆众)",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-10-08",
+      "source_url": "https://material.oilchem.net/new_material/electrolyte.shtml",
+      "distribution": {"type": "point", "value": 32750, "domain": [0, null]},
+      "quote": "隆众资讯 2026-10-08 14:00 电解液报价：磷酸铁锂 32,750 元/吨。来源：https://material.oilchem.net/new_material/electrolyte.shtml 。用作 2026H2 价格代理：现价仅近似 H2 均价，代理误差未入分布、置信度偏乐观；与 H1 均价（买化塑）为跨发布方，基差未入图。"
     }
   ]
 }
