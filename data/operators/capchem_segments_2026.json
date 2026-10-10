@@ -1,6 +1,6 @@
 {
   "subgraph": "capchem_segments_2026",
-  "note": "新宙邦 2026 全年归母净利润——分业务自下而上（不含券商）。电池化学品链已重建为 H2量×H2价 结构：H2 收入 = H1 均价×(1+价环比)×H1 产量×(1+量环比)。全链统一为【产量】口径（严禁产量/出货混用）：东吴给的是电解液【出货量】，先经 电解液产销比假设(≈1) 折算为电解液产量，再与非电解液产量相加。H2 全产品产量 = 电解液H2产量(=(全年50−H1)出货×产销比) + 非电解液H2产量；非电解液H1产量 = 全产品产量32.11 − 电解液H1产量；非电解液H2产量 = 非电解液H1产量 ×(1+非电解液H2环比增速假设)。原 4% 产能投放锚(volume_growth_h2_capacity)及“电解液增速直接乘全产品”的 mixture 已退役——电解液仅占 67%，用其增速乘全产品属口径错配，且 4% 会逼非电解液暴跌，故改为全产品口径自下而上；H2 价环比 = mixture(电解液现货锚, 成本传导路径) 两路融合；成本传导路径 = (六氟+溶剂(DMC)+其余)单吨电解液成本变动 × H2 电解液量占比 ÷ H1 全产品均价 × β + 非电解液产品价格变动贡献；H2 毛利率 = margin_h1_2026(audited) + margin_delta_h2，margin_delta_h2 = mixture(东吴单吨盈利, 券商修复)。电子/氟/其他业务全年毛利由 seg_gross_profit(H1收入, g3, H1毛利率, 全年调整系数) 一步算出；其中电子/氟的 g3 已由“跨期环比外推”改为“同季同比驱动”：g3 = growth(2026H2, 2026H1)、 2026H2 = 2025H2(audited派生)×(1+H2同比增速_融合)，H2同比增速由多条证据锰 mixture 融合(每份证据一个数据节点、再合并计算，不删证据)：电子=动量延续锰+增速放缓锰、有机氟=技改爬坡锰+产能上限锰；非电解液量环比增速同样=存量满产上限锰+新线投产增量锰 mixture。避免拿跨年 H2→H1 的环比去代年内 H1→H2 的季节性方向错配；其他业务占比<1% 仍用原子假设 g3。算子皆纯数学(C_op=1.0，定义即代码)，主观性集中在 assumptions 文件的假设节点——本文件输入的数据节点含 audited（公司披露）与 assumption/analyst_estimate（我方/券商锚）两类——及两个调整系数。",
+  "note": "新宙邦 2026 全年归母净利润——分业务自下而上（不含券商）。电池化学品链：H2 收入 = H1 电解液单吨收入(分部收入÷电解液出货) × (1+单吨收入环比) × H2 电解液出货(东吴 FY50 − 东吴 H1 21)；单吨收入环比 = mixture(电解液现货锚, 成本传导路径)；成本传导路径 = (六氟+溶剂(DMC)+其余)单吨电解液成本变动 ÷ H1 单吨收入 × β；H2 毛利率 = margin_h1_2026(audited) + margin_delta_h2，margin_delta_h2 = mixture(东吴单吨盈利, 券商修复)。电子/氟/其他业务全年毛利由 seg_gross_profit(H1收入, g3, H1毛利率, 全年调整系数) 一步算出；其中电子/氟的 g3 已由“跨期环比外推”改为“同季同比驱动”：g3 = growth(2026H2, 2026H1)、 2026H2 = 2025H2(audited派生)×(1+H2同比增速_融合)，H2同比增速由多条证据锰 mixture 融合(每份证据一个数据节点、再合并计算，不删证据)：电子=动量延续锰+增速放缓锰、有机氟=技改爬坡锰+产能上限锰。避免拿跨年 H2→H1 的环比去代年内 H1→H2 的季节性方向错配；其他业务占比<1% 仍用原子假设 g3。算子皆纯数学(C_op=1.0，定义即代码)，主观性集中在 assumptions 文件的假设节点——本文件输入的数据节点含 audited（公司披露）与 assumption/analyst_estimate（我方/券商锚）两类——及两个调整系数。",
   "operators": [
     {
       "id": "seg.other.g1_2025",
@@ -145,153 +145,67 @@
       "unit": "亿元"
     },
     {
-      "id": "seg.battery.price_h1_2026",
-      "operator": "divide",
-      "inputs": ["seg.battery.rev_h1_2026", "seg.battery.volume_h1_2026"],
-      "output_metric": "电池化学品_H1均价_2026(audited派生)",
-      "unit": "万元/吨",
-      "note": "产量口径(收入÷产量)，与披露销量口径均价 17,302 元/吨约差 3%"
+      "id": "seg.battery.shipment_h1_2026",
+      "operator": "mixture",
+      "inputs": ["capchem.battery_chem.shipment_h1_2026", "seg.battery.shipment_h1_2026.dongwu"],
+      "output_metric": "电池化学品_H1电解液出货量_2026(EVTank与东吴同期融合)",
+      "unit": "万吨",
+      "note": "两源同期（2026H1）同量，差约 0.5%"
     },
     {
-      "id": "seg.battery.shipment_h1_2026_est",
-      "operator": "sum",
-      "inputs": ["seg.battery.shipment_q1_2026_est", "seg.battery.shipment_q2_2026_est"],
-      "output_metric": "电池化学品_H1电解液出货量_2026_东吴测算",
-      "unit": "万吨"
+      "id": "seg.battery.prod_to_shipment_h1_2026",
+      "operator": "divide",
+      "inputs": ["seg.battery.volume_h1_2026", "seg.battery.shipment_h1_2026"],
+      "output_metric": "电池化学品_H1产量÷电解液出货_2026(口径诊断)",
+      "unit": "比率",
+      "note": "诊断旁支：电池化学品产量含大量非电解液(溶剂/添加剂等，是否自用未核实)，该比值显著大于 1 说明产量不宜作收入量；不进收入链"
     },
     {
       "id": "seg.battery.shipment_h2_2026_est",
       "operator": "subtract",
-      "inputs": ["seg.battery.shipment_fy2026_est", "seg.battery.shipment_h1_2026_est"],
-      "output_metric": "电池化学品_H2电解液出货量_2026_东吴测算派生",
-      "unit": "万吨"
+      "inputs": ["seg.battery.shipment_fy2026_est", "seg.battery.shipment_h1_2026.dongwu"],
+      "output_metric": "电池化学品_H2电解液出货量_2026_东吴同源相减",
+      "unit": "万吨",
+      "note": "FY 与 H1 均取东吴 8/21 同源相减，避免混入跨源口径差"
     },
     {
-      "id": "seg.battery.volume_h1_electrolyte",
-      "operator": "product",
-      "inputs": ["seg.battery.shipment_h1_2026_est", "seg.battery.electrolyte_prod_ship_ratio"],
-      "output_metric": "电池化学品_H1电解液产量_2026(出货×产销比)",
-      "unit": "万吨"
-    },
-    {
-      "id": "seg.battery.volume_h2_electrolyte",
-      "operator": "product",
-      "inputs": ["seg.battery.shipment_h2_2026_est", "seg.battery.electrolyte_prod_ship_ratio"],
-      "output_metric": "电池化学品_H2电解液产量_2026(出货×产销比)",
-      "unit": "万吨"
-    },
-    {
-      "id": "seg.battery.volume_h1_nonelectrolyte",
-      "operator": "subtract",
-      "inputs": ["seg.battery.volume_h1_2026", "seg.battery.volume_h1_electrolyte"],
-      "output_metric": "电池化学品_H1非电解液产量_2026(派生)",
-      "unit": "万吨"
-    },
-    {
-      "id": "seg.battery.volume_growth_h2_nonelectrolyte",
-      "operator": "mixture",
-      "inputs": ["seg.battery.volume_growth_h2_nonelec_ceiling", "seg.battery.volume_growth_h2_nonelec_newline"],
-      "output_metric": "电池化学品_H2非电解液量环比增速_融合",
-      "unit": "比率"
-    },
-    {
-      "id": "seg.battery.volume_growth_h2_nonelectrolyte_plus1",
-      "operator": "affine",
-      "inputs": ["seg.battery.volume_growth_h2_nonelectrolyte"],
-      "params": {"a": 1.0, "b": 1.0},
-      "output_metric": "电池化学品_H2非电解液量增速+1",
-      "unit": "比率"
-    },
-    {
-      "id": "seg.battery.volume_h2_nonelectrolyte",
-      "operator": "product",
-      "inputs": ["seg.battery.volume_h1_nonelectrolyte", "seg.battery.volume_growth_h2_nonelectrolyte_plus1"],
-      "output_metric": "电池化学品_H2非电解液产量_2026",
-      "unit": "万吨"
+      "id": "seg.battery.unit_rev_h1_2026",
+      "operator": "divide",
+      "inputs": ["seg.battery.rev_h1_2026", "seg.battery.shipment_h1_2026"],
+      "output_metric": "电池化学品_H1电解液单吨收入_2026(分部收入÷电解液出货)",
+      "unit": "万元/吨",
+      "note": "分部收入整体归于电解液出货：券商（东吴 2026-03-24 年报点评 https://pdf.dfcfw.com/pdf/H3_AP202603241820730922_1.pdf ：'25 年电解液收入 66.8 亿元'，与年报电池化学品分部收入一致）将分部收入视为电解液收入；非电解液外销占比未披露，与招股书媒体转引'电池化学品均价 17,302 元/吨'隐含的销量口径存在张力，此处为券商同口径近似"
     },
     {
       "id": "seg.battery.price_growth_h2",
       "operator": "mixture",
       "inputs": ["seg.battery.price_growth_h2_spot", "seg.battery.price_growth_h2_cost_wired"],
-      "output_metric": "电池化学品_H2均价环比变动_融合",
+      "output_metric": "电池化学品_H2电解液单吨收入环比变动_融合",
       "unit": "比率",
-      "note": "两路均为'电池化学品全产品 H2 均价相对 H1 变动'的完整估计：spot=整体电解液市场主观判断(+6% 先验，与成本路有共因，非由 3.35 万现价推出)；cost_wired=电解液成本(六氟+溶剂+其余)×H2 电解液量占比÷H1 均价×β + 非电解液产品价格变动贡献。成本路为同期传导、未含长单滞后。两路方向不一致时触发 Method Conflict，融合 P50 不作结论，需并列查看两支路。"
+      "note": "两路均为'电解液单吨收入 H2 相对 H1 变动'的完整估计：spot=电解液市场主观判断(+6% 先验，与成本路有共因)；cost_wired=单吨电解液成本(六氟+溶剂+其余)变动÷H1 单吨收入×β，同期传导、未含长单滞后。两路不一致时触发 Method Conflict，融合 P50 不作结论，需并列查看两支路。"
     },
     {
-      "id": "seg.battery.electrolyte_vol_share_h2_2026",
-      "operator": "divide",
-      "inputs": ["seg.battery.volume_h2_electrolyte", "seg.battery.volume_h2_2026"],
-      "output_metric": "电池化学品_H2电解液产量占全产品产量比_2026",
-      "unit": "比率"
-    },
-    {
-      "id": "seg.battery.nonelec_vol_share_h2_2026",
-      "operator": "divide",
-      "inputs": ["seg.battery.volume_h2_nonelectrolyte", "seg.battery.volume_h2_2026"],
-      "output_metric": "电池化学品_H2非电解液产量占全产品产量比_2026",
-      "unit": "比率"
-    },
-    {
-      "id": "seg.battery.material_cost_delta_per_ton_all",
-      "operator": "product",
-      "inputs": ["ind.electrolyte.cost.delta_h2_vs_h1_2026", "seg.battery.electrolyte_vol_share_h2_2026"],
-      "output_metric": "电池化学品_全产品每吨电解液成本变动额_2026H2相对H1",
-      "unit": "元/吨",
-      "note": "电解液总成本变动额 × H2 电解液量占比，摊到全产品每吨；非电解液产品由 nonelec 支路单独承载"
-    },
-    {
-      "id": "seg.battery.material_cost_delta_per_ton_all_wan",
+      "id": "seg.battery.electrolyte_cost_delta_wan",
       "operator": "affine",
-      "inputs": ["seg.battery.material_cost_delta_per_ton_all"],
+      "inputs": ["ind.electrolyte.cost.delta_h2_vs_h1_2026"],
       "params": {"a": 0, "b": 0.0001},
-      "output_metric": "电池化学品_全产品每吨电解液成本变动额(万元/吨)",
-      "unit": "万元/吨",
-      "note": "元/吨→万元/吨 单位换算，与 seg.battery.price_h1_2026 单位一致"
-    },
-    {
-      "id": "seg.battery.price_growth_h2_cost_full",
-      "operator": "divide",
-      "inputs": ["seg.battery.material_cost_delta_per_ton_all_wan", "seg.battery.price_h1_2026"],
-      "output_metric": "电池化学品_H2均价变动率_电解液成本全额转嫁",
-      "unit": "比率",
-      "note": "= 电解液成本变动额全额转嫁时对全产品均价的贡献，不是公司实际变动"
-    },
-    {
-      "id": "seg.battery.price_growth_h2_cost_passed",
-      "operator": "product",
-      "inputs": ["seg.battery.price_growth_h2_cost_full", "capchem.battery.price_pass_through"],
-      "output_metric": "电池化学品_H2均价变动率_电解液成本传导(×β)",
-      "unit": "比率"
-    },
-    {
-      "id": "seg.battery.nonelec_delta_per_ton_all",
-      "operator": "product",
-      "inputs": ["seg.battery.nonelec_price_delta_h2", "seg.battery.nonelec_vol_share_h2_2026"],
-      "output_metric": "电池化学品_全产品每吨非电解液价格变动额",
-      "unit": "元/吨"
-    },
-    {
-      "id": "seg.battery.nonelec_delta_per_ton_all_wan",
-      "operator": "affine",
-      "inputs": ["seg.battery.nonelec_delta_per_ton_all"],
-      "params": {"a": 0, "b": 0.0001},
-      "output_metric": "电池化学品_全产品每吨非电解液价格变动额(万元/吨)",
+      "output_metric": "单吨电解液总成本变动额_2026H2相对H1(万元/吨)",
       "unit": "万元/吨",
       "note": "元/吨→万元/吨"
     },
     {
-      "id": "seg.battery.price_growth_h2_nonelec",
+      "id": "seg.battery.price_growth_h2_cost_full",
       "operator": "divide",
-      "inputs": ["seg.battery.nonelec_delta_per_ton_all_wan", "seg.battery.price_h1_2026"],
-      "output_metric": "电池化学品_H2均价变动率_非电解液产品贡献",
+      "inputs": ["seg.battery.electrolyte_cost_delta_wan", "seg.battery.unit_rev_h1_2026"],
+      "output_metric": "电池化学品_H2电解液单吨收入变动率_成本全额转嫁",
       "unit": "比率",
-      "note": "不乘 β（本身即价格变动）"
+      "note": "单吨电解液成本变动额 ÷ H1 单吨收入，全额转嫁时的变动率，不是实际变动"
     },
     {
       "id": "seg.battery.price_growth_h2_cost_wired",
-      "operator": "sum",
-      "inputs": ["seg.battery.price_growth_h2_cost_passed", "seg.battery.price_growth_h2_nonelec"],
-      "output_metric": "电池化学品_H2均价变动率_成本传导路径(完整估计)",
+      "operator": "product",
+      "inputs": ["seg.battery.price_growth_h2_cost_full", "capchem.battery.price_pass_through"],
+      "output_metric": "电池化学品_H2电解液单吨收入变动率_成本传导路径(×β)",
       "unit": "比率"
     },
     {
@@ -309,13 +223,6 @@
       "unit": "比率"
     },
     {
-      "id": "seg.battery.volume_h2_2026",
-      "operator": "sum",
-      "inputs": ["seg.battery.volume_h2_electrolyte", "seg.battery.volume_h2_nonelectrolyte"],
-      "output_metric": "电池化学品_H2产量_2026",
-      "unit": "万吨"
-    },
-    {
       "id": "seg.battery.price_growth_h2_plus1",
       "operator": "affine",
       "inputs": ["seg.battery.price_growth_h2"],
@@ -324,17 +231,17 @@
       "unit": "比率"
     },
     {
-      "id": "seg.battery.price_h2_2026",
+      "id": "seg.battery.unit_rev_h2_2026",
       "operator": "product",
-      "inputs": ["seg.battery.price_h1_2026", "seg.battery.price_growth_h2_plus1"],
-      "output_metric": "电池化学品_H2均价_2026",
+      "inputs": ["seg.battery.unit_rev_h1_2026", "seg.battery.price_growth_h2_plus1"],
+      "output_metric": "电池化学品_H2电解液单吨收入_2026",
       "unit": "万元/吨"
     },
     {
       "id": "seg.battery.rev_h2_2026",
       "operator": "product",
-      "inputs": ["seg.battery.price_h2_2026", "seg.battery.volume_h2_2026"],
-      "output_metric": "电池化学品_H2收入_2026",
+      "inputs": ["seg.battery.unit_rev_h2_2026", "seg.battery.shipment_h2_2026_est"],
+      "output_metric": "电池化学品_H2收入_2026(单吨收入×电解液出货)",
       "unit": "亿元"
     },
     {
