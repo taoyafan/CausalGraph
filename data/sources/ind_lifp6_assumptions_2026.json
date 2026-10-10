@@ -21,7 +21,34 @@
       "evidence_type": "assumption",
       "as_of": "2026-10-09",
       "distribution": {"type": "split_normal", "mu": 0, "sigma_low": 3000, "sigma_high": 3000, "domain": [-10000, 10000]},
-      "quote": "口径基差假设：把买化塑 2026H1 市场均价换算到'生意社月初基准价'口径时的水平偏差，合并承载两类可比性偏差——①发布方统计口径不同（买化塑市场均价 vs 生意社基准价）；②H2 以月初价近似月均（行情上行时月初价偏低）。方向不确定，众数 0、σ≈3000 元/吨（约 2.5%）。此为主 Agent 提出的中性不确定性假设（model-reviewer 要求），待协作者确认，非披露值。"
+      "quote": "口径基差假设：把买化塑 2026H1 市场均价换算到'生意社月初基准价'口径时的水平偏差，合并承载两类可比性偏差——①发布方统计口径不同（买化塑市场均价 vs 生意社基准价）；②H2 以月初价近似月均（行情上行时月初价偏低）。方向不确定，众数 0、σ≈3000 元/吨（约 2.5%）。此为主 Agent 提出的中性不确定性假设（model-reviewer 要求），待协作者确认，非披露值。（注：H2 侧月初价在上行行情中偏低，μ=0 与该方向不一致，μ 待协作者拍板。）"
+    },
+    {
+      "id": "ind.dmc.price.novdec_vs_oct_2026",
+      "metric": "DMC_2026年11-12月均价相对10-01生意社价比值_持平假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "split_normal", "mu": 1.0, "sigma_low": 0.10, "sigma_high": 0.10, "domain": [0.5, 1.5]},
+      "quote": "持平假设：DMC 2026 年 11~12 月均价与 10 月初生意社基准价持平（众数 1.0），±10% 承载 DMC 较大波动（9 月→10 月初 +21.89%，生意社 2026-10-01 https://www.100ppi.com/news/detail-20261001-6294130.html ）。主 Agent 提出，待协作者确认，非披露值。"
+    },
+    {
+      "id": "ind.electrolyte.solvent_cost_per_dmc",
+      "metric": "每吨电解液溶剂成本变动额÷DMC价格变动额",
+      "unit": "吨/吨",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "split_normal", "mu": 0.8, "sigma_low": 0.12, "sigma_high": 0.08, "domain": [0, 1.2]},
+      "quote": "定义：每吨电解液溶剂成本变动额 ÷ DMC 价格变动额。承载两层乘性近似：①溶剂吨耗；②以 DMC 价变动代表溶剂篮子(EC/EMC/DEC 等)变动。检索摘要线索（无 URL、未核实）：溶剂约占电解液质量 80%~85%；EC/EMC 无同源价。故不作数据节点，两层近似合并于本锚。0.8 为主 Agent 软判断，待协作者确认。注意：本锚基本决定电解液成本路的符号。"
+    },
+    {
+      "id": "ind.electrolyte.other_cost.delta_h2_vs_h1_2026",
+      "metric": "每吨电解液添加剂及加工费等其余成本_H2相对H1变动额_占位",
+      "unit": "元/吨",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "split_normal", "mu": 0, "sigma_low": 200, "sigma_high": 400, "domain": [-5000, 5000]},
+      "quote": "占位（上侧偏宽仅承载下述方向证据）：添加剂(VC/FEC/LiFSI)无同源价、加工费无数据，幅度未知故众数取 0；上侧偏宽承载方向证据——新宙邦：'鉴于溶剂、核心添加剂等基础化工品价格持续上涨，有效对冲了六氟磷酸锂价格回落的影响，公司电解液产品价格相对稳定'（电池中国网 2026-04-02 http://www.chinabattery.org/detail/1056855.html ）。主 Agent 提出，待协作者确认。"
     }
   ]
 }

@@ -23,7 +23,7 @@ CausalGraph 的建图工作由**一支分工明确的 Agent 团队**协作完成
 | **主 Agent（= 对话/默认 Agent）** | 思考建模：决定用什么公式计算某值、需要哪些信息节点；把信息需求派给 Scout、把节点增删派给 Persister、把审核派给 Reviewer；汇总结果、触发求值与呈现。**即当前与用户对话的默认 Agent，职责写在 [AGENTS.md](../../AGENTS.md)，无独立 `.agent.md`** | 不亲自搜索/提取原文、不亲自增删节点、不亲自写算子代码、不亲自做数值计算 |
 | **Scout（搜索提取 Agent）** | 领取具体信息需求 → 检索来源 → 提取**原子事实**（含出处 URL）回报给主 Agent，不落盘；缺算子/缺数据时上报，不自行凑 | 不做任何数值计算；不写数据节点；不评审自己 |
 | **Persister（落盘 Agent）** | 领取具体节点增删任务（主 Agent 给出节点 id/字段内容或要删的 id）→ 按节点 schema 格式写入/修改/删除 data/sources 与 data/operators 下的 JSON 文件；只做"照填"不做"设计" | 不决定分布参数/公式/节点设计（那是主 Agent 的建模职责）；不检索；不评审自己 |
-| **Model Reviewer（建模审核 Agent）** | 落盘**前**审核**建模方案本身**（设计意图，非 JSON）：公式/口径一致、禁跨期比值、禁时变内容跨期融合（铁律 8）、先搜后算、数据/算子/假设三分离、因果方向与 DAG、分布依据诚实；通过或打回并给理由 | 不搜数据、不写 JSON、不写算子代码、不做数值改动；不接触 URL；不审已落盘的 JSON（那是 Reviewer） |
+| **Model Reviewer（建模审核 Agent）** | 落盘**前**按 [agents/modeling-rules.md](agents/modeling-rules.md) 逐条审核**建模方案本身**（设计意图，非 JSON）；通过或打回并给理由 | 不搜数据、不写 JSON、不写算子代码、不做数值改动；不接触 URL；不审已落盘的 JSON（那是 Reviewer） |
 | **Reviewer（审核 Agent）** | 审核节点/算子是否符合铁律与 schema、图结构是否被破坏（断边/成环/悬空/id 冲突）；通过或打回并给出理由 | 不新建数据、不改数据内容（只批准/打回）；完全不接触 URL、不做网络验证（Scout 的摘要+URL 即溯源终点） |
 | **Operator Author（算子作者 Agent）** | 主 Agent 把**公式语义**（用什么公式算、参数含义）告诉它 → 实现为受控、可复现的具名算子代码入库（`cgraph/operators.py`），写清语义与参数 | 不新建数据节点；不内联一次性公式；不自行决定公式（公式由主 Agent 给出） |
 
@@ -84,6 +84,7 @@ flowchart TD
 | 角色 | 提示词文件（唯一事实源） |
 |------|------------------------|
 | 全体共守的铁律 | [agents/invariants.md](agents/invariants.md) |
+| 建模规范（主 Agent 设计必读 + Model Reviewer 审核清单，同一份） | [agents/modeling-rules.md](agents/modeling-rules.md) |
 | Scout | [agents/scout.md](agents/scout.md) |
 | Persister | [agents/persister.md](agents/persister.md) |
 | Model Reviewer（落盘前审建模方案） | [agents/model-reviewer.md](agents/model-reviewer.md) |
@@ -163,6 +164,8 @@ Agent 执行任务时常见障碍及**标准解法**（对应铁律"遇阻不放
 - **角色提示词按文件拆分（防双份 + 防上下文污染）**：每个角色一个文件、只含该角色的正文；
   铁律单独一份 invariants.md 全体共读（生产者与审核者必须用同一份文字，否则制衡失效）。
   子 Agent 只读自己角色的文件 + invariants.md，不看到其它角色的提示词；主 Agent 只存路径不读内容。
+  **建模规范同理单独一份 [agents/modeling-rules.md](agents/modeling-rules.md)**：建模者（主 Agent）与 Model Reviewer
+  共读，规范不得只写在审核角色文件里（否则建模者看不到、只能事后被挑错）。
   改提示词**只改对应角色文件一处**，严禁在两处各存一份。
 - **`.agent.md` 一律是零正文存根，提示词只在 agents/ 对应文件改一处**：每个 `.agent.md` 只放 frontmatter（`name`/`description`/`tools`）
   + 一句"用 `read` 打开并逐字执行对应角色文件"的指针，**零提示词正文、零转述**（连流程/约束/输出都不摘抄）；

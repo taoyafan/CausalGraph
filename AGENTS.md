@@ -29,6 +29,8 @@
 - **思考建模是主 Agent 的核心职责**：决定用什么公式计算某个值、需要哪些信息节点、各节点分布与
   参数怎么设计；然后派 `scout` 检索信息 → 设计建模方案 → 派 `model-reviewer` 审核方案（落盘前）
   → 派 `persister` 落盘 → 派 `reviewer` 审核节点（落盘后）。
+- **设计建模方案前必读 [doc/design/agents/modeling-rules.md](doc/design/agents/modeling-rules.md)**（建模规范，
+  model-reviewer 用同一份审）；它是共享规范、不属于角色提示词，不受下文"不读角色提示词"限制。
 - **先 outline 再动手了解图结构**：需要搞清当前图有哪些视图、各视图锚点（结论）、成员分布时，
   先跑 `python -m cgraph.cli outline`（默认按 `分类→视图`；`--view <名>` 展开单视图、`--orphans`
   看诊断桶、`--raw` 回退结构鸟瞰含 `--group`/`--ops`/`--data`），据此定位后再按需 `focus`/读文件；

@@ -582,6 +582,76 @@
       "output_metric": "单吨电解液六氟成本变动额_2026H2相对H1",
       "unit": "元/吨",
       "note": "dosage 为时间稳定的配比系数，跨 vintage 融合允许"
+    },
+    {
+      "id": "ind.dmc.price.h1_sum_2026",
+      "operator": "sum",
+      "inputs": ["ind.dmc.price.sci.20260105", "ind.dmc.price.sci.20260202", "ind.dmc.price.sci.20260302", "ind.dmc.price.sci.20260401", "ind.dmc.price.sci.20260501", "ind.dmc.price.sci.20260601"],
+      "output_metric": "DMC_2026年1-6月六个月价格合计(生意社)",
+      "unit": "元/吨"
+    },
+    {
+      "id": "ind.dmc.price.h1avg_2026",
+      "operator": "affine",
+      "inputs": ["ind.dmc.price.h1_sum_2026"],
+      "params": {"a": 0, "b": 0.16666666666666666},
+      "output_metric": "DMC_2026H1均价(生意社月初价近似)",
+      "unit": "元/吨",
+      "note": "÷6 = 1~6 月共 6 个月（结构常数），月初价近似月均"
+    },
+    {
+      "id": "ind.dmc.price.novdec_2026_est",
+      "operator": "product",
+      "inputs": ["ind.dmc.price.sci.20261001", "ind.dmc.price.novdec_vs_oct_2026"],
+      "output_metric": "DMC_2026年11-12月月均价_持平外推",
+      "unit": "元/吨"
+    },
+    {
+      "id": "ind.dmc.price.novdec_2026_x2",
+      "operator": "affine",
+      "inputs": ["ind.dmc.price.novdec_2026_est"],
+      "params": {"a": 0, "b": 2},
+      "output_metric": "DMC_2026年11+12月两个月价格合计",
+      "unit": "元/吨",
+      "note": "×2 = 两个月，结构常数"
+    },
+    {
+      "id": "ind.dmc.price.h2_sum_2026",
+      "operator": "sum",
+      "inputs": ["ind.dmc.price.sci.20260701", "ind.dmc.price.sci.20260803", "ind.dmc.price.sci.20260901", "ind.dmc.price.sci.20261001", "ind.dmc.price.novdec_2026_x2"],
+      "output_metric": "DMC_2026年7-12月六个月价格合计(生意社)",
+      "unit": "元/吨"
+    },
+    {
+      "id": "ind.dmc.price.h2avg_2026_est",
+      "operator": "affine",
+      "inputs": ["ind.dmc.price.h2_sum_2026"],
+      "params": {"a": 0, "b": 0.16666666666666666},
+      "output_metric": "DMC_2026H2均价估计(生意社)",
+      "unit": "元/吨",
+      "note": "÷6 = 7~12 月；月初价近似月均"
+    },
+    {
+      "id": "ind.dmc.price.delta_h2_vs_h1_2026",
+      "operator": "subtract",
+      "inputs": ["ind.dmc.price.h2avg_2026_est", "ind.dmc.price.h1avg_2026"],
+      "output_metric": "DMC_2026H2均价相对H1变动额",
+      "unit": "元/吨",
+      "note": "H1/H2 同源同规则(生意社月初价)，无需基差锚"
+    },
+    {
+      "id": "ind.electrolyte.solvent_cost.delta_h2_vs_h1_2026",
+      "operator": "product",
+      "inputs": ["ind.dmc.price.delta_h2_vs_h1_2026", "ind.electrolyte.solvent_cost_per_dmc"],
+      "output_metric": "单吨电解液溶剂成本变动额_2026H2相对H1",
+      "unit": "元/吨"
+    },
+    {
+      "id": "ind.electrolyte.cost.delta_h2_vs_h1_2026",
+      "operator": "sum",
+      "inputs": ["ind.electrolyte.liPF6_cost.delta_h2_vs_h1_2026", "ind.electrolyte.solvent_cost.delta_h2_vs_h1_2026", "ind.electrolyte.other_cost.delta_h2_vs_h1_2026"],
+      "output_metric": "单吨电解液总成本变动额_2026H2相对H1(六氟+溶剂+其余)",
+      "unit": "元/吨"
     }
   ]
 }

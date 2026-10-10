@@ -1,0 +1,111 @@
+{
+  "source_id": "ind_dmc_price_100ppi_2026",
+  "source_name": "生意社碳酸二甲酯(DMC)基准价 2026 月初报价",
+  "publisher": "生意社(100ppi)",
+  "as_of": "2026-10-01",
+  "retrieved_at": "2026-10-10",
+  "source_url": "https://www.100ppi.com/news/list-14-1217-2676-1.html",
+  "note": "每月取首个报价日基准价，作为当月均价近似（月内波动较大，如 3-09 3916.67、3-11 4700.00，近似噪声未单独入图）；与六氟生意社序列同源同规则。",
+  "nodes": [
+    {
+      "id": "ind.dmc.price.sci.20260105",
+      "metric": "碳酸二甲酯DMC基准价_2026-01-05(生意社)",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-01-05",
+      "source_url": "https://www.100ppi.com/news/detail-20260105-5145424.html",
+      "distribution": {"type": "point", "value": 4066.67, "domain": [0, null]},
+      "quote": "1月5日生意社碳酸二甲酯(DMC)基准价为4066.67元/吨。来源：生意社。1/1–1/4 无报价，取首个报价日。"
+    },
+    {
+      "id": "ind.dmc.price.sci.20260202",
+      "metric": "碳酸二甲酯DMC基准价_2026-02-02(生意社)",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-02-02",
+      "source_url": "https://www.100ppi.com/news/detail-20260202-5264571.html",
+      "distribution": {"type": "point", "value": 3750.00, "domain": [0, null]},
+      "quote": "2月2日生意社碳酸二甲酯(DMC)基准价为3750.00元/吨。来源：生意社。"
+    },
+    {
+      "id": "ind.dmc.price.sci.20260302",
+      "metric": "碳酸二甲酯DMC基准价_2026-03-02(生意社)",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-03-02",
+      "source_url": "https://www.100ppi.com/news/detail-20260302-5340803.html",
+      "distribution": {"type": "point", "value": 3750.00, "domain": [0, null]},
+      "quote": "3月2日生意社碳酸二甲酯(DMC)基准价为3750.00元/吨。来源：生意社。"
+    },
+    {
+      "id": "ind.dmc.price.sci.20260401",
+      "metric": "碳酸二甲酯DMC基准价_2026-04-01(生意社)",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-04-01",
+      "source_url": "https://www.100ppi.com/news/detail-20260401-5475700.html",
+      "distribution": {"type": "point", "value": 4600.00, "domain": [0, null]},
+      "quote": "4月1日生意社碳酸二甲酯(DMC)基准价为4600.00元/吨。来源：生意社。"
+    },
+    {
+      "id": "ind.dmc.price.sci.20260501",
+      "metric": "碳酸二甲酯DMC基准价_2026-05-01(生意社)",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-05-01",
+      "source_url": "https://www.100ppi.com/news/detail-20260501-5604132.html",
+      "distribution": {"type": "point", "value": 3933.33, "domain": [0, null]},
+      "quote": "5月1日生意社碳酸二甲酯(DMC)基准价为3933.33元/吨。来源：生意社。"
+    },
+    {
+      "id": "ind.dmc.price.sci.20260601",
+      "metric": "碳酸二甲酯DMC基准价_2026-06-01(生意社)",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-06-01",
+      "source_url": "https://www.100ppi.com/news/detail-20260601-5727557.html",
+      "distribution": {"type": "point", "value": 3700.00, "domain": [0, null]},
+      "quote": "6月1日生意社碳酸二甲酯(DMC)基准价为3700.00元/吨。来源：生意社。"
+    },
+    {
+      "id": "ind.dmc.price.sci.20260701",
+      "metric": "碳酸二甲酯DMC基准价_2026-07-01(生意社)",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-07-01",
+      "source_url": "https://www.100ppi.com/news/detail-20260701-5858759.html",
+      "distribution": {"type": "point", "value": 3766.67, "domain": [0, null]},
+      "quote": "7月1日生意社碳酸二甲酯(DMC)基准价为3766.67元/吨。来源：生意社。"
+    },
+    {
+      "id": "ind.dmc.price.sci.20260803",
+      "metric": "碳酸二甲酯DMC基准价_2026-08-03(生意社)",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-08-03",
+      "source_url": "https://www.100ppi.com/news/detail-20260803-6010404.html",
+      "distribution": {"type": "point", "value": 4350.00, "domain": [0, null]},
+      "quote": "8月3日生意社碳酸二甲酯(DMC)基准价为4350.00元/吨。来源：生意社。8-01 为周六，取 8 月首个报价日。"
+    },
+    {
+      "id": "ind.dmc.price.sci.20260901",
+      "metric": "碳酸二甲酯DMC基准价_2026-09-01(生意社)",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-09-01",
+      "source_url": "https://www.100ppi.com/news/detail-20260901-6148985.html",
+      "distribution": {"type": "point", "value": 4950.00, "domain": [0, null]},
+      "quote": "9月1日生意社碳酸二甲酯(DMC)基准价为4950.00元/吨。来源：生意社。"
+    },
+    {
+      "id": "ind.dmc.price.sci.20261001",
+      "metric": "碳酸二甲酯DMC基准价_2026-10-01(生意社)",
+      "unit": "元/吨",
+      "evidence_type": "market_observed",
+      "as_of": "2026-10-01",
+      "source_url": "https://www.100ppi.com/news/detail-20261001-6294130.html",
+      "distribution": {"type": "point", "value": 6033.33, "domain": [0, null]},
+      "quote": "10月1日生意社碳酸二甲酯(DMC)基准价为6033.33元/吨。来源：生意社。原文：与上月初(4950.00元/吨)相比，上涨了21.89%"
+    }
+  ]
+}
