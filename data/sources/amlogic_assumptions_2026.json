@@ -1,0 +1,29 @@
+{
+  "source_id": "amlogic_assumptions_2026",
+  "source_name": "晶晨股份 2026Q4 外推——我方假设(非公司/非券商)",
+  "publisher": "CausalGraph 协作者假设",
+  "as_of": "2026-10-10",
+  "source_url": "https://basic.10jqka.com.cn/688099/",
+  "retrieved_at": "2026-10-10",
+  "note": "晶晨股份Q4单季归母相对Q3单季的环比系数。两个反向驱动论点各建一锚(放量 vs 季节回落),由下游mixture等权融合暴露分歧(见data/operators/amlogic_profit_fy2026.json)。μ与等权均为AI拍定,待协作者确认。",
+  "nodes": [
+    {
+      "id": "amlogic.momentum.q4_factor_ramp",
+      "metric": "归母净利_2026Q4环比Q3系数_放量锚_假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "split_normal", "mu": 1.05, "sigma_low": 0.08, "sigma_high": 0.10, "domain": [0, null]},
+      "quote": "单锚(Q4继续放量,同向证据):半年报/IR称已进入三星电视供应链、预计2026Q4批量量产;半年报称自Q3起部分主要竞争对手无力保障合封存储、改推分立存储电视SoC方案,公司有信心扩大份额;高端电视SoC T966D5自2025Q4导入核心客户后逐季显著提升;10-09预告称经营层面初步预估2026全年营收有望突破100亿(非业绩预告),前三季度营收70.80~71.80亿。众数1.05,上侧略宽(新客户量产兑现超预期),下侧(放量节奏后移)。AI拍定,待协作者确认。来源:晶晨股份2026半年报、2026-09-11投资者关系活动记录、公告2026-043。"
+    },
+    {
+      "id": "amlogic.momentum.q4_factor_seasonal",
+      "metric": "归母净利_2026Q4环比Q3系数_季节回落锚_假设",
+      "unit": "比率",
+      "evidence_type": "assumption",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "split_normal", "mu": 0.90, "sigma_low": 0.08, "sigma_high": 0.07, "domain": [0, null]},
+      "quote": "单锚(Q4季节性回落,同向证据):历史单季归母Q4不高于Q3——2025年Q3 2.012亿、Q4 1.752亿;2024年Q3 2.316亿、Q4 2.281亿(年报分季度数据);存储涨价与供应紧张自2025Q4起持续、抑制下游消费电子需求;机顶盒国内客户采购节奏放缓、等待集采。众数0.90。AI拍定,待协作者确认。来源:晶晨股份2025/2024年度报告分季度主要财务数据、2026半年报、2026-09-11投资者关系活动记录。"
+    }
+  ]
+}

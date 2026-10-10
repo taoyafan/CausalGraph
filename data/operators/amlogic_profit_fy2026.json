@@ -1,0 +1,35 @@
+{
+  "subgraph": "amlogic_profit_fy2026",
+  "note": "晶晨股份(688099.SH)2026全年归母净利润+同比。结构=H1实际(6.108)+Q3预告(6.49~6.99,uniform)+Q4外推;口径:H1/Q3/Q4均为归母净利润,Q4=Q3单季×Q4环比系数,Q3节点同时进sum与product以保留Q3-Q4相关性。Q4环比系数=mixture(放量锚1.05, 季节回落锚0.90),等权为AI主观设定待确认。2026不与券商一致预期融合:一致预期2026E均值14.79亿主体为前三季度预告前vintage(铁律8不跨vintage融合),唯一同期的东吴10-09为单家且'维持'旧预测,仅作参考不入计算。27/28净利与26/27/28前瞻PE见data/instances/valuation_multiyear.json(模板forward_pe_multiyear)。",
+  "operators": [
+    {
+      "id": "amlogic.momentum.q4_factor",
+      "operator": "mixture",
+      "inputs": ["amlogic.momentum.q4_factor_ramp", "amlogic.momentum.q4_factor_seasonal"],
+      "output_metric": "归母净利_2026Q4环比Q3系数(融合:放量+季节回落,等权)",
+      "unit": "比率"
+    },
+    {
+      "id": "amlogic.profit.q4_2026",
+      "operator": "product",
+      "inputs": ["amlogic.profit.q3_2026", "amlogic.momentum.q4_factor"],
+      "output_metric": "归母净利润_2026Q4(=Q3单季×Q4环比系数)",
+      "unit": "亿元"
+    },
+    {
+      "id": "amlogic.profit.fy2026",
+      "operator": "sum",
+      "inputs": ["amlogic.profit.h1_2026", "amlogic.profit.q3_2026", "amlogic.profit.q4_2026"],
+      "output_metric": "归母净利润_2026E(H1实际+Q3预告+Q4外推)",
+      "unit": "亿元",
+      "note": "自下而上:H1半年报实际+Q3业绩预告+Q4外推。同花顺一致预期2026E均值14.79亿为预告前vintage,仅作参考不入计算。"
+    },
+    {
+      "id": "amlogic.profit.fy2026.yoy",
+      "operator": "growth",
+      "inputs": ["amlogic.profit.fy2026", "amlogic.profit.fy2025"],
+      "output_metric": "归母净利润_2026全年同比增速(相对2025实际)",
+      "unit": "比率"
+    }
+  ]
+}

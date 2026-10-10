@@ -84,6 +84,17 @@
         "profit_source": {"2027": "songfa.consensus.fy2027e", "2028": "songfa.consensus.fy2028e"},
         "profit_ref": {"2026": "songfa.profit.fy2026"}
       }
+    },
+    {
+      "name": "amlogic",
+      "note": "晶晨股份(688099.SH)：26 沿用自下而上(H1实际+Q3预告+Q4外推)的 amlogic.profit.fy2026；27/28 用券商一致预期提升(预告前vintage,大概率低估,PE_27/28可能偏高;2027同比受vintage错位压低,不作结论)。",
+      "bind": {
+        "company": "amlogic",
+        "years": ["2026", "2027", "2028"],
+        "market_cap": "amlogic.market.cap",
+        "profit_source": {"2027": "amlogic.consensus.fy2027e", "2028": "amlogic.consensus.fy2028e"},
+        "profit_ref": {"2026": "amlogic.profit.fy2026"}
+      }
     }
   ]
 }

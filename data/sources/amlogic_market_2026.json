@@ -1,0 +1,20 @@
+{
+  "source_id": "amlogic_market_2026",
+  "source_name": "晶晨股份(688099.SH) 行情快照——总市值",
+  "publisher": "东方财富 行情",
+  "as_of": "2026-10-09",
+  "source_url": "https://quote.eastmoney.com/sh688099.html",
+  "retrieved_at": "2026-10-10",
+  "note": "用作前瞻PE分子。东财行情接口快照2026-10-09约15:44(收盘后,10-10周六无交易)。同花顺F10首页另显示总市值421亿(时点未标注),取东财带时间戳一源以守单一来源。",
+  "nodes": [
+    {
+      "id": "amlogic.market.cap",
+      "metric": "A股总市值_2026-10-09",
+      "unit": "亿元",
+      "evidence_type": "market_observed",
+      "as_of": "2026-10-09",
+      "distribution": {"type": "point", "value": 422.09, "domain": [0, null]},
+      "quote": "东方财富行情接口(2026-10-09约15:44收盘后):最新价99.71元、A股总股本423,319,995股、A股总市值42,209,236,701.45元(约422.09亿)、动态市盈率34.55。来源:https://push2.eastmoney.com/api/qt/stock/get?secid=1.688099&fields=f43,f57,f58,f84,f116,f86,f162 。"
+    }
+  ]
+}

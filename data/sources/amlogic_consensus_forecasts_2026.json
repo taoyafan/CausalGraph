@@ -1,0 +1,29 @@
+{
+  "source_id": "amlogic_ths_consensus_2026",
+  "source_name": "晶晨股份 2027E/2028E 归母净利润 券商一致预期(同花顺F10)",
+  "publisher": "同花顺 F10 盈利预测(多家券商一致预期)",
+  "as_of": "2026-10-10",
+  "source_url": "https://basic.10jqka.com.cn/688099/worth.html",
+  "retrieved_at": "2026-10-10",
+  "note": "同花顺F10(截至2026-10-10,6个月内12家机构)。以均值作split_normal中心μ,下/上侧σ由(均值-最低)/2、(最高-均值)/2定,与松发先例同法;evidence_type=analyst_estimate。vintage警示:详表仅东吴2026-10-09一条晚于前三季度预告(且声明'维持'旧预测,14.76/20.02/27.64),其余2026-05~08,属预告前vintage;Q3单季归母6.49~6.99亿已显示盈利水平大幅跃升,该一致预期大概率被低估、待上修,据此算出的PE_2027/2028可能偏高;模板生成的2027同比(2026用新vintage自下而上、2027用旧vintage一致预期)会被vintage错位人为压低,不作结论。2026E一致预期均值14.79亿同为预告前vintage,未入图计算。",
+  "nodes": [
+    {
+      "id": "amlogic.consensus.fy2027e",
+      "metric": "归母净利润_2027E_券商一致预期",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "split_normal", "mu": 19.65, "sigma_low": 0.785, "sigma_high": 0.63, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(截至2026-10-10,6个月内12家机构):2027E归母净利润 最低18.08/均值19.65/最高20.91亿元。混合vintage,多数早于2026-10-09前三季度预告。来源:同花顺F10 https://basic.10jqka.com.cn/688099/worth.html 。"
+    },
+    {
+      "id": "amlogic.consensus.fy2028e",
+      "metric": "归母净利润_2028E_券商一致预期",
+      "unit": "亿元",
+      "evidence_type": "analyst_estimate",
+      "as_of": "2026-10-10",
+      "distribution": {"type": "split_normal", "mu": 25.35, "sigma_low": 1.855, "sigma_high": 1.20, "domain": [0, null]},
+      "quote": "同花顺F10盈利预测(截至2026-10-10,6个月内12家机构):2028E归母净利润 最低21.64/均值25.35/最高27.75亿元。混合vintage,多数早于2026-10-09前三季度预告。来源:同花顺F10 https://basic.10jqka.com.cn/688099/worth.html 。"
+    }
+  ]
+}

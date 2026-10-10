@@ -1,0 +1,38 @@
+{
+  "source_id": "amlogic_actuals_2026",
+  "source_name": "晶晨股份 2026前三季度业绩预告 + 2026半年报 + 2025年报",
+  "publisher": "晶晨半导体(上海)股份有限公司 (688099.SH)",
+  "as_of": "2026-10-09",
+  "source_url": "https://static.sse.com.cn/disclosure/listedinfo/announcement/c/new/2026-10-09/688099_20261009_HM6Q.pdf",
+  "retrieved_at": "2026-10-10",
+  "note": "晶晨股份全年归母 = H1实际(半年报) + Q3预告(公告2026-043,未审计) + Q4外推。正式三季报预约2026-10-30披露,届时以正式值替换Q3节点。背景(仅陈述,不入图):前三季度营收70.80~71.80亿(+39.61%~+41.59%),Q3营收26.89~27.89亿(环比+7.71%~+11.72%);Q3扣非归母6.40~6.90亿,与归母6.49~6.99亿接近,非经常性损益占比小,Q3归母基本为经常性口径;前三季度归母12.60~13.10亿(=H1实际+Q3预告,口径自洽)。",
+  "nodes": [
+    {
+      "id": "amlogic.profit.h1_2026",
+      "metric": "归母净利润_2026H1",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "as_of": "2026-08",
+      "distribution": {"type": "point", "value": 6.108, "domain": [0, null]},
+      "quote": "2026半年报(2026-08-20披露):H1归母净利润610,791,100.57元(约6.108亿),其中Q2单季4.38亿(同比+41.89%,环比+152.63%);H1综合毛利率38.73%;H1确认股份支付0.69亿。来源:晶晨股份2026年半年度报告 https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202608191828159167&client_source=web&page_index=4 。"
+    },
+    {
+      "id": "amlogic.profit.q3_2026",
+      "metric": "归母净利润_2026Q3单季_业绩预告区间",
+      "unit": "亿元",
+      "evidence_type": "guidance",
+      "as_of": "2026-10-09",
+      "distribution": {"type": "uniform", "low": 6.492, "high": 6.992, "domain": [0, null]},
+      "quote": "2026年前三季度业绩预告的自愿性披露公告(编号2026-043,2026-10-08晚发布,未经审计):Q3单季归母净利润6.492089~6.992089亿元,同比+222.67%~+247.52%,环比+48.36%~+59.79%;Q3扣非归母6.398795~6.898795亿元;前三季度归母12.60~13.10亿元。原因:智能电视SoC持续导入全球主流品牌、高端电视SoC导入推进、产品结构优化。预告给硬区间故用uniform;按guidance置信度引擎会略展宽至区间外,对未审计预告可接受。正式三季报2026-10-30披露后替换。来源:上交所 https://static.sse.com.cn/disclosure/listedinfo/announcement/c/new/2026-10-09/688099_20261009_HM6Q.pdf 。"
+    },
+    {
+      "id": "amlogic.profit.fy2025",
+      "metric": "归母净利润_2025全年",
+      "unit": "亿元",
+      "evidence_type": "audited",
+      "as_of": "2026-03-31",
+      "distribution": {"type": "point", "value": 8.730, "domain": [0, null]},
+      "quote": "2025年报(经审计,2026-03-31披露):全年归母净利润872,984,327.35元(约8.730亿),营收67.93亿。用作2026全年同比分母。来源:晶晨股份2025年度报告 https://np-cnotice-stock.eastmoney.com/api/content/ann?art_code=AN202603301820869677&client_source=web&page_index=3 。"
+    }
+  ]
+}

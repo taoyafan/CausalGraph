@@ -13,6 +13,7 @@
         {"name": "生益科技", "anchor": "shengyi.pe.2026", "panel": ["shengyi.pe.2026", "shengyi.pe.2027", "shengyi.pe.2028"]},
         {"name": "深南电路", "anchor": "shennan.pe.2026", "panel": ["shennan.pe.2026", "shennan.pe.2027", "shennan.pe.2028"]},
         {"name": "松发股份", "anchor": "songfa.pe.2026", "panel": ["songfa.pe.2026", "songfa.pe.2027", "songfa.pe.2028"]},
+        {"name": "晶晨股份", "anchor": "amlogic.pe.2026", "panel": ["amlogic.pe.2026", "amlogic.pe.2027", "amlogic.pe.2028"]},
         {"name": "利通电子", "anchor": "litong.profit.fy2026", "note": "暂无前瞻PE（未建市值/估值链），锚 2026 归母利润"},
         {"name": "建滔积层板", "anchor": "kbl.fy2026.core_attributable_profit", "note": "暂无前瞻PE，锚 2026 核心归母利润"}
       ]
