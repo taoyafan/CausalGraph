@@ -2,7 +2,7 @@
 
 > 规则见 [AGENTS.md](AGENTS.md)：每条 ≤ 3 行，过长则在 `doc/todo/` 建详情文档并在此链接。
 
-- **事件的时间记录与处理**：为事件补发生时点、持续期与时间轴（现有节点只有期次快照），否则事件影响"哪一期"盈利无法表达；设计待定。
+- **时间维度架构**：需求已记录于 [doc/todo/time-dimension.md](doc/todo/time-dimension.md)；待定实现优先级与设计（含事件时间、未来 N 个月情景）。
 - **锂电产业链图后续**：事件节点与「突发事件→公司盈利」传导、事件时间轴（含价格传导时滞）待设计；已落盘的结构与「不入图」判定见 [doc/design/industry-lithium.md](doc/design/industry-lithium.md)。
 - **产品价格 → 公司利润：扩展**：新宙邦已按半年粒度打通（[industry-lithium.md §7](doc/design/industry-lithium.md)）；下一步宁德等公司；"未来 N 个月"依赖时间维度架构。
 - **局部增量计算（需求 ④）**：现每条命令全量重扫重算；按 [reactive-engine.md](doc/design/reactive-engine.md) 落地全局图缓存 + 脏标记 + 只重算受影响下游，图规模变大前做。
