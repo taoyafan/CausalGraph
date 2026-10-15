@@ -34,10 +34,8 @@
 
 - **Web**（`web/index.html`）：下拉按`分类(optgroup) → 视图`；选中视图 = 顶部 panel 看板条 +
   锚点贡献树钻取；第二级下拉列出该视图全部成员（★锚点 → ·算子 → ◦数据源）供跳至任意节点。
-  数据来自 `window.CG_EXPORT.views.categories`（由 `cgraph export` 写入）；**诊断桶不进 Web**。
-- **CLI**（`cgraph outline`）：默认按`分类 → 视图(★锚点 + 成员计数)`列出，末尾诊断桶计数
-  （`--orphans` 展开，**诊断桶只在这里看**）；`--view <名>` 展开单个视图成员；`--raw` 回退到
-  旧的纯结构鸟瞰（按图簇的 源/中/终 三层，供调试）。
+  数据来自 `window.CG_EXPORT.views.categories`（由 `export` 写入）；**诊断桶不进 Web**。
+- **CLI**（`outline`）：诊断桶只在 `outline --orphans` 看；输出格式见 [cli-output.md](cli-output.md) §3。
 
 ## 5. 中文命名
 

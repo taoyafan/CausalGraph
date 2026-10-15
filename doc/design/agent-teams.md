@@ -21,7 +21,7 @@ CausalGraph 的建图工作由**一支分工明确的 Agent 团队**协作完成
 | 角色 | 职责 | 明确**不做** |
 |------|------|------------|
 | **主 Agent（= 对话/默认 Agent）** | 思考建模：决定用什么公式计算某值、需要哪些信息节点；把信息需求派给 Scout、把节点增删派给 Persister、把审核派给 Reviewer；汇总结果、触发求值与呈现。**即当前与用户对话的默认 Agent，职责写在 [AGENTS.md](../../AGENTS.md)，无独立 `.agent.md`** | 不亲自搜索/提取原文、不亲自增删节点、不亲自写算子代码、不亲自做数值计算 |
-| **Scout（搜索提取 Agent）** | 领取具体信息需求 → 检索来源 → 提取**原子事实**（含出处 URL）回报给主 Agent，不落盘；缺算子/缺数据时上报，不自行凑 | 不做任何数值计算；不写数据节点；不评审自己 |
+| **Scout（搜索提取 Agent）** | 领取具体信息需求 → 检索来源 → 提取**原子事实**（含出处 URL）回报给主 Agent；可把查阅的文献摘录写入本地临时文件；缺算子/缺数据时上报，不自行凑 | 不做任何数值计算；不写 `data/` 下任何文件；不评审自己 |
 | **Persister（落盘 Agent）** | 领取具体节点增删任务（主 Agent 给出节点 id/字段内容或要删的 id）→ 按节点 schema 格式写入/修改/删除 data/sources 与 data/operators 下的 JSON 文件；只做"照填"不做"设计" | 不决定分布参数/公式/节点设计（那是主 Agent 的建模职责）；不检索；不评审自己 |
 | **Model Reviewer（建模审核 Agent）** | 落盘**前**按 [agents/modeling-rules.md](agents/modeling-rules.md) 逐条审核**建模方案本身**（设计意图，非 JSON）；通过或打回并给理由 | 不搜数据、不写 JSON、不写算子代码、不做数值改动；不接触 URL；不审已落盘的 JSON（那是 Reviewer） |
 | **Reviewer（审核 Agent）** | 审核节点/算子是否符合铁律与 schema、图结构是否被破坏（断边/成环/悬空/id 冲突）；通过或打回并给出理由 | 不新建数据、不改数据内容（只批准/打回）；完全不接触 URL、不做网络验证（Scout 的摘要+URL 即溯源终点） |
@@ -55,7 +55,7 @@ flowchart TD
 关键点：
 - **主 Agent 思考、子 Agent 执行**：主 Agent（对话 Agent）只做建模决策（公式、需要的节点、参数设计），
   具体搜索/落盘/审核由专职子 Agent 做；子 Agent 各自消化原文与 schema，主 Agent 上下文不被污染。
-- **Scout 只搜不落盘**：Scout 返回原子事实（含出处 URL）给主 Agent，主 Agent 设计节点后由 Persister 落盘。
+- **Scout 只搜不落盘**：Scout 返回原子事实（含出处 URL）给主 Agent，主 Agent 设计节点后由 Persister 落盘（Scout 的本地临时摘录不入图、不入库）。
 - **Persister 只填不设计**：Persister 是"照填"机器——主 Agent 给出 id/字段/分布/quote，Persister 按 schema
   写入或删除；任何节点设计决策留在主 Agent（或打回时由 Reviewer 指出）。
 - **建模审核在落盘前（Model Reviewer）**：涉及新建/改节点或算子的建模方案，主 Agent 定方案后**先派
@@ -92,25 +92,7 @@ flowchart TD
 | Operator Author（仅缺算子时启用） | [agents/operator-author.md](agents/operator-author.md) |
 
 各 harness 适配时可增加自己的格式外壳（工具声明、输出模板），但**不得删改**角色边界与铁律引用。
-
-### 3.1 主 Agent（= 对话/默认 Agent）
-
-> 主 Agent **不是**独立的 `.agent.md`，而是**当前与用户对话的默认 Agent**。其编排职责（含
-> 先 outline 建立结构认知、强制先搜后算、自动派 Reviewer、禁读禁算边界等）的**单一事实源**在
-> [AGENTS.md](../../AGENTS.md)《主 Agent（对话 Agent）编排职责》一节，常驻生效——此处不复制正文
-> （与 §3.2~3.4 一样只指路，避免两处漂移）。
-
-### 3.2 Scout（搜索提取 Agent）
-
-提示词正文在 [agents/scout.md](agents/scout.md)（含铁律引用）。
-
-### 3.3 Reviewer（审核 Agent）
-
-提示词正文在 [agents/reviewer.md](agents/reviewer.md)（含铁律引用）。
-
-### 3.4 Operator Author（算子作者 Agent）
-
-提示词正文在 [agents/operator-author.md](agents/operator-author.md)（含铁律引用）。
+主 Agent 无独立提示词文件，其编排职责的唯一事实源是 [AGENTS.md](../../AGENTS.md)。
 
 ---
 
@@ -132,9 +114,9 @@ Agent 执行任务时常见障碍及**标准解法**（对应铁律"遇阻不放
 | **id 冲突** | 全局唯一命名空间：改名或复用已有节点，不得让同一 id 既是数据又是算子。 |
 | **来源无法获取/已失效** | 记录 gap 为 TODO 并标注，绝不编造 URL 或叙事冒充出处。 |
 | **Scout 检索挂起/超时** | 派发时显式限工具与限时：只用 web_search，禁止 browser/browser_exec（曾挂起烧光 600s 预算）；web_extract 首次报错就换查询不重试；拿到目标数量即可停。子 agent 超时后先抢救其 live transcript（搜索命中往往已产出），把线索并入重派任务。 |
-| **Reviewer 审核范围** | 不只审新建节点/算子——数据文件、提示词/规范文档、引擎/CLI 代码的任何实质变更（含删除、重构、字段清理）都要先过 Reviewer 再提交；重构类用"审查变更是否完整、自洽、无残留"框架（grep 死引用、JSON 合法性、文档一致性）。 |
+| **Reviewer 审核范围** | 只审图内容：数据/算子节点 JSON（含节点增删改名）与 Operator Author 新增的算子。引擎/CLI 代码与文档的改动不过 Reviewer。 |
 | **节点改名** | 改名后全仓库 grep 裸旧 id：不仅 `inputs`/`id` 结构字段，还有其它算子文件 note/desc 的 prose 引用、README/文档引用——prose 级残留语义失真（曾发生跨文件 note 指向新融合节点的错误）。 |
-| **Git 操作** | 一步到位：`git add -A && git commit -m "..." && git push`，不做分步 status/add/commit 检查。 |
+| **Git 操作** | 一步到位：`git add -A; git commit -m "..."; git push`，不做分步 status/add/commit 检查。 |
 | **证据与假设的关系** | 构建时的主动原则（见 invariants 铁律4）：假设节点 quote 直接内嵌证据（事实+URL+日期），不单独建证据节点层——曾为此建 7 个 ind.* 证据节点（孤儿、三层冗余）后被删除，证据并入 eps 假设 quote。 |
 
 ---
@@ -147,19 +129,13 @@ Agent 执行任务时常见障碍及**标准解法**（对应铁律"遇阻不放
   对每次对话常驻生效——**跟用户对话的默认 Agent 就是主 Agent**。主 Agent 只需知道各角色提示词文件的**路径**，
   编排时**不读提示词内容**（防上下文污染）。
 - **五个专家角色做成子 Agent**（需要上下文隔离 + 工具收窄 + 独立人格）：
-  - VS Code Copilot：`.github/agents/<role>.agent.md`（**已落地**），frontmatter 配 `tools`。当前工具权限：
-    `scout` = [read, edit, search, web, execute]（检索/提取，不落盘）；
-    `persister` = [read, edit, execute]（落盘：读写 JSON + 跑 check 自检）；
-    `model-reviewer` = [read, search, execute]（**只读审建模方案 + 否决权**；`execute` 仅用于跑 focus/check 验证方案）；
-    `reviewer` = [read, search, execute]（**只读审核 + 否决权**；`execute` 仅用于跑 `check`）；
-    `operator-author` = [read, edit, search, execute]（写算子代码，仅缺算子时启用）。
+  - VS Code Copilot：`.github/agents/<role>.agent.md`（**已落地**），模型与工具权限以各文件 frontmatter 为准。
+    权限原则：只读角色（`reviewer`/`model-reviewer`）不给 `edit`，`execute` 仅用于跑 focus/check；
+    `scout` 的 `edit` 仅用于写本地临时摘录。
   - Hermes（delegate_task 现场派发，无注册文件）：派发时 context 只写指针——
-    "你是 Scout/Persister/Reviewer/Operator Author，用 read 依次打开 doc/design/agents/invariants.md 与
-    对应角色文件，逐字执行，然后完成：<任务>"；toolsets 映射：
-    `scout` = [web, file, terminal]；`persister` = [file, terminal]（terminal 用于跑 check 自检）；
-    `model-reviewer` = [file, terminal]（terminal 仅用于跑 focus/check 验证方案）；
-    `reviewer` = [file, terminal]（terminal 仅用于跑 check）；
-    `operator-author` = [file, terminal]。
+    "你是 <角色>，用 read 依次打开 doc/design/agents/invariants.md 与对应角色文件，逐字执行，然后完成：<任务>"；
+    toolsets 映射：`scout` = [web, file, terminal]；`persister` / `model-reviewer` / `reviewer` / `operator-author`
+    = [file, terminal]（只读角色的 terminal 仅用于跑 focus/check）。
   - 其它 harness（Claude subagents 等）：按各自的 subagent/system-prompt 机制承载同一套提示词。
 - **角色提示词按文件拆分（防双份 + 防上下文污染）**：每个角色一个文件、只含该角色的正文；
   铁律单独一份 invariants.md 全体共读（生产者与审核者必须用同一份文字，否则制衡失效）。
@@ -167,7 +143,7 @@ Agent 执行任务时常见障碍及**标准解法**（对应铁律"遇阻不放
   **建模规范同理单独一份 [agents/modeling-rules.md](agents/modeling-rules.md)**：建模者（主 Agent）与 Model Reviewer
   共读，规范不得只写在审核角色文件里（否则建模者看不到、只能事后被挑错）。
   改提示词**只改对应角色文件一处**，严禁在两处各存一份。
-- **`.agent.md` 一律是零正文存根，提示词只在 agents/ 对应文件改一处**：每个 `.agent.md` 只放 frontmatter（`name`/`description`/`tools`）
+- **`.agent.md` 一律是零正文存根，提示词只在 agents/ 对应文件改一处**：每个 `.agent.md` 只放 frontmatter
   + 一句"用 `read` 打开并逐字执行对应角色文件"的指针，**零提示词正文、零转述**（连流程/约束/输出都不摘抄）；
   这样所有 harness 的存根都只是指针、天然与角色文件一致。
 - **禁止分叉**：适配层不得改写角色边界与铁律；如需调整，改角色文件后各 harness 同步，避免多份不一致定义。

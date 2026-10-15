@@ -309,7 +309,7 @@ def main(argv=None):
     p.add_argument("--sources", default=default_sources, help="数据源目录")
     p.add_argument("--operators", default=default_operators, help="算子子图目录")
     p.add_argument("--samples", type=int, default=20000, help="蒙特卡洛样本数")
-    p.add_argument("--seed", type=int, default=None, help="随机种子（可复现；缺省不固定）")
+    p.add_argument("--seed", type=int, default=42, help="随机种子（默认 42，可复现）")
     p.set_defaults(func=cmd_focus)
 
     t = sub.add_parser("trace", help="溯源某个数据节点的来源出处")

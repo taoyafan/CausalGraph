@@ -4,19 +4,37 @@
 
 - **项目名称**：CausalGraph
 - **产品名称**：投资沙盘
-- **CLI 工具前缀**：`cgraph`
-- **文档分层**：本文件只写**需求与架构总纲**；机制细节、公式、schema、流程手册一律进
-  [doc/design/](doc/design/) 并从本文件链接（见 §3），避免同一件事两处各写一份。
+- **运行方式**：`python -m cgraph.cli <子命令>`（零第三方依赖；常用命令见 [§0](#0-常用命令)）
+- **文档分层**：README = 需求与设计总纲；[AGENTS.md](AGENTS.md) = 在 README 之上对 Agent 的额外要求；
+  [TODO.md](TODO.md) = 待办。机制细节一律进 [doc/design/](doc/design/) 并从 §3 链接；代码里能直接查到的定义
+  （枚举、参数、schema 字段等）只指出文件/函数，不在文档重复列出。
 
 ---
 
 ## 目录
 
+- [0. 常用命令](#0-常用命令)
 - [设计哲学（Design Philosophy）](#设计哲学design-philosophy)
 - [1. 核心需求（System Intent）](#1-核心需求system-intent)
 - [2. 架构总纲（CausalGraph 架构）](#2-架构总纲causalgraph-架构)
-  - [2.10 产业链结构层（锂电首条链）](#210-产业链结构层锂电首条链)
 - [3. 设计文档索引](#3-设计文档索引)
+
+---
+
+## 0. 常用命令
+
+```
+python -m cgraph.cli outline [--view <视图名|锚点id>] [--orphans] [--raw]   # 视图目录/结构鸟瞰（不求值）
+python -m cgraph.cli focus <node_id> [--level 0-4]                     # 以某节点为中心求值并渲染（默认 level 3 公式视图）
+python -m cgraph.cli focus <node_id> --scenario <情景路径> [--diff]       # 情景演绎 / 基线对比
+python -m cgraph.cli trace <data_node_id>                              # 溯源出处（URL/原文/时点）
+python -m cgraph.cli check                                             # 全图静态体检（断边/环/孤儿/值来源存疑）
+python -m cgraph.cli export                                            # 导出 web/export.js 供 web/index.html 直读
+python -m cgraph.cli scenario list|show|remove [路径]                   # 情景文件管理
+```
+
+- 随机种子默认固定（可复现）；完整参数见 `python -m cgraph.cli <子命令> -h`。
+- 各档输出格式见 [cli-output.md](doc/design/cli-output.md)。
 
 ---
 
@@ -59,20 +77,20 @@
 ### 2.1 基础模型：纯 Node + Edge 与数据源解耦
 
 - **极简图模型**：数据、逻辑、算子、突发事件全部抽象为 **Node**，**Edge** 仅代表数据与事件的传导方向。
-- **数据源独立**：数据源只产出自己的独占数据节点（带 `Source_ID`），不改写图上现有节点；**严格单一来源**——一个数据节点只能对应一个数据源，多源碰撞各建独立节点、由下游**算子节点**加权融合（假设节点按**一论点一锚**）。
+- **数据源独立**：数据源只产出自己的独占数据节点（带 `source_id`），不改写图上现有节点；**严格单一来源**——一个数据节点只能对应一个数据源，多源碰撞各建独立节点、由下游**算子节点**加权融合（假设节点按**一论点一锚**）。
 - 存储、目录与边（= 算子 `inputs`）的组织见 [architecture.md](doc/design/architecture.md)。
 
 ### 2.2 双重约束：固定算子库 + 固定概率分布库
 
 - **算子库**：AI 不得自由编写脚本，只能从预设标准算子库中挑选并填参数。
-- **分布库**：固定为 `Uniform` / `Normal` / `SplitNormal` / `Point(Bernoulli)`；`Triangular` 已禁用（非对称三角展宽时均值/中值会偏离众数）。
-- 各分布的参数语义与禁用理由见 [confidence-model.md](doc/design/confidence-model.md)。
+- **分布库**：固定为 `Uniform` / `Normal` / `SplitNormal` / `Point`；`Triangular` 已禁用。
+- 参数语义与禁用理由见 [confidence-model.md](doc/design/confidence-model.md)。
 
 ### 2.3 概率与置信度融合机制
 
 - **数据节点**：承载分布与数据源置信度 $C$，原子化、单一来源、零依赖；**算子节点**：纯数学算子不打折，主观推断算子按把握度打折。
 - $C$ 由程序按 `evidence_type` 查表得到、实时生效（AI 不填数字）；展宽只作用于节点自身分布并按物理/常识边界截断；同一指标的多来源由下游**融合算子**（mixture 等）处理。
-- 完整公式、$C$ 表、融合语义与展示口径（headline 用 P50）见 [confidence-model.md](doc/design/confidence-model.md)。
+- 展宽公式、融合语义与展示口径（headline 用 P50）见 [confidence-model.md](doc/design/confidence-model.md)；$C$ 查表在 `cgraph/confidence.py`。
 
 ### 2.4 层级解包与响应式风控引擎
 
@@ -81,13 +99,12 @@
 
 ### 2.5 CLI 交互层
 
-- 以 focus 节点为中心渲染字符树：`()` 数据节点、`[]` 算子节点、行尾告警；`--level 0/1/2/3/4` 分档（摘要／一层上游／全树／公式视图／debug 展开来源）。
-- 各档格式与 `trace`/`check`/`export`/`scenario`/`outline` 用法见 [cli-output.md](doc/design/cli-output.md)。
+- 以 focus 节点为中心渲染文本字符树，面向 AI Agent 阅读；`--level` 分档控制详略。命令见 [§0](#0-常用命令)，输出格式见 [cli-output.md](doc/design/cli-output.md)。
 
 ### 2.6 Agent 团队与跨 Harness 分工
 
-- **主 Agent（= 对话 Agent）** 思考建模、派发、汇总、判断图完整性并触发求值；**Scout** 检索提取（不落盘）；**Persister** 按字段落盘；**Reviewer** 审核否决；**Operator Author** 确实缺算子时才实现。
-- 角色规范提示词、问题→解决方案手册与跨 harness 适配见 [agent-teams.md](doc/design/agent-teams.md)；主 Agent 的职责与边界见 [AGENTS.md](AGENTS.md)。
+- 主 Agent（= 对话 Agent）只思考建模与编排；检索、落盘、审核、写算子分别交给专职子 Agent，生产与审核分离形成制衡。
+- 角色表、流水线、问题→解决方案手册与跨 harness 适配见 [agent-teams.md](doc/design/agent-teams.md)；主 Agent 的职责与边界见 [AGENTS.md](AGENTS.md)。
 
 ### 2.7 参考建模范式：从财报外推未来利润
 
@@ -96,23 +113,23 @@
 
 ### 2.8 子图模板与实例化（存储期语法糖）
 
-- 结构同构、只差绑定的链条（如各公司的"多年盈利 + 同比 + 前瞻 PE"）在 `data/templates/` 只写一次，各公司在 `data/instances/` 加一条 `bind`；**加载时内存展开**为普通算子节点，磁盘不存展开结果，各档输出与手写节点完全等价，展开来源只在 `focus --level 4`（debug）显示。
-- 模板/实例的 schema 与展开规则见 [architecture.md](doc/design/architecture.md) §4.2。
+- 结构同构、只差绑定的链条只写一次模板，加一家公司 = 加一条绑定；加载时内存展开为普通算子节点。
+- schema 与展开规则见 [architecture.md](doc/design/architecture.md)。
 
 ### 2.9 情景演绎（What-if）
 
-- 在既有图上**临时覆盖**某节点分布或**屏蔽**某条线路，看预测如何变化；临时态只存在 `data/scenarios/`，删文件即全部恢复，被覆盖节点带 ✎ 标记、被屏蔽节点不显示。
+- 在既有图上**临时覆盖**某节点分布或**屏蔽**某条线路，看预测如何变化；基线数据不动，删情景文件即恢复。
 - 细节见 [overlay-scenario.md](doc/design/overlay-scenario.md)。
 
 ### 2.10 产业链结构层（锂电首条链）
 
 - 以**产业环节**为骨架（碳酸锂 → 六氟磷酸锂 → 电解液 → 电池），把公司挂到对应环节上；同一指标的多来源各建独立数据节点、由 `mixture` 等权融合；事件与传导复用同一张全局图。
-- 落地细节（骨架、成本传导链、期间口径纪律、多源融合约定、已知局限）见 [industry-lithium.md](doc/design/industry-lithium.md)。
+- 落地细节见 [industry-lithium.md](doc/design/industry-lithium.md)。
 
 ### 2.11 视图层（导航入口，与连通性解耦）
 
 - **视图 = 人类命名的锚点节点 + 分类**，成员由锚点的**上游闭包**自动求得——与图的连通性（id 前缀、弱连通分量）解耦，因此产业链最终把各公司连成一张图后，公司仍能各看各的。
-- 公司视图锚**前瞻 PE**（panel 并列三年）、产业视图锚**价格/供需**；选中视图后可在第二级列表跳至该视图的任意成员节点。不服务于任何视图锚点的旁支算子（vs/ratio 校验等）归入**诊断桶**，作为建模者的覆盖率自检，**只在 `cgraph outline --orphans` 暴露**、不进 Web。注册表见 `data/views.json`。
+- 公司视图锚**前瞻 PE**、产业视图锚**价格/供需**；不服务于任何视图的旁支算子归入诊断桶，只供建模者自检。
 - 机制、schema、诊断桶规则见 [views.md](doc/design/views.md)。
 
 ---
@@ -124,7 +141,7 @@
 | [architecture.md](doc/design/architecture.md) | 应用结构与存储：目录约定、节点存储、边与链接、子图模板与实例化、求值引擎 |
 | [confidence-model.md](doc/design/confidence-model.md) | 分布库、$1/C$ 展宽公式、证据类型与 $C$ 查表、融合语义、展示口径 |
 | [reactive-engine.md](doc/design/reactive-engine.md) | 全局图缓存、增量计算、Baseline+Delta、脏标记与变化阻断、风控链路 |
-| [cli-output.md](doc/design/cli-output.md) | `focus` 各档输出格式、随机种子、其它子命令 |
+| [cli-output.md](doc/design/cli-output.md) | `focus` 各档输出格式、`outline` 输出格式 |
 | [profit-forecast-methods.md](doc/design/profit-forecast-methods.md) | 从财报外推未来利润的三类信号与融合范式 |
 | [overlay-scenario.md](doc/design/overlay-scenario.md) | 情景演绎：覆盖/屏蔽、情景文件、`--diff` |
 | [agent-teams.md](doc/design/agent-teams.md) | Agent 团队角色提示词、问题→解决方案手册、跨 harness 适配 |

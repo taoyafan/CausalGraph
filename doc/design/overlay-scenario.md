@@ -1,7 +1,5 @@
 # 情景演绎（Scenario What-if）：临时覆盖与屏蔽 设计
 
-> 状态：已决策。本文为最终设计，实现以本文为准。
-
 ## 1. 定位
 
 投资沙盘的核心体验：用户在既有图上**临时替换若干假设值、或临时屏蔽某条线路，
@@ -29,19 +27,19 @@ data/scenarios/
 
 ```json
 {
-  "desc": "踢掉华源预测，且假设 H2 让价更狠",
+  "desc": "六氟 H2 涨 20%，且剔除有机氟贡献",
   "created_by": "user",
   "overrides": {
-    "seg.battery.eps": {
-      "distribution": {"type": "triangular", "low": -0.15, "mode": 0.0, "high": 0.1},
-      "reason": "假设 H2 让价更狠"
+    "ind.liPF6.price.oilchem": {
+      "distribution": {"type": "point", "value": 138000, "domain": [0, null]},
+      "reason": "假设 H2 六氟涨价 20%"
     }
   },
-  "mutes": ["seg.fluorine.gp_fy2026"]
+  "mutes": ["capchem.seg.fluorine.gp_fy2026"]
 }
 ```
 
-- override 必须给**完整分布 JSON**（与数据节点 distribution 同 schema）。
+- override 必须给**完整分布 JSON**（与数据节点 distribution 同 schema）。真实样例见 `data/scenarios/capchem/`。
 - `created_by` / `reason` 必填，落实诚实性（§4）。
 
 ## 3. 求值语义
@@ -53,25 +51,17 @@ data/scenarios/
   mixture 权重按剩余输入**等比归一**（保持相对权重语义）。
 - 固定元数算子（divide/subtract/growth 等要求恰好 N 个输入）被屏蔽后输入不足时，
   **报错拒绝求值**，不算出错误结果。
-- 只重算受影响下游子图（与 E13 响应式引擎同机制）。
 
 ## 4. 诚实性约束
 
-- 覆盖是证据类型 `user_override`：文件记录谁（created_by）、为何（reason）、
+- 覆盖不改变原节点的 `evidence_type`（仍按原 $C$ 展宽）；情景文件记录谁（created_by）、为何（reason）、
   覆盖了哪个节点。溯源链不断。
 - **显示可辨识**：被覆盖节点在一切输出中带临时标记（✎），与基线值不得混淆；
   **被屏蔽节点不显示**（它已不参与计算），但在 diff 摘要中报告屏蔽了几个。
 
 ## 5. CLI 语义
 
-```
-cgraph focus <node> --scenario capchem/<名>     # 载入情景求值
-cgraph focus <node> --scenario capchem/<名> --diff   # 基线 vs 情景对比
-cgraph scenario list                            # 列出全部情景文件
-cgraph scenario show <路径>                     # 查看情景内容
-cgraph scenario remove <路径>                   # 删除情景文件（全部恢复原值）
-```
-
+命令见 [README §0](../../README.md)（`focus --scenario <路径> [--diff]`、`scenario list|show|remove`）。
 - 恢复语义 = 文件内容的增删：删一条 override/mute 该节点即回原样，删文件全恢复，
   **无显式恢复命令**。
 - 情景文件的创建即直接写 JSON（AI/用户均可），CLI 不提供编辑命令。
@@ -85,7 +75,7 @@ cgraph scenario remove <路径>                   # 删除情景文件（全部�
 - 已应用覆盖清单（原分布 → 临时分布 + reason）；
 - 屏蔽计数。
 
-## 7. 端上显示（未来扩展）
+## 7. 端上显示
 
-公式卡插槽行加 ✎ 临时标记 + 原值/临时值并排区间条；骨架不变。
-见 mobile-display.md §4。
+公式卡插槽行加 ✎ 临时标记 + 原值/临时值并排区间条；骨架不变，见 [mobile-display.md](mobile-display.md)。
+目前仅 CLI 实现，Web 端见 [TODO.md](../../TODO.md)。

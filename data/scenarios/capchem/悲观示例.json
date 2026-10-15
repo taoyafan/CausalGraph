@@ -2,5 +2,5 @@
   "desc": "剔除有机氟贡献（演示屏蔽）",
   "created_by": "user",
   "overrides": {},
-  "mutes": ["seg.fluorine.gp_fy2026"]
+  "mutes": ["capchem.seg.fluorine.gp_fy2026"]
 }

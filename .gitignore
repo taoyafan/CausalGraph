@@ -13,3 +13,6 @@ venv/
 # 测试禁止入库(本项目约定)
 tests/
 test_*.py
+
+# Scout 等子 Agent 的本地临时摘录
+tmp/

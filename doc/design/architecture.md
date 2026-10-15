@@ -6,24 +6,21 @@ CausalGraph 的运行时最小实现。数据源、节点存储、链接方式�
 ## 1. 目录结构
 
 ```
-cgraph/                  引擎（Python 包，零第三方依赖）
-  distributions.py       4 种固定分布采样 + 置信度 1/C 展宽 + domain 截断
-  confidence.py          evidence_type -> C 查表
-  model.py               DataNode / OperatorNode 数据结构
-  operators.py           算子库（sum / mixture ...），注册即扩展
-  engine.py              Graph：从 focus 递归拓扑求值 + 循环检测 + 告警收集
-  loader.py              读 data/sources + data/operators 合成一张全局 Graph
-  cli.py                 `cgraph focus <node_id>` / `cgraph trace <node_id>`
+cgraph/                  引擎（Python 包，零第三方依赖；各模块职责见文件头 docstring）
 data/
   sources/*.json         数据源，每文件一个独立源，产出若干 DataNode
   operators/*.json       算子子图，每文件一簇 OperatorNode（inputs = 对任意上游节点 id 的引用 = 边）
   templates/*.json       子图模板定义（带形参占位；不参与求值，见 §4.2）
   instances/*.json       模板实例绑定（加载时展开为普通算子节点，见 §4.2）
+  scenarios/<链条>/*.json 情景文件（临时覆盖/屏蔽，见 overlay-scenario.md）
+  views.json             视图注册表（见 views.md）
+web/                     静态前端：index.html 直读 export 生成的 export.js
+scripts/                 一次性辅助脚本（不参与求值）
 ```
 
 > **全局单图**：没有“每个 use case 一个图文件”。所有 source + operator 节点属于**同一张全局图**，
 > `data/operators/` 下多个文件只是物理上拆成多个子图，随时可被新节点跨子图连接。
-> “Use case” 退化为运行时指定一个 **focus 节点 id**（`cgraph focus <node_id>`）。
+> “Use case” 退化为运行时指定一个 **focus 节点 id**（`python -m cgraph.cli focus <node_id>`）。
 
 ## 2. 数据源独立存放
 
@@ -37,17 +34,13 @@ data/
 - 文件头带出处字段：`source_url`（原文网址）、`retrieved_at`（抓取时间 ISO-UTC）、`publisher`（发布方）。
 - **不下载原件到本地**：溯源证据 = 原文 URL + quote（原文引用）+ retrieved_at；原件可能失效，
   失效即如实标注缺口，不编造本地文件冒充出处（agent-teams.md 手册）。
-- 溯源用 `cgraph trace <node_id>`：从数据节点反查其 `source_id`，打印发布方、来源 URL、原文引用、数据时点。
+- 溯源用 `python -m cgraph.cli trace <node_id>`：从数据节点反查其 `source_id`，打印发布方、来源 URL、原文引用、数据时点。
 - 加载时源文件头（除 `nodes[]`）整体登记进 `Graph.sources`（`source_id -> 出处元数据`），供 `trace` 与审计使用。
 
 ## 3. 节点如何存储
 
-| 节点类型 | 存储位置 | 关键字段 |
-|---|---|---|
-| DataNode（原子数据） | `data/sources/*.json` | `id` `metric` `unit` `evidence_type` `distribution` `quote` `as_of`，可选 `display_unit` `display_scale` |
-| OperatorNode（算子） | `data/operators/*.json` | `id` `operator` `inputs` `output_metric` `unit` `params`，可选 `display_unit` `display_scale` |
-
-- 分布用 dict：`{"type": "triangular", "low", "mode", "high", "domain":[lo,hi]}` 等 4 类。
+- DataNode 存 `data/sources/*.json`，OperatorNode 存 `data/operators/*.json`；字段以 `cgraph/model.py` 的数据结构与
+  `cgraph/loader.py` 的解析为准，分布类型与参数以 `cgraph/distributions.py` 为准（triangular 已禁用，采样即报错）。
 - `evidence_type` 决定置信度：加载求值时经 `confidence.py` 查表得 C，再对分布按 1/C 展宽。改表即全局重算。
 - `display_unit` / `display_scale` 只控制展示，默认分别为 `unit` / `1`。统计值、分布文字、直方图坐标与
   公式内联数据按 `内部值 / display_scale` 显示；采样、计算、domain、情景覆盖与缓存值始终保持内部量纲。
@@ -64,7 +57,7 @@ data/
 - 一个 `data/operators/*.json` = 一簇相关算子（一个子图）：文件头可带 `subgraph`（子图名）/ `note`，主体是 `operators[]`。
 - **拆分纯为可读性**，与求值无关：引擎把所有子图合并成一张图。按分析主题/标的/期次聚类（如 `capchem_2026.json`）。
 - **跨子图连接**：新算子的 `inputs` 直接写目标节点的全局 id，无需改动被引用的子图——这就是“子图随时被新节点连起来”的机制。
-- **命名**：节点 id 用点分层次（如 `capchem.profit.fy2026`、`broker.kaiyuan.fy2026`），保证全局唯一且自解释。
+- **命名**：节点 id 用点分层次、带公司前缀（如 `capchem.profit.fy2026`、`capchem.broker.kaiyuan.fy2026e`），保证全局唯一且自解释；产业环节用 `ind.*`。
 
 ### 4.2 子图模板与实例化（data/templates + data/instances）
 
@@ -86,4 +79,4 @@ data/
 - 默认蒙特卡洛：数据节点采样 N 个点，算子逐样本运算（`sum` 逐点相加，`mixture` 按权重逐点抽取）。
 - `op_confidence < 1` 时对算子输出样本绕中位数按 1/C 展宽（推断类算子折损）。
 - `mixture` 检测上游中位数相对差，超阈值挂 `Method Conflict` 告警，逐层向上冒泡。
-- 固定随机种子保证可复现。
+- 随机种子默认固定，保证可复现；当前每条命令全量加载、全量求值（增量计算见 reactive-engine.md）。

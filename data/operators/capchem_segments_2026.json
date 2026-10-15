@@ -3,159 +3,159 @@
   "note": "新宙邦 2026 全年归母净利润——分业务自下而上（不含券商）。电池化学品链：H2 毛利 = (H2 单吨收入 − H2 单吨成本) × H2 电解液出货；H2 单吨收入 = H1 单吨收入 × (1 + β × (行业铁锂电解液 H2 代理价 ÷ H1 均价 − 1))；H2 单吨成本 = H1 单吨成本 + 六氟外购成本变动（(六氟现价 − H1 均价) × 单耗 × (1 − 自供率)），其余单位成本按 H1 不变。电子/氟/其他业务全年毛利由 seg_gross_profit(H1收入, g3, H1毛利率, 全年调整系数) 一步算出；其中电子/氟的 g3 已由“跨期环比外推”改为“同季同比驱动”：g3 = growth(2026H2, 2026H1)、 2026H2 = 2025H2(audited派生)×(1+H2同比增速_融合)，H2同比增速由多条证据锰 mixture 融合(每份证据一个数据节点、再合并计算，不删证据)：电子=动量延续锰+增速放缓锰、有机氟=技改爬坡锰+产能上限锰。避免拿跨年 H2→H1 的环比去代年内 H1→H2 的季节性方向错配；其他业务占比<1% 仍用原子假设 g3。算子皆纯数学(C_op=1.0，定义即代码)，主观性集中在 assumptions 文件的假设节点——本文件输入的数据节点含 audited（公司披露）与 assumption/analyst_estimate（我方/券商锚）两类——及两个调整系数。",
   "operators": [
     {
-      "id": "seg.electronic.rev_h2_2025",
+      "id": "capchem.seg.electronic.rev_h2_2025",
       "operator": "subtract",
-      "inputs": ["seg.electronic.rev_fy_2025", "seg.electronic.rev_h1_2025"],
+      "inputs": ["capchem.seg.electronic.rev_fy_2025", "capchem.seg.electronic.rev_h1_2025"],
       "output_metric": "电子信息化学品_2025H2营业收入(audited派生)",
       "unit": "亿元"
     },
     {
-      "id": "seg.electronic.yoy_h2",
+      "id": "capchem.seg.electronic.yoy_h2",
       "operator": "mixture",
-      "inputs": ["seg.electronic.yoy_h2_momentum", "seg.electronic.yoy_h2_normalize"],
+      "inputs": ["capchem.seg.electronic.yoy_h2_momentum", "capchem.seg.electronic.yoy_h2_normalize"],
       "output_metric": "电子信息化学品_2026H2营收同比增速_融合",
       "unit": "比率"
     },
     {
-      "id": "seg.electronic.yoy_h2_plus1",
+      "id": "capchem.seg.electronic.yoy_h2_plus1",
       "operator": "affine",
-      "inputs": ["seg.electronic.yoy_h2"],
+      "inputs": ["capchem.seg.electronic.yoy_h2"],
       "params": {"a": 1.0, "b": 1.0},
       "output_metric": "电子信息化学品_H2营收同比增速+1",
       "unit": "比率"
     },
     {
-      "id": "seg.electronic.rev_h2_2026",
+      "id": "capchem.seg.electronic.rev_h2_2026",
       "operator": "product",
-      "inputs": ["seg.electronic.rev_h2_2025", "seg.electronic.yoy_h2_plus1"],
+      "inputs": ["capchem.seg.electronic.rev_h2_2025", "capchem.seg.electronic.yoy_h2_plus1"],
       "output_metric": "电子信息化学品_2026H2营业收入(H2同比驱动)",
       "unit": "亿元"
     },
     {
-      "id": "seg.fluorine.rev_h2_2025",
+      "id": "capchem.seg.fluorine.rev_h2_2025",
       "operator": "subtract",
-      "inputs": ["seg.fluorine.rev_fy_2025", "seg.fluorine.rev_h1_2025"],
+      "inputs": ["capchem.seg.fluorine.rev_fy_2025", "capchem.seg.fluorine.rev_h1_2025"],
       "output_metric": "有机氟化学品_2025H2营业收入(audited派生)",
       "unit": "亿元"
     },
     {
-      "id": "seg.fluorine.yoy_h2",
+      "id": "capchem.seg.fluorine.yoy_h2",
       "operator": "mixture",
-      "inputs": ["seg.fluorine.yoy_h2_retrofit", "seg.fluorine.yoy_h2_capcap"],
+      "inputs": ["capchem.seg.fluorine.yoy_h2_retrofit", "capchem.seg.fluorine.yoy_h2_capcap"],
       "output_metric": "有机氟化学品_2026H2营收同比增速_融合",
       "unit": "比率"
     },
     {
-      "id": "seg.fluorine.yoy_h2_plus1",
+      "id": "capchem.seg.fluorine.yoy_h2_plus1",
       "operator": "affine",
-      "inputs": ["seg.fluorine.yoy_h2"],
+      "inputs": ["capchem.seg.fluorine.yoy_h2"],
       "params": {"a": 1.0, "b": 1.0},
       "output_metric": "有机氟化学品_H2营收同比增速+1",
       "unit": "比率"
     },
     {
-      "id": "seg.fluorine.rev_h2_2026",
+      "id": "capchem.seg.fluorine.rev_h2_2026",
       "operator": "product",
-      "inputs": ["seg.fluorine.rev_h2_2025", "seg.fluorine.yoy_h2_plus1"],
+      "inputs": ["capchem.seg.fluorine.rev_h2_2025", "capchem.seg.fluorine.yoy_h2_plus1"],
       "output_metric": "有机氟化学品_2026H2营业收入(H2同比驱动)",
       "unit": "亿元"
     },
     {
-      "id": "seg.electronic.g3",
+      "id": "capchem.seg.electronic.g3",
       "operator": "growth",
-      "inputs": ["seg.electronic.rev_h2_2026", "seg.electronic.rev_h1_2026"],
+      "inputs": ["capchem.seg.electronic.rev_h2_2026", "capchem.seg.electronic.rev_h1_2026"],
       "output_metric": "电子信息化学品_2026_H1→H2收入环比增速(由H2同比驱动派生)",
       "unit": "比率"
     },
     {
-      "id": "seg.fluorine.g3",
+      "id": "capchem.seg.fluorine.g3",
       "operator": "growth",
-      "inputs": ["seg.fluorine.rev_h2_2026", "seg.fluorine.rev_h1_2026"],
+      "inputs": ["capchem.seg.fluorine.rev_h2_2026", "capchem.seg.fluorine.rev_h1_2026"],
       "output_metric": "有机氟化学品_2026_H1→H2收入环比增速(由H2同比驱动派生)",
       "unit": "比率"
     },
     {
-      "id": "seg.electronic.gp_fy2026",
+      "id": "capchem.seg.electronic.gp_fy2026",
       "operator": "seg_gross_profit",
-      "inputs": ["seg.electronic.rev_h1_2026", "seg.electronic.g3", "seg.electronic.margin_h1_2026", "capchem.margin_fy_factor"],
+      "inputs": ["capchem.seg.electronic.rev_h1_2026", "capchem.seg.electronic.g3", "capchem.seg.electronic.margin_h1_2026", "capchem.margin_fy_factor"],
       "output_metric": "电子信息化学品_全年毛利_2026",
       "unit": "亿元"
     },
     {
-      "id": "seg.fluorine.gp_fy2026",
+      "id": "capchem.seg.fluorine.gp_fy2026",
       "operator": "seg_gross_profit",
-      "inputs": ["seg.fluorine.rev_h1_2026", "seg.fluorine.g3", "seg.fluorine.margin_h1_2026", "capchem.margin_fy_factor"],
+      "inputs": ["capchem.seg.fluorine.rev_h1_2026", "capchem.seg.fluorine.g3", "capchem.seg.fluorine.margin_h1_2026", "capchem.margin_fy_factor"],
       "output_metric": "有机氟化学品_全年毛利_2026",
       "unit": "亿元"
     },
     {
-      "id": "seg.other.gp_fy2026",
+      "id": "capchem.seg.other.gp_fy2026",
       "operator": "seg_gross_profit",
-      "inputs": ["seg.other.rev_h1_2026", "seg.other.g3", "seg.other.margin_h1_2026", "capchem.margin_fy_factor"],
+      "inputs": ["capchem.seg.other.rev_h1_2026", "capchem.seg.other.g3", "capchem.seg.other.margin_h1_2026", "capchem.margin_fy_factor"],
       "output_metric": "其他业务_全年毛利_2026",
       "unit": "亿元"
     },
     {
       "id": "capchem.gross_profit.fy2026",
       "operator": "sum",
-      "inputs": ["seg.battery.gp_fy2026", "seg.electronic.gp_fy2026", "seg.fluorine.gp_fy2026", "seg.other.gp_fy2026"],
+      "inputs": ["capchem.seg.battery.gp_fy2026", "capchem.seg.electronic.gp_fy2026", "capchem.seg.fluorine.gp_fy2026", "capchem.seg.other.gp_fy2026"],
       "output_metric": "全年毛利合计_2026",
       "unit": "亿元"
     },
     {
-      "id": "seg.battery.gp_h1_2026",
+      "id": "capchem.seg.battery.gp_h1_2026",
       "operator": "product",
-      "inputs": ["seg.battery.rev_h1_2026", "seg.battery.margin_h1_2026"],
+      "inputs": ["capchem.seg.battery.rev_h1_2026", "capchem.seg.battery.margin_h1_2026"],
       "output_metric": "电池化学品_H1毛利_2026",
       "unit": "亿元"
     },
     {
-      "id": "seg.electronic.gp_h1_2026",
+      "id": "capchem.seg.electronic.gp_h1_2026",
       "operator": "product",
-      "inputs": ["seg.electronic.rev_h1_2026", "seg.electronic.margin_h1_2026"],
+      "inputs": ["capchem.seg.electronic.rev_h1_2026", "capchem.seg.electronic.margin_h1_2026"],
       "output_metric": "电子信息化学品_H1毛利_2026",
       "unit": "亿元"
     },
     {
-      "id": "seg.fluorine.gp_h1_2026",
+      "id": "capchem.seg.fluorine.gp_h1_2026",
       "operator": "product",
-      "inputs": ["seg.fluorine.rev_h1_2026", "seg.fluorine.margin_h1_2026"],
+      "inputs": ["capchem.seg.fluorine.rev_h1_2026", "capchem.seg.fluorine.margin_h1_2026"],
       "output_metric": "有机氟化学品_H1毛利_2026",
       "unit": "亿元"
     },
     {
-      "id": "seg.other.gp_h1_2026",
+      "id": "capchem.seg.other.gp_h1_2026",
       "operator": "product",
-      "inputs": ["seg.other.rev_h1_2026", "seg.other.margin_h1_2026"],
+      "inputs": ["capchem.seg.other.rev_h1_2026", "capchem.seg.other.margin_h1_2026"],
       "output_metric": "其他业务_H1毛利_2026",
       "unit": "亿元"
     },
     {
-      "id": "seg.battery.shipment_h1_2026",
+      "id": "capchem.seg.battery.shipment_h1_2026",
       "operator": "mixture",
-      "inputs": ["capchem.battery_chem.shipment_h1_2026", "seg.battery.shipment_h1_2026.dongwu"],
+      "inputs": ["capchem.battery_chem.shipment_h1_2026", "capchem.seg.battery.shipment_h1_2026.dongwu"],
       "output_metric": "电池化学品_H1电解液出货量_2026(EVTank与东吴同期融合)",
       "unit": "万吨",
       "note": "两源同期（2026H1）同量，差约 0.5%"
     },
     {
-      "id": "seg.battery.shipment_h2_2026_est",
+      "id": "capchem.seg.battery.shipment_h2_2026_est",
       "operator": "subtract",
-      "inputs": ["seg.battery.shipment_fy2026_est", "seg.battery.shipment_h1_2026.dongwu"],
+      "inputs": ["capchem.seg.battery.shipment_fy2026_est", "capchem.seg.battery.shipment_h1_2026.dongwu"],
       "output_metric": "电池化学品_H2电解液出货量_2026_东吴同源相减",
       "unit": "万吨",
       "note": "FY 与 H1 均取东吴 8/21 同源相减，避免混入跨源口径差"
     },
     {
-      "id": "seg.battery.unit_rev_h1_2026",
+      "id": "capchem.seg.battery.unit_rev_h1_2026",
       "operator": "divide",
-      "inputs": ["seg.battery.rev_h1_2026", "seg.battery.shipment_h1_2026"],
+      "inputs": ["capchem.seg.battery.rev_h1_2026", "capchem.seg.battery.shipment_h1_2026"],
       "output_metric": "电池化学品_H1单吨收入_2026(分部收入÷电解液出货)",
       "unit": "万元/吨",
       "note": "分部收入含少量非电解液外销，按电解液出货摊，单吨收入口径偏高（粗粒度可接受）"
     },
     {
-      "id": "seg.battery.lfp_price_ratio_h2_vs_h1",
+      "id": "capchem.seg.battery.lfp_price_ratio_h2_vs_h1",
       "operator": "divide",
       "inputs": ["ind.electrolyte.price.lfp.oilchem", "ind.electrolyte.price.lfp.h1avg_2026.maihuasu"],
       "output_metric": "铁锂电解液价格_H2代理÷H1均价",
@@ -163,62 +163,62 @@
       "note": "H2 代理为隆众 10-08 现价、H1 为买化塑均价，跨发布方"
     },
     {
-      "id": "seg.battery.lfp_price_change_h2",
+      "id": "capchem.seg.battery.lfp_price_change_h2",
       "operator": "affine",
-      "inputs": ["seg.battery.lfp_price_ratio_h2_vs_h1"],
+      "inputs": ["capchem.seg.battery.lfp_price_ratio_h2_vs_h1"],
       "params": {"a": -1.0, "b": 1.0},
       "output_metric": "行业铁锂电解液价格变动率_H2相对H1",
       "unit": "比率"
     },
     {
-      "id": "seg.battery.price_growth_h2",
+      "id": "capchem.seg.battery.price_growth_h2",
       "operator": "product",
-      "inputs": ["seg.battery.lfp_price_change_h2", "capchem.electrolyte.price_beta"],
+      "inputs": ["capchem.seg.battery.lfp_price_change_h2", "capchem.electrolyte.price_beta"],
       "output_metric": "电池化学品_H2电解液单吨收入环比变动(行业价格×β)",
       "unit": "比率",
       "note": "= β × (行业铁锂电解液 H2 代理价 ÷ H1 均价 − 1)。情景覆盖 ind.electrolyte.price.lfp.oilchem 即可传导。电解液售价与六氟成本是两个独立驱动，六氟到售价的传导未建模；联合情景需同时覆盖两侧价格节点。"
     },
     {
-      "id": "seg.battery.price_growth_h2_plus1",
+      "id": "capchem.seg.battery.price_growth_h2_plus1",
       "operator": "affine",
-      "inputs": ["seg.battery.price_growth_h2"],
+      "inputs": ["capchem.seg.battery.price_growth_h2"],
       "params": {"a": 1.0, "b": 1.0},
       "output_metric": "电池化学品_H2价格变动+1",
       "unit": "比率"
     },
     {
-      "id": "seg.battery.unit_rev_h2_2026",
+      "id": "capchem.seg.battery.unit_rev_h2_2026",
       "operator": "product",
-      "inputs": ["seg.battery.unit_rev_h1_2026", "seg.battery.price_growth_h2_plus1"],
+      "inputs": ["capchem.seg.battery.unit_rev_h1_2026", "capchem.seg.battery.price_growth_h2_plus1"],
       "output_metric": "电池化学品_H2电解液单吨收入_2026",
       "unit": "万元/吨"
     },
     {
-      "id": "seg.battery.rev_h2_2026",
+      "id": "capchem.seg.battery.rev_h2_2026",
       "operator": "product",
-      "inputs": ["seg.battery.unit_rev_h2_2026", "seg.battery.shipment_h2_2026_est"],
+      "inputs": ["capchem.seg.battery.unit_rev_h2_2026", "capchem.seg.battery.shipment_h2_2026_est"],
       "output_metric": "电池化学品_H2收入_2026(单吨收入×电解液出货)",
       "unit": "亿元"
     },
     {
-      "id": "seg.battery.rev_fy2026",
+      "id": "capchem.seg.battery.rev_fy2026",
       "operator": "sum",
-      "inputs": ["seg.battery.rev_h1_2026", "seg.battery.rev_h2_2026"],
+      "inputs": ["capchem.seg.battery.rev_h1_2026", "capchem.seg.battery.rev_h2_2026"],
       "output_metric": "电池化学品_全年收入_2026",
       "unit": "亿元"
     },
     {
-      "id": "seg.battery.cost_ratio_h1_2026",
+      "id": "capchem.seg.battery.cost_ratio_h1_2026",
       "operator": "affine",
-      "inputs": ["seg.battery.margin_h1_2026"],
+      "inputs": ["capchem.seg.battery.margin_h1_2026"],
       "params": {"a": 1.0, "b": -1.0},
       "output_metric": "电池化学品_H1成本率(1−毛利率)",
       "unit": "比率"
     },
     {
-      "id": "seg.battery.unit_cost_h1_2026",
+      "id": "capchem.seg.battery.unit_cost_h1_2026",
       "operator": "product",
-      "inputs": ["seg.battery.unit_rev_h1_2026", "seg.battery.cost_ratio_h1_2026"],
+      "inputs": ["capchem.seg.battery.unit_rev_h1_2026", "capchem.seg.battery.cost_ratio_h1_2026"],
       "output_metric": "电池化学品_H1单吨成本_2026",
       "unit": "万元/吨"
     },
@@ -254,38 +254,38 @@
       "unit": "万元/吨"
     },
     {
-      "id": "seg.battery.unit_cost_h2_2026",
+      "id": "capchem.seg.battery.unit_cost_h2_2026",
       "operator": "sum",
-      "inputs": ["seg.battery.unit_cost_h1_2026", "capchem.liPF6.cost_delta_per_ton_electrolyte_wan"],
+      "inputs": ["capchem.seg.battery.unit_cost_h1_2026", "capchem.liPF6.cost_delta_per_ton_electrolyte_wan"],
       "output_metric": "电池化学品_H2单吨成本_2026",
       "unit": "万元/吨",
       "note": "= H1 单吨成本 + 六氟外购成本变动；六氟以外的单位成本（溶剂/添加剂/制造费用）按 H1 水平不变（粗粒度）。情景覆盖 ind.liPF6.price.oilchem / ind.liPF6.price.trendforce 即可传导；六氟到售价的传导未建模。"
     },
     {
-      "id": "seg.battery.unit_gp_h2_2026",
+      "id": "capchem.seg.battery.unit_gp_h2_2026",
       "operator": "subtract",
-      "inputs": ["seg.battery.unit_rev_h2_2026", "seg.battery.unit_cost_h2_2026"],
+      "inputs": ["capchem.seg.battery.unit_rev_h2_2026", "capchem.seg.battery.unit_cost_h2_2026"],
       "output_metric": "电池化学品_H2单吨毛利_2026",
       "unit": "万元/吨"
     },
     {
-      "id": "seg.battery.gp_h2_2026",
+      "id": "capchem.seg.battery.gp_h2_2026",
       "operator": "product",
-      "inputs": ["seg.battery.unit_gp_h2_2026", "seg.battery.shipment_h2_2026_est"],
+      "inputs": ["capchem.seg.battery.unit_gp_h2_2026", "capchem.seg.battery.shipment_h2_2026_est"],
       "output_metric": "电池化学品_H2毛利_2026(单吨毛利×电解液出货)",
       "unit": "亿元"
     },
     {
-      "id": "seg.battery.gp_fy2026",
+      "id": "capchem.seg.battery.gp_fy2026",
       "operator": "sum",
-      "inputs": ["seg.battery.gp_h1_2026", "seg.battery.gp_h2_2026"],
+      "inputs": ["capchem.seg.battery.gp_h1_2026", "capchem.seg.battery.gp_h2_2026"],
       "output_metric": "电池化学品_全年毛利_2026",
       "unit": "亿元"
     },
     {
       "id": "capchem.gross_profit.h1_2026",
       "operator": "sum",
-      "inputs": ["seg.battery.gp_h1_2026", "seg.electronic.gp_h1_2026", "seg.fluorine.gp_h1_2026", "seg.other.gp_h1_2026"],
+      "inputs": ["capchem.seg.battery.gp_h1_2026", "capchem.seg.electronic.gp_h1_2026", "capchem.seg.fluorine.gp_h1_2026", "capchem.seg.other.gp_h1_2026"],
       "output_metric": "H1毛利合计_2026",
       "unit": "亿元"
     },

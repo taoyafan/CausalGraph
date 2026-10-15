@@ -1,6 +1,6 @@
 # CLI 输出规范（cli-output）
 
-> 对应 [README §2.5](../../README.md#25-cli-交互层text-based-dsl-engine)。命令为 `python -m cgraph.cli <子命令>`。
+> 只讲输出格式。命令清单见 [README §0](../../README.md)，完整参数见 `python -m cgraph.cli <子命令> -h`。
 
 ## 1. 呈现结构
 
@@ -16,15 +16,7 @@
 - `--level 3`（默认）公式视图：按算子模板渲染中缀表达式看整个演算过程，数据节点内联 `[值]`（只带值不带区间，C 由 `?` 标记体现），假设节点带 `?`，末尾附汇总行；
 - `--level 4` debug：公式视图 + 每行附模板展开来源（`⟨宏展开: 模板 X ← 实例 Y⟩`）+ 模板实例统计——展开来源只在这一档显示（见 [architecture.md](architecture.md) §4.2）。
 
-## 3. 随机种子
-
-- `--seed` 默认不固定（每次运行重采样）；需要可复现时显式传 `--seed 42`。
-
-## 4. 其它子命令
-
-- `trace <数据节点>` 溯源出处（URL / 原文引用 / 时点）；`check` 全图静态体检（断边/环/孤儿/值来源存疑）；`export` 导出静态 JS 供 Web 直读；`scenario list|show|remove` 情景文件管理（见 [overlay-scenario.md](overlay-scenario.md)）。
-
-## 5. `outline`：视图目录 + 结构鸟瞰（Agent 建立结构认知，免读源文件）
+## 3. `outline`：视图目录 + 结构鸟瞰
 
 > 目的：让 Agent 不打开任何 `data/*.json` 就能一眼看清「该从哪些结论看进去、每个视图锚点是什么、成员多少」，固定格式、每次可复现，省上下文。**不求值、只读拓扑**。
 

@@ -6,16 +6,16 @@
       "id": "capchem.profit.fy2026e.consensus",
       "operator": "mixture",
       "inputs": [
-        "broker.huaan.fy2026e",
-        "broker.changcheng.fy2026e",
-        "broker.guohai.fy2026e",
-        "broker.guangda.fy2026e",
-        "broker.kaiyuan.fy2026e",
-        "broker.guolianminsheng.fy2026e",
-        "broker.dongwu.fy2026e",
-        "broker.huatai.fy2026e",
-        "broker.xibu.fy2026e",
-        "broker.huayuan.fy2026e"
+        "capchem.broker.huaan.fy2026e",
+        "capchem.broker.changcheng.fy2026e",
+        "capchem.broker.guohai.fy2026e",
+        "capchem.broker.guangda.fy2026e",
+        "capchem.broker.kaiyuan.fy2026e",
+        "capchem.broker.guolianminsheng.fy2026e",
+        "capchem.broker.dongwu.fy2026e",
+        "capchem.broker.huatai.fy2026e",
+        "capchem.broker.xibu.fy2026e",
+        "capchem.broker.huayuan.fy2026e"
       ],
       "output_metric": "归母净利润_2026全年_券商一致预期",
       "unit": "亿元"

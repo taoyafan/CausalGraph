@@ -23,7 +23,7 @@
   ],
   "nodes": [
     {
-      "id": "seg.electronic.rev_h1_2025",
+      "id": "capchem.seg.electronic.rev_h1_2025",
       "metric": "电子信息化学品_营业收入_2025H1",
       "unit": "亿元",
       "evidence_type": "audited",
@@ -33,7 +33,7 @@
       "quote": "2025 半年报 分产品：电子信息化学品 营业收入 679,177,445.52 元（≈6.79 亿），毛利率 47.82%，收入同比 +25.18%。"
     },
     {
-      "id": "seg.fluorine.rev_h1_2025",
+      "id": "capchem.seg.fluorine.rev_h1_2025",
       "metric": "有机氟化学品_营业收入_2025H1",
       "unit": "亿元",
       "evidence_type": "audited",
@@ -43,7 +43,7 @@
       "quote": "2025 半年报 分产品：有机氟化学品 营业收入 721,835,375.91 元（≈7.22 亿），毛利率 62.80%，收入同比 +1.37%。"
     },
     {
-      "id": "seg.electronic.rev_fy_2025",
+      "id": "capchem.seg.electronic.rev_fy_2025",
       "metric": "电子信息化学品_营业收入_2025FY",
       "unit": "亿元",
       "evidence_type": "audited",
@@ -53,7 +53,7 @@
       "quote": "2025 年报『营业收入构成-分产品』：电子信息化学品 营业收入 1,464,610,164.45 元（≈14.65 亿，占营收 15.19%），同比 +29.14%。"
     },
     {
-      "id": "seg.fluorine.rev_fy_2025",
+      "id": "capchem.seg.fluorine.rev_fy_2025",
       "metric": "有机氟化学品_营业收入_2025FY",
       "unit": "亿元",
       "evidence_type": "audited",
